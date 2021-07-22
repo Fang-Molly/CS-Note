@@ -215,10 +215,205 @@ AND (language = 'Spanish' OR language = 'French');
 
 ## 2.7 WHERE IN
 
+```SQL
+SELECT name
+FROM kids
+WHERE age = 2
+OR age = 4
+OR age = 6
+OR age = 8
+OR age = 10;
+```
+
+```SQL
+SELECT name
+FROM kids
+WHERE age IN (2, 4, 6, 8, 10);
+```
+
+```SQL
+SELECT title, language
+FROM films
+WHERE language IN ('English', 'Spanish', 'French');
+```
+## 2.8 Introduction to NULL and IS NULL
+
+* `NULL` : a missing or unknown value
+* `IS NULL` : get the missing values
+
+```SQL
+SELECT COUNT(*)
+FROM people
+WHERE birthdate IS NULL;
+```
+
+* `IS NOT NULL` : get the non-missing values
+
+```SQL
+SELECT name
+FROM people
+WHERE birthdate IS NOT NULL;
+```
+
+## 2.9 LIKE and NOT LIKE
+
+* `LIKE` : filter by specifying the exact text
+
+* `%` wildcard : match zero, one or many characters in text
+
+    * `'Data'`, `'DataC'`, `'DataCamp'`
+
+```SQL
+SELECT name
+FROM companies
+WHERE name LIKE 'Data%';
+```
+
+* `_` wildcard : match a single character
+
+    * `'DataCamp'`, `'DataComp'`
+
+```SQL
+SELECT name
+FROM companies
+WHERE name LIKE 'DataC_mp';
+```
+
+# 3. Aggregate functions
+
+## 3.1 Aggregate functions
+
+* `AVG()` : get the average value
+
+```SQL
+SELECT AVG(budget)
+FROM films;
+```
+
+* `MAX()` : get the highest value
+
+* `MIN()`
+
+* `SUM()` 
 
 
+## 3.2 Combining aggregate functions with WHERE
+
+```SQL
+SELECT SUM(budget)
+FROM films
+WHERE release_year >= 2010;
+```
+
+```SQL
+SELECT MAX(gross)
+FROM films
+WHERE release_year 
+BETWEEN 2000 AND 2012;
+```
+
+## 3.3 A note on arithmetic
+
+```SQL
+SELECT(4/3);
+# result is 1
+```
+```SQL
+SELECT(4.0/3.0);
+# result is 1.333
+```
 
 
+## 3.4 It's AS simple AS aliasing
+
+* `AS` keyword : assigna a temporary name to something
+
+```SQL
+SELECT MAX(budget) AS max_budget,
+       MAX(duration) AS max_duration
+FROM films;
+```
+
+```SQL
+SELECT title, 
+       gross - budget AS net_profit
+FROM films;
+```
+
+# 4. Sorting and grouping
+
+## 4.1 ORDER BY
+
+* `ORDER BY` keyword : sort results in ascending order according to the values of one or more columns
+
+* `DESC` : sort in descending order
+
+```SQL
+SELECT title
+FROM films
+ORDER BY release_year DESC;
+```
+
+## 4.2 Sorting single columns
+
+```SQL
+SELECT *
+FROM films
+WHERE release_year <> 2015
+ORDER BY duration;
+```
+```SQL
+SELECT imdb_score, film_id
+FROM reviews
+ORDER BY imdb_score DESC;
+```
+
+## 4.3 Sorting multiple columns
+
+```SQL
+SELECT birthdate, name
+FROM people
+ORDER BY birthdate, name;
+```
+
+## 4.4 GROUP BY
+
+* `GROUP BY` : group a result by one or more columns
+
+```SQL
+SELECT sex, count(*)
+FROM employees
+GROUP BY sex
+ORDER BY count DESC;
+```
+
+## 4.5 HAVING a great time
+
+```SQL
+SELECT release_year
+FROM films
+GROUP BY release_year
+HAVING COUNT(title) > 10;
+```
+
+```SQL
+SELECT release_year, AVG(budget) AS avg_budget, AVG(gross) AS avg_gross
+FROM films
+WHERE release_year > 1990
+GROUP BY release_year
+HAVING AVG(budget) > 60000000
+ORDER BY AVG(gross) DESC;
+```
+
+## 4.6 `JOIN` `ON`
+
+```SQL
+SELECT title, imdb_score
+FROM films
+JOIN reviews
+ON films.id = reviews.film_id
+WHERE title = 'To Kill a Mockingbird';
+```
 
 
 
