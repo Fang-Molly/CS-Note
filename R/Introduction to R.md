@@ -804,11 +804,177 @@ str(planets_df)
 
 ```R
 # Print out diameter of Mercury (row 1, column 3)
-planets_df[1, 3]
+planets_df[1,3]
 
 # Print out data for Mars (entire fourth row)
-planets_df[4, ]
+planets_df[4,]
 ```
+
+* make use of the variable name
+
+```R
+planets_df[1:3,"type"]
+```
+
+* select an entire column by using `$`sign
+
+```R
+planets_df[,3]
+planets_df[,"diameter"]
+planets_df$diameter
+```
+
+* select an entire column by the variable name
+
+```R
+planets_df[rings_vector, "name"]
+>
+[1] Jupiter Saturn  Uranus  Neptune
+Levels: Earth Jupiter Mars Mercury Neptune Saturn Uranus Venus
+
+planets_df[rings_vector,]
+>
+     name      type diameter rotation rings
+5 Jupiter Gas giant   11.209     0.41  TRUE
+6  Saturn Gas giant    9.449     0.43  TRUE
+7  Uranus Gas giant    4.007    -0.72  TRUE
+8 Neptune Gas giant    3.883     0.67  TRUE
+```
+
+* `subset()` function: `subset(my_df, subset = some_condition)`
+
+```R
+subset(planets_df, subset = rings)
+>
+     name      type diameter rotation rings
+5 Jupiter Gas giant   11.209     0.41  TRUE
+6  Saturn Gas giant    9.449     0.43  TRUE
+7  Uranus Gas giant    4.007    -0.72  TRUE
+8 Neptune Gas giant    3.883     0.67  TRUE
+
+subset(planets_df, subset = diameter < 1)
+>
+     name               type diameter rotation rings
+1 Mercury Terrestrial planet    0.382    58.64 FALSE
+2   Venus Terrestrial planet    0.949  -243.02 FALSE
+4    Mars Terrestrial planet    0.532     1.03 FALSE
+```
+
+## 5.4 Sorting
+
+* `order()` function ：give you the ranked position of each element
+
+```R
+> a <- c(100, 10, 1000)
+> order(a)
+[1] 2 1 3
+
+> a[order(a)]
+[1]   10  100 1000
+```
+
+```R
+# Use order() to create positions
+positions <-  order(planets_df$diameter)
+positions
+
+# Use positions to sort planets_df
+planets_df[positions, ]
+>
+positions
+[1] 1 4 2 3 8 7 6 5
+
+planets_df[positions, ]
+     name               type diameter rotation rings
+1 Mercury Terrestrial planet    0.382    58.64 FALSE
+4    Mars Terrestrial planet    0.532     1.03 FALSE
+2   Venus Terrestrial planet    0.949  -243.02 FALSE
+3   Earth Terrestrial planet    1.000     1.00 FALSE
+8 Neptune          Gas giant    3.883     0.67  TRUE
+7  Uranus          Gas giant    4.007    -0.72  TRUE
+6  Saturn          Gas giant    9.449     0.43  TRUE
+5 Jupiter          Gas giant   11.209     0.41  TRUE
+```
+
+# 6 Lists
+
+## 6.1 Why would you need lists?
+
+* list : gather a variety of objects under one name in an ordered way
+
+* `list()` : create a list `my_list <- list(comp1, comp2 ...)`
+
+```R
+# Vector with numerics from 1 up to 10
+my_vector <- 1:10 
+
+# Matrix with numerics from 1 up to 9
+my_matrix <- matrix(1:9, ncol = 3)
+
+# First 10 elements of the built-in data frame mtcars
+my_df <- mtcars[1:10,]
+
+# Construct list with these different elements:
+my_list <- list(my_vector, my_matrix, my_df)
+my_list
+
+>
+[[1]]
+ [1]  1  2  3  4  5  6  7  8  9 10
+
+[[2]]
+     [,1] [,2] [,3]
+[1,]    1    4    7
+[2,]    2    5    8
+[3,]    3    6    9
+
+[[3]]
+                   mpg cyl  disp  hp drat    wt  qsec vs am gear carb
+Mazda RX4         21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4
+Mazda RX4 Wag     21.0   6 160.0 110 3.90 2.875 17.02  0  1    4    4
+Datsun 710        22.8   4 108.0  93 3.85 2.320 18.61  1  1    4    1
+Hornet 4 Drive    21.4   6 258.0 110 3.08 3.215 19.44  1  0    3    1
+Hornet Sportabout 18.7   8 360.0 175 3.15 3.440 17.02  0  0    3    2
+Valiant           18.1   6 225.0 105 2.76 3.460 20.22  1  0    3    1
+Duster 360        14.3   8 360.0 245 3.21 3.570 15.84  0  0    3    4
+Merc 240D         24.4   4 146.7  62 3.69 3.190 20.00  1  0    4    2
+Merc 230          22.8   4 140.8  95 3.92 3.150 22.90  1  0    4    2
+Merc 280          19.2   6 167.6 123 3.92 3.440 18.30  1  0    4    4
+```
+
+## 6.2 Creating a named list
+
+```R
+my_list <- list(name1 = your_comp1, name2 = your_comp2)
+```
+
+```R
+my_list <- list(your_comp1, your_comp2)
+names(my_list) <- c("name1", "name2")
+```
+
+## 6.3 Selecting elements from a list
+
+* `[[]]` double square brackets : `shining_list[[1]]`
+
+```R
+shining_list[["reviews"]]
+shining_list$reviews
+```
+
+```R
+shining_list[[2]][1]
+shining_list$actors[2]
+```
+
+
+
+
+
+
+
+
+
 
 
 
