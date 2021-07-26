@@ -538,6 +538,288 @@ Return of the Jedi      309.306  165.8          475.106
 [1] 281.15
 ```
 
+## 3.8 A little arithmetic with matrices
+
+```R
+# all_wars_matrix is available in your workspace
+all_wars_matrix
+
+# Estimate the visitors
+visitors <- all_wars_matrix / 5
+  
+# Print the estimate to the console
+all_wars_matrix
+visitors
+
+>
+all_wars_matrix
+                           US non-US
+A New Hope              461.0  314.4
+The Empire Strikes Back 290.5  247.9
+Return of the Jedi      309.3  165.8
+The Phantom Menace      474.5  552.5
+Attack of the Clones    310.7  338.7
+Revenge of the Sith     380.3  468.5
+>
+visitors
+                           US non-US
+A New Hope              92.20  62.88
+The Empire Strikes Back 58.10  49.58
+Return of the Jedi      61.86  33.16
+The Phantom Menace      94.90 110.50
+Attack of the Clones    62.14  67.74
+Revenge of the Sith     76.06  93.70
+```
+
+# 4 Factors
+
+## 4.1 What's a factor and why would you use it?
+
+* factor : a statistical data type used to store categorical variables
+
+* categorical variable : belong to a limited number of categories
+* continuous variable: belong to an infinite number of values
+
+* `factor()` function : create factors
+
+    * factor levels
+
+```R
+# Sex vector
+sex_vector <- c("Male", "Female", "Female", "Male", "Male")
+
+# Convert sex_vector to a factor
+factor_sex_vector <- factor(sex_vector)
+
+# Print out factor_sex_vector
+factor_sex_vector
+
+>
+[1] Male   Female Female Male   Male  
+Levels: Female Male
+```
+
+* two types of categorical variables:
+    * nominal categorical variable : without an implied order
+        * animals_vector <- c("Elephant", "Giraffe", "Donkey", "Horse")
+    * ordinal categorical variable
+        * temperature_vector <- c("Low", "Medium", "High")
+
+```R
+# Animals
+animals_vector <- c("Elephant", "Giraffe", "Donkey", "Horse")
+factor_animals_vector <- factor(animals_vector)
+factor_animals_vector
+
+# Temperature
+temperature_vector <- c("High", "Low", "High","Low", "Medium")
+factor_temperature_vector <- factor(temperature_vector, order = TRUE, levels = c("Low", "Medium", "High"))
+factor_temperature_vector
+
+>
+factor_animals_vector
+[1] Elephant Giraffe  Donkey   Horse   
+Levels: Donkey Elephant Giraffe Horse
+
+factor_temperature_vector
+[1] High   Low    High   Low    Medium
+Levels: Low < Medium < High
+```
+
+## 4.2 Factor levels
+
+* `levels()` : specify the levels of factor
+
+```R
+# Code to build factor_survey_vector
+survey_vector <- c("M", "F", "F", "M", "M")
+factor_survey_vector <- factor(survey_vector)
+
+# Specify the levels of factor_survey_vector
+levels(factor_survey_vector) <- c("Female", "Male")
+
+factor_survey_vector
+
+>
+[1] Male   Female Female Male   Male  
+Levels: Female Male
+```
+
+## 4.3 Summarizing a factor
+
+* `summary()`
+
+```R
+# Build factor_survey_vector with clean levels
+survey_vector <- c("M", "F", "F", "M", "M")
+factor_survey_vector <- factor(survey_vector)
+levels(factor_survey_vector) <- c("Female", "Male")
+factor_survey_vector
+
+# Generate summary for survey_vector
+summary(survey_vector)
+
+# Generate summary for factor_survey_vector
+summary(factor_survey_vector)
+
+>
+summary(survey_vector)
+Length     Class      Mode 
+     5 character character 
+        
+>        
+summary(factor_survey_vector)
+Female   Male 
+     2      3 
+```
+
+## 4.4 Battle of the sexes
+
+```R
+# Build factor_survey_vector with clean levels
+survey_vector <- c("M", "F", "F", "M", "M")
+factor_survey_vector <- factor(survey_vector)
+levels(factor_survey_vector) <- c("Female", "Male")
+
+# Male
+male <- factor_survey_vector[1]
+
+# Female
+female <- factor_survey_vector[2]
+
+# Battle of the sexes: Male 'larger' than female?
+male > female
+
+>
+Warning message: '>' not meaningful for factors
+[1] NA
+```
+
+## 4.5 Ordered factors
+
+```R
+# Create speed_vector
+speed_vector <- c("medium", "slow", "slow", "medium", "fast")
+
+# Convert speed_vector to ordered factor vector
+factor_speed_vector <- factor(speed_vector, ordered = TRUE, levels = c("slow", "medium", "fast"))
+
+# Print factor_speed_vector
+factor_speed_vector
+summary(factor_speed_vector)
+
+>
+factor_speed_vector
+[1] medium slow   slow   medium fast  
+Levels: slow < medium < fast
+>
+summary(factor_speed_vector)
+  slow medium   fast 
+     2      2      1 
+```
+
+## 4.6 Comparing ordered factors
+
+```R
+# Create factor_speed_vector
+speed_vector <- c("medium", "slow", "slow", "medium", "fast")
+factor_speed_vector <- factor(speed_vector, ordered = TRUE, levels = c("slow", "medium", "fast"))
+
+# Factor value for second data analyst
+da2 <- factor_speed_vector[2]
+
+# Factor value for fifth data analyst
+da5 <- factor_speed_vector[5]
+
+# Is data analyst 2 faster than data analyst 5?
+da2 > da5
+
+>
+[1] FALSE
+```
+
+# 5 Data frames
+
+## 5.1 What's a data frame?
+
+* `head()` : show the first observations of a data frame
+
+* `tail()` : print out the last observations of a data frame
+
+* `str()` : show the structure of the data set
+
+    * the total number of observations
+    * the total number of variables
+    * a full list of thte variables names
+    * the data type of each variable
+    * the first observations
+
+## 5.2 Creating a data frame
+
+* `data.frame()`
+
+```R
+# Definition of vectors
+name <- c("Mercury", "Venus", "Earth", 
+          "Mars", "Jupiter", "Saturn", 
+          "Uranus", "Neptune")
+type <- c("Terrestrial planet", 
+          "Terrestrial planet", 
+          "Terrestrial planet", 
+          "Terrestrial planet", "Gas giant", 
+          "Gas giant", "Gas giant", "Gas giant")
+diameter <- c(0.382, 0.949, 1, 0.532, 
+              11.209, 9.449, 4.007, 3.883)
+rotation <- c(58.64, -243.02, 1, 1.03, 
+              0.41, 0.43, -0.72, 0.67)
+rings <- c(FALSE, FALSE, FALSE, FALSE, TRUE, TRUE, TRUE, TRUE)
+
+# Create a data frame from the vectors
+planets_df <- data.frame(name, type, diameter, rotation, rings)
+
+planets_df
+
+>
+     name               type diameter rotation rings
+1 Mercury Terrestrial planet    0.382    58.64 FALSE
+2   Venus Terrestrial planet    0.949  -243.02 FALSE
+3   Earth Terrestrial planet    1.000     1.00 FALSE
+4    Mars Terrestrial planet    0.532     1.03 FALSE
+5 Jupiter          Gas giant   11.209     0.41  TRUE
+6  Saturn          Gas giant    9.449     0.43  TRUE
+7  Uranus          Gas giant    4.007    -0.72  TRUE
+8 Neptune          Gas giant    3.883     0.67  TRUE
+
+>
+str(planets_df)
+'data.frame':	8 obs. of  5 variables:
+ $ name    : Factor w/ 8 levels "Earth","Jupiter",..: 4 8 1 3 2 6 7 5
+ $ type    : Factor w/ 2 levels "Gas giant","Terrestrial planet": 2 2 2 2 1 1 1 1
+ $ diameter: num  0.382 0.949 1 0.532 11.209 ...
+ $ rotation: num  58.64 -243.02 1 1.03 0.41 ...
+ $ rings   : logi  FALSE FALSE FALSE FALSE TRUE TRUE ...
+```
+
+## 5.3 Selection of data frame elements
+
+```R
+# Print out diameter of Mercury (row 1, column 3)
+planets_df[1, 3]
+
+# Print out data for Mars (entire fourth row)
+planets_df[4, ]
+```
+
+
+
+
+
+
+
+
+
+
+
 
 
 
