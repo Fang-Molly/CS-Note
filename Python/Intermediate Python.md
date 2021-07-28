@@ -271,11 +271,19 @@ SA  South Africa   Pretoria   1.221       52.98
 
 * Index and select data
 
-    * Square brackets `[]`
-    * Advanced methods
-        * loc
-        * iloc
-        
+    * square brackets: limited functionality
+        * Column access `brics[["country", "capital"]]
+        * Row access: only through slicing  `brics[1:4]`
+    * ideally
+        * 2D Numpy arrays
+        * my_array[rows, columns]
+    * pandas
+        * loc (label-based)
+            * Row access `brics.loc[["RU", "IN", "CH"]]
+            * Column access `brics.loc[:, ["country", "capital"]]
+            * Row & Column access  `brics.loc[["RU", "IN", "CH"], ["country", "capital"]]`
+        * illoc (integer position-based)
+                
 > Column Access []
 
 ```python
@@ -311,13 +319,73 @@ IN   India  New Delhi   3.286      1252.0
 CH   China    Beijing   9.597      1357.0
 ```
 
-* Discussion []
+* Row Access loc
 
-    * 
+```python
+>>> brics.loc["RU"]
+country       Russia
+capital        Moscw
+area            17.1
+population     143.5
+Name: RU, dtype: object
 
+>>> brics.loc[["RU"]]
+   country capital  area  population
+RU  Russia   Moscw  17.1       143.5
 
+>>> brics.loc[["RU", "IN", "CH"]]
+   country    capital    area  population
+RU  Russia      Moscw  17.100       143.5
+IN   India  New Delhi   3.286      1252.0
+CH   China    Beijing   9.597      1357.0
 
+>>> brics.loc[["RU", "IN", "CH"], ["country", "capital"]]
+   country    capital
+RU  Russia      Moscw
+IN   India  New Delhi
+CH   China    Beijing
 
+>>> brics.loc[:, ["country", "capital"]]
+         country    capital
+BR        Brazil   Brasilia
+RU        Russia      Moscw
+IN         India  New Delhi
+CH         China    Beijing
+SA  South Africa   Pretoria
+```
+
+* Row Access iloc
+
+```python
+>>> brics.iloc[[1]]
+   country capital  area  population
+RU  Russia   Moscw  17.1       143.5
+
+>>> brics.iloc[[1,2,3]]
+   country    capital    area  population
+RU  Russia      Moscw  17.100       143.5
+IN   India  New Delhi   3.286      1252.0
+CH   China    Beijing   9.597      1357.0
+
+# row & column iloc
+>>> brics.iloc[[1,2,3],[0,1]]
+   country    capital
+RU  Russia      Moscw
+IN   India  New Delhi
+CH   China    Beijing
+
+>>> brics.iloc[:, [0,1]]
+         country    capital
+BR        Brazil   Brasilia
+RU        Russia      Moscw
+IN         India  New Delhi
+CH         China    Beijing
+SA  South Africa   Pretoria
+```
+
+# 3 Logic, Control Flow and Filtering
+
+## 3.1 Comparison Operators
 
 
 
