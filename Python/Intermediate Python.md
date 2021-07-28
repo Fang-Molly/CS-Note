@@ -191,22 +191,129 @@ True
 * List vs Dictionary
 
  
+## 2.2 Pandas
 
+* Tabular dataset
 
+* Datasets in Python
 
+    * 2D Numpy array
+        * One data type
 
+    * pandas!
+        * High level data manipulation tool
+        * Wes Mckinney
+        * Built on Numpy
+        * DataFrame
 
+* DataFrame from Dictionary
 
+```python
+>>> dict = {
+... "country" : ["Brazil", "Russia", "India", "China", "South Africa"],
+... "capital" : ["Brasilia", "Moscw", "New Delhi", "Beijing", "Pretoria"],
+... "area" : [8.156, 17.10, 3.286, 9.597, 1.221],
+... "population" : [200.4, 143.5, 1252, 1357, 52.98]}
+>>> import pandas as pd
+>>> brics = pd.DataFrame(dict)
+>>> brics
+        country    capital    area  population
+0        Brazil   Brasilia   8.156      200.40
+1        Russia      Moscw  17.100      143.50
+2         India  New Delhi   3.286     1252.00
+3         China    Beijing   9.597     1357.00
+4  South Africa   Pretoria   1.221       52.98
 
+# update the index
+>>> brics.index = ["BR", "RU", "IN", "CH", "SA"]
+>>> brics
+         country    capital    area  population
+BR        Brazil   Brasilia   8.156      200.40
+RU        Russia      Moscw  17.100      143.50
+IN         India  New Delhi   3.286     1252.00
+CH         China    Beijing   9.597     1357.00
+SA  South Africa   Pretoria   1.221       52.98
+```
 
+* DataFrame from CSV file
 
+    * CSV = comma-separated values
+    
+> brics.csv          
+,country,capital,area,population
+BR,Brazil,Brasilia,8.156,200.40
+RU,Russia,Moscw,17.100,143.50
+IN,India,New Delhi,3.286,1252.00
+CH,China,Beijing,9.597,1357.00
+SA,South Africa,Pretoria,1.221,52.98
 
+```python
+>>> import pandas as pd
+>>> brics = pd.read_csv("brics.csv")
+>>> brics
+  Unnamed: 0       country    capital    area  population
+0         BR        Brazil   Brasilia   8.156      200.40
+1         RU        Russia      Moscw  17.100      143.50
+2         IN         India  New Delhi   3.286     1252.00
+3         CH         China    Beijing   9.597     1357.00
+4         SA  South Africa   Pretoria   1.221       52.98
 
+# set the first column as row labels
+>>> brics = pd.read_csv("brics.csv", index_col=0)
+>>> brics
+         country    capital    area  population
+BR        Brazil   Brasilia   8.156      200.40
+RU        Russia      Moscw  17.100      143.50
+IN         India  New Delhi   3.286     1252.00
+CH         China    Beijing   9.597     1357.00
+SA  South Africa   Pretoria   1.221       52.98
+```
 
+* Index and select data
 
+    * Square brackets `[]`
+    * Advanced methods
+        * loc
+        * iloc
+        
+> Column Access []
 
+```python
+>>> brics['country']
+BR          Brazil
+RU          Russia
+IN           India
+CH           China
+SA    South Africa
+Name: country, dtype: object
 
+>>> type(brics['country'])
+<class 'pandas.core.series.Series'>
+>>> type(brics[['country']])
+<class 'pandas.core.frame.DataFrame'>
 
+>>> brics[['country', 'capital']]
+         country    capital
+BR        Brazil   Brasilia
+RU        Russia      Moscw
+IN         India  New Delhi
+CH         China    Beijing
+SA  South Africa   Pretoria
+```
+
+> Row Access []
+
+```python
+>>> brics[1:4]
+   country    capital    area  population
+RU  Russia      Moscw  17.100       143.5
+IN   India  New Delhi   3.286      1252.0
+CH   China    Beijing   9.597      1357.0
+```
+
+* Discussion []
+
+    * 
 
 
 
