@@ -106,6 +106,94 @@ plt.yticks([0, 2, 4, 6, 8, 10],
 plt.show()
 ```
 
+* Colors
+    * alpha: 0-1, 0 is totally transparent, 1 is not at all transparent
+
+```python
+# Specify c and alpha inside plt.scatter()
+plt.scatter(x = gdp_cap, y = life_exp, s = np.array(pop) * 2, c = col, alpha = 0.8)
+```
+
+* Additional customizations
+
+```python
+# Additional customizations
+plt.text(1550, 71, 'India')
+plt.text(5700, 80, 'China')
+
+# add grid() call
+plt.grid(True)
+```
+
+# 2 Dictionaries & Pandas
+
+## 2.1 Dictionaries
+
+* List
+
+```python
+>>> pop = [30.55, 2.77, 39.21]
+>>> countries = ["afghanistan", "albania", "algeria"]
+>>> ind_alb = countries.index("albania")
+>>> ind_alb
+1
+>>> pop[ind_alb]
+2.77
+```
+
+* Dictionaries
+
+```python
+>>> world = {"afghanistan":30.55, "albania":2.77, "algeria":39.21}
+>>> world
+{'afghanistan': 30.55, 'albania': 2.77, 'algeria': 39.21}
+>>> world["albania"]
+2.77
+# keys() method
+>>> world.keys()
+dict_keys(['afghanistan', 'albania', 'algeria'])
+```
+
+* Keys have to be "immutable" objects
+    * list cann't be keys
+
+```python
+>>> {0:"hello", True:"dear", "two":"world"}
+{0: 'hello', True: 'dear', 'two': 'world'}
+>>> {["just", "to", "test"]: "value"}
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+TypeError: unhashable type: 'list'
+```
+
+```python
+# add elements
+>>> world = {"afghanistan":30.55, "albania":2.77, "algeria":39.21}
+>>> world["sealand"] = 0.000027
+>>> world
+{'afghanistan': 30.55, 'albania': 2.77, 'algeria': 39.21, 'sealand': 2.7e-05}
+
+# in
+>>> "sealand" in world
+True
+
+# update  the element
+>>> world["sealand"] = 0.000028
+>>> world
+{'afghanistan': 30.55, 'albania': 2.77, 'algeria': 39.21, 'sealand': 2.8e-05}
+
+# remove the element
+>>> del(world['sealand'])
+>>> world
+{'afghanistan': 30.55, 'albania': 2.77, 'algeria': 39.21}
+```
+
+* List vs Dictionary
+
+ 
+
+
+
 
 
 
