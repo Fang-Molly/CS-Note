@@ -385,7 +385,290 @@ SA  South Africa   Pretoria
 
 # 3 Logic, Control Flow and Filtering
 
+> Overview
+
+* Comparison operators : `<`, `>`, `>=`, `<=`, `==`, `!=`
+* Boolean operators : `and`, `or`, `not`
+* Conditional statements : `if`, `else`, `elif`
+
 ## 3.1 Comparison Operators
+
+* Numeric comparisons
+
+```python
+>>> 2 < 3
+True
+>>> 2 == 3
+False
+>>> 2 <= 3
+True
+>>> 3 <= 3
+True
+>>> x = 2
+>>> y = 3
+>>> x < y
+True
+```
+
+* Other comparisons
+
+```python
+>>> "carl" < "chris"
+True
+>>> 3 < "chris"
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+TypeError: '<' not supported between instances of 'int' and 'str'
+>>> 3 < 4.1
+True
+```
+
+* Comparators
+
+    * `<` : less than
+    * `<=` : less than or equal
+    * `>` : greater than
+    * `>=` : greater than or equal
+    * `==` : equal
+    * `!=` : not equal
+
+## 3.2 Boolean Operators
+
+ * `and`
+
+```Python
+>>> True and True
+True
+>>> False and True
+False
+>>> True and False
+False
+>>> False and False
+False
+>>> x = 12
+>>> x > 5 and x < 15
+True
+```
+
+ * `or`
+
+```python
+>>> True or True
+True
+>>> False or True
+True
+>>> True or False
+True
+>>> False or False
+False
+>>> y = 5
+>>> y < 7 or y > 13
+True
+```
+
+ * `not`
+
+```python
+>>> not True
+False
+>>> not False
+True
+```
+
+* NumPy
+
+```python
+>>> bmi
+array([21.85171573, 20.97505669, 21.75028214, 24.7473475 , 21.44127836])
+>>> bmi > 21
+array([ True, False,  True,  True,  True])
+>>> bmi < 22
+array([ True,  True,  True, False,  True])
+>>> bmi > 21 and bmi < 22
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+ValueError: The truth value of an array with more than one element is ambiguous. Use a.any() or a.all()
+```
+
+> logical_and()
+    
+```python    
+>>> np.logical_and(bmi > 21, bmi < 22)
+array([ True, False,  True, False,  True])
+>>> bmi[np.logical_and(bmi > 21, bmi < 22)]
+array([21.85171573, 21.75028214, 21.44127836])
+```
+
+> logical_or()
+
+
+> logical_not()
+
+
+## 3.3 if, elif, else
+
+* `if`
+
+```python
+>>> z = 4
+>>> if z % 2 == 0 :   # True
+...     print("z is even")
+... 
+z is even
+```
+
+```python
+>>> z = 4
+>>> if z % 2 == 0 :
+...     print("checking " + str(z))
+...     print("z is even")
+... 
+checking 4
+z is even
+```
+
+* `else`
+
+```python
+>>> z = 5
+>>> if z % 2 == 0 :
+...     print("z is even")
+... else:
+...     print("z is odd")
+... 
+z is odd
+```
+
+* `elif`
+
+```python
+>>> z = 3
+>>> if z % 2 == 0 :
+...     print("z is divisible by 2")
+... elif z % 3 == 0 :
+...     print("z is divisible by 3")
+... else:
+...     print("z is neither divisible by 2 nor by 3")
+... 
+z is divisible by 3
+```
+
+## 3.4 Filtering pandas DataFrames
+
+```python
+>>> import pandas as pd
+>>> brics = pd.read_csv("brics.csv", index_col = 0)
+>>> brics
+         country    capital    area  population
+BR        Brazil   Brasilia   8.156      200.40
+RU        Russia      Moscw  17.100      143.50
+IN         India  New Delhi   3.286     1252.00
+CH         China    Beijing   9.597     1357.00
+SA  South Africa   Pretoria   1.221       52.98
+
+# select the column
+>>> brics["area"]
+BR     8.156
+RU    17.100
+IN     3.286
+CH     9.597
+SA     1.221
+Name: area, dtype: float64
+
+# do comparison on the column
+>>> brics["area"] > 8
+BR     True
+RU     True
+IN    False
+CH     True
+SA    False
+Name: area, dtype: bool
+
+# use result to select countries
+>>> is_huge = brics["area"] > 8
+>>> is_huge
+BR     True
+RU     True
+IN    False
+CH     True
+SA    False
+Name: area, dtype: bool
+>>> brics[is_huge]
+   country   capital    area  population
+BR  Brazil  Brasilia   8.156       200.4
+RU  Russia     Moscw  17.100       143.5
+CH   China   Beijing   9.597      1357.0
+```
+
+* Boolean operators
+
+```python
+>>> import numpy as np
+>>> np.logical_and(brics["area"] > 8, brics["area"] < 10)
+BR     True
+RU    False
+IN    False
+CH     True
+SA    False
+Name: area, dtype: bool
+>>> brics[np.logical_and(brics["area"] > 8, brics["area"] < 10)]
+   country   capital   area  population
+BR  Brazil  Brasilia  8.156       200.4
+CH   China   Beijing  9.597      1357.0
+```
+
+# 4 Loops
+
+## 4.1 `while` loop
+
+
+
+
+## 4.2 `for` lopp
+
+
+
+
+
+
+
+## 4.3 Loop Data Structures
+
+
+
+
+
+
+
+# 5 Case Studay: Hacker Statistics
+
+## 5.1 Random Numbers
+
+
+
+
+
+
+
+
+## 5.2 Random Walk
+
+
+
+
+
+
+
+
+
+## 5.3 Distribution
+
+
+
+
+
+
+
 
 
 
