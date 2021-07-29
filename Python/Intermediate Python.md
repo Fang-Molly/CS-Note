@@ -621,35 +621,253 @@ CH   China   Beijing  9.597      1357.0
 
 ## 4.1 `while` loop
 
+```python
+>>> error = 50.0
+>>> while error > 1 :
+...     error = error / 4
+...     print(error)
+... 
+12.5
+3.125
+0.78125
+```
+```python
+# Initialize offset
+offset = -6
 
-
+# Code the while loop
+while offset != 0 :
+    print("correcting...")
+    if offset > 0 :
+        offset = offset - 1
+    else : 
+        offset = offset + 1   
+    print(offset)
+```
 
 ## 4.2 `for` lopp
 
+```python
+>>> fam = [1.73, 1.68, 1.71, 1.89]
+>>> for height in fam :
+...     print(height)
+... 
+1.73
+1.68
+1.71
+1.89
 
+>>> fam = [1.73, 1.68, 1.71, 1.89]
+>>> for index, height in enumerate(fam) :
+...     print("index" + str(index) + ":" + str(height))
+... 
+index0:1.73
+index1:1.68
+index2:1.71
+index3:1.89
 
-
-
-
+>>> for c in "family" :
+...     print(c.capitalize())
+... 
+F
+A
+M
+I
+L
+Y
+```
 
 ## 4.3 Loop Data Structures
 
+* Dictionary : `for key, val in my_dict.items() :`
 
+```python
+>>> world = {"afghanistan":30.55, "albania":2.77, "algeria":39.21}
+>>> for key, value in world.items() :
+...     print(key + " is " + str(value))
+... 
+afghanistan is 30.55
+albania is 2.77
+algeria is 39.21
+```
 
+* Numpy Arrays : `for val in np.nditer(my_array) :`
 
+```python
+>>> import numpy as np
+>>> np_height = np.array([1.73, 1.68, 1.71, 1.89, 1.79])
+>>> np_weight = np.array([65.4, 59.2, 63.6, 88.4, 68.7])
+>>> bmi = np_weight / np_height ** 2
+>>> for val in bmi :
+...     print(val)
+... 
+21.85171572722109
+20.97505668934241
+21.750282138093777
+24.74734749867025
+21.44127836209856
+```
 
+* 2D Numpy Arrays
 
+```python
+>>> import numpy as np
+>>> np_height = np.array([1.73, 1.68, 1.71, 1.89, 1.79])
+>>> np_weight = np.array([65.4, 59.2, 63.6, 88.4, 68.7])
+>>> means = np.array([np_height, np_weight])
+>>> for val in means :
+...     print(val)
+... 
+[1.73 1.68 1.71 1.89 1.79]
+[65.4 59.2 63.6 88.4 68.7]
+
+>>> import numpy as np
+>>> np_height = np.array([1.73, 1.68, 1.71, 1.89, 1.79])
+>>> np_weight = np.array([65.4, 59.2, 63.6, 88.4, 68.7])
+>>> means = np.array([np_height, np_weight])
+>>> for val in np.nditer(means) :
+...     print(val)
+... 
+1.73
+1.68
+1.71
+1.89
+1.79
+65.4
+59.2
+63.6
+88.4
+68.7
+```
+
+* `iterrows()`
+
+```python
+>>> import pandas as pd
+>>> brics = pd.read_csv("brics.csv", index_col = 0)
+>>> for val in brics :
+...     print(val)
+... 
+country
+capital
+area
+population
+
+# iterrows
+>>> for lab, row in brics.iterrows():
+...     print(lab)
+...     print(row)
+... 
+BR
+country         Brazil
+capital       Brasilia
+area             8.156
+population       200.4
+Name: BR, dtype: object
+RU
+country       Russia
+capital        Moscw
+area            17.1
+population     143.5
+Name: RU, dtype: object
+IN
+country           India
+capital       New Delhi
+area              3.286
+population       1252.0
+Name: IN, dtype: object
+CH
+country         China
+capital       Beijing
+area            9.597
+population     1357.0
+Name: CH, dtype: object
+SA
+country       South Africa
+capital           Pretoria
+area                 1.221
+population           52.98
+Name: SA, dtype: object
+```
+
+* selective print
+
+```python
+>>> import pandas as pd
+>>> brics = pd.read_csv("brics.csv", index_col = 0)
+>>> for lab, row in brics.iterrows():
+...     print(lab + ": " + row["capital"])
+... 
+BR: Brasilia
+RU: Moscw
+IN: New Delhi
+CH: Beijing
+SA: Pretoria
+```
+
+* add column
+
+```python
+>>> import pandas as pd
+>>> brics = pd.read_csv("brics.csv", index_col = 0)
+>>> for lab, row in brics.iterrows() :
+...     brics.loc[lab, "name_length"] = len(row["country"])
+... 
+>>> print(brics)
+         country    capital    area  population  name_length
+BR        Brazil   Brasilia   8.156      200.40          6.0
+RU        Russia      Moscw  17.100      143.50          6.0
+IN         India  New Delhi   3.286     1252.00          5.0
+CH         China    Beijing   9.597     1357.00          5.0
+SA  South Africa   Pretoria   1.221       52.98         12.0
+```
+
+* `apply()`
+
+```python
+>>> import pandas as pd
+>>> brics = pd.read_csv("brics.csv", index_col = 0)
+>>> brics["name_length"] = brics["country"].apply(len)
+>>> print(brics)
+         country    capital    area  population  name_length
+BR        Brazil   Brasilia   8.156      200.40            6
+RU        Russia      Moscw  17.100      143.50            6
+IN         India  New Delhi   3.286     1252.00            5
+CH         China    Beijing   9.597     1357.00            5
+SA  South Africa   Pretoria   1.221       52.98           12
+```
 
 # 5 Case Studay: Hacker Statistics
 
 ## 5.1 Random Numbers
 
+* Random generators
 
+```python
+>>> import numpy as np
+>>> np.random.rand()
+0.2667909160527513
 
-
-
-
-
+# starting from a seed
+>>> np.random.seed(123) # same seed: same random numbers!
+>>> np.random.rand()
+0.6964691855978616
+>>> np.random.rand()
+0.28613933495037946
+```
+```python
+>>> import numpy as np
+>>> np.random.seed(123)
+>>> coin = np.random.randint(0,2)
+>>> print(coin)
+0
+>>> if coin == 0 :
+...     print("heads")
+... else:
+...     print("tails")
+... 
+heads
+```
 
 ## 5.2 Random Walk
 
