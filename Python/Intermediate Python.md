@@ -32,6 +32,39 @@
 plt.xscale('log')
 ```
 
+> Bar chart
+
+```python
+plt.bar(df.precinct, df.pets_abducted)
+plt.ylabel('Pet Abductions')
+plt.show()
+```
+
+* Horizontal bar charts
+
+```python
+plt.barh(df.precinct, df.pets_abducted)
+plt.ylabel('Pet Abductions')
+plt.show()
+```
+
+* Adding error bars
+
+```python
+plt.bar(df.precinct, df.pet_abductions, yerr=df.error)
+plt.ylabel('Pet Abductions')
+plt.show()
+```
+
+* Stacked bar charts
+
+```python
+plt.bar(df.precinct, df.dog, label='Dog')
+plt.bar(df.precinct, df.cat, bottom=df.dog, label='Cat')
+plt.legend()
+plt.show()
+```
+
 ## 1.2 Histogram
 
 * Histogram
@@ -47,6 +80,13 @@ plt.xscale('log')
 >>> plt.hist(values, bins=3)
 (array([4., 6., 2.]), array([0., 2., 4., 6.]), <BarContainer object of 3 artists>)
 >>> plt.show()
+```
+
+* changing range
+
+```python
+plt.hist(data, range=(xmin, xmax))
+plt.hist(gravel.mass, range(50, 100))
 ```
 
 * `plt.clf()` clean it up again so you can start afresh
@@ -65,6 +105,13 @@ plt.hist(life_exp, bins=20)
 # Show and clean up again
 plt.show()
 plt.clf()
+```
+
+* Normalizing
+
+```python
+plt.hist(male_weight, density=True)
+plt.hist(female_weight, density=True)
 ```
 
 ## 1.3 Customization
@@ -114,7 +161,7 @@ plt.plot(mengfei.days, mengfei.cases, label="Mengfei")
 plt.legend()
 ```
 
-* Colors
+* Changing colors transparency
 
     * alpha: 0-1, 0 is totally transparent, 1 is not at all transparent
 
@@ -123,16 +170,18 @@ plt.legend()
 plt.scatter(x = gdp_cap, y = life_exp, s = np.array(pop) * 2, c = col, alpha = 0.8)
 ```
 
-* Additional customizations
+* Add text
 
 ```python
-# Additional customizations
 plt.text(1550, 71, 'India')
 plt.text(5700, 80, 'China')
+```
+* Add grid
 
-# add grid() call
+```python
 plt.grid(True)
 ```
+
 * Change font size
 
 `plt.title("Plot title", fontsize=20)`
@@ -165,6 +214,11 @@ plt.grid(True)
 
 `plt.style.use('fivethirtyeight')`
 
+    * `fivethirtyeight` - Based on the color scheme of the popular website
+    * `grayscale` - Great for when you don't have a color printer!
+    * `seaborn` - Based on another Python visualization library
+    * `classic` - The default color scheme for Matplotlib
+    * `ggplot`
  
 
 # 2 Dictionaries & Pandas
