@@ -8,7 +8,7 @@
 > Line plot
 
 ```python
->>> import matplotlib.pyplot as plt
+>>> import matplotlib.pyplot as plt   # or `from matplotlib import pyplot as plt` 
 >>> year = [1950, 1970, 1990, 2010]
 >>> pop = [2.519, 3.692, 5.263, 6.972]
 >>> plt.plot(year, pop)
@@ -105,8 +105,17 @@ plt.yticks([0, 2, 4, 6, 8, 10],
 
 plt.show()
 ```
+* Legends
+
+```python
+plt.plot(aditya.days, aditya.cases, label="Aditya")
+plt.plot(deshaun.days, deshaun.cases, label="Dechaun")
+plt.plot(mengfei.days, mengfei.cases, label="Mengfei")
+plt.legend()
+```
 
 * Colors
+
     * alpha: 0-1, 0 is totally transparent, 1 is not at all transparent
 
 ```python
@@ -124,6 +133,39 @@ plt.text(5700, 80, 'China')
 # add grid() call
 plt.grid(True)
 ```
+* Change font size
+
+`plt.title("Plot title", fontsize=20)`
+
+* Change font color
+
+`plt.legend(color="green")`
+
+* Changing line color
+
+`plt.plot(x, y1, color="orange")`
+
+* Changing line width
+
+`plt.plot(x, y1, linewidth=1)`
+
+* Changing line style
+
+`plt.plot(x, y1, linestyle='-')`
+
+'-', '--', '-.', ':'    
+
+* Adding markers
+
+`plt.plot(x, y1, marker='x')`
+
+'x', 's', 'o', 'd', '*', 'h'.  
+
+* Setting a style
+
+`plt.style.use('fivethirtyeight')`
+
+ 
 
 # 2 Dictionaries & Pandas
 
@@ -322,6 +364,7 @@ memory usage: 328.0+ bytes
 > Column Access []
 
 ```python
+# select with brackets and string
 >>> brics['country']
 BR          Brazil
 RU          Russia
@@ -330,11 +373,13 @@ CH           China
 SA    South Africa
 Name: country, dtype: object
 
+# different types from single bracket and double bracket
 >>> type(brics['country'])
 <class 'pandas.core.series.Series'>
 >>> type(brics[['country']])
 <class 'pandas.core.frame.DataFrame'>
 
+# select multiple columns
 >>> brics[['country', 'capital']]
          country    capital
 BR        Brazil   Brasilia
@@ -342,6 +387,17 @@ RU        Russia      Moscw
 IN         India  New Delhi
 CH         China    Beijing
 SA  South Africa   Pretoria
+
+# select with a dot
+>>> brics.country
+0          Brazil
+1          Russia
+2           India
+3           China
+4    South Africa
+Name: country, dtype: object
+>>> type(brics.country)
+<class 'pandas.core.series.Series'>
 ```
 
 > Row Access []
@@ -633,6 +689,19 @@ Name: area, dtype: bool
 BR  Brazil  Brasilia   8.156       200.4
 RU  Russia     Moscw  17.100       143.5
 CH   China   Beijing   9.597      1357.0
+
+>>> brics.area > 8
+0     True
+1     True
+2    False
+3     True
+4    False
+Name: area, dtype: bool
+>>> brics[brics.area > 8]
+  Unnamed: 0 country   capital    area  population
+0         BR  Brazil  Brasilia   8.156       200.4
+1         RU  Russia     Moscw  17.100       143.5
+3         CH   China   Beijing   9.597      1357.0
 ```
 
 * Boolean operators
