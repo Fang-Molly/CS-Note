@@ -268,6 +268,41 @@ IN         India  New Delhi   3.286     1252.00
 CH         China    Beijing   9.597     1357.00
 SA  South Africa   Pretoria   1.221       52.98
 ```
+```
+>>> import pandas as pd
+>>> brics = pd.read_csv("brics.csv")
+>>> brics
+  Unnamed: 0       country    capital    area  population
+0         BR        Brazil   Brasilia   8.156      200.40
+1         RU        Russia      Moscw  17.100      143.50
+2         IN         India  New Delhi   3.286     1252.00
+3         CH         China    Beijing   9.597     1357.00
+4         SA  South Africa   Pretoria   1.221       52.98
+
+# show the first few lines
+>>> brics.head()
+  Unnamed: 0       country    capital    area  population
+0         BR        Brazil   Brasilia   8.156      200.40
+1         RU        Russia      Moscw  17.100      143.50
+2         IN         India  New Delhi   3.286     1252.00
+3         CH         China    Beijing   9.597     1357.00
+4         SA  South Africa   Pretoria   1.221       52.98
+
+# show the basic points of the data
+>>> brics.info()
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 5 entries, 0 to 4
+Data columns (total 5 columns):
+ #   Column      Non-Null Count  Dtype  
+---  ------      --------------  -----  
+ 0   Unnamed: 0  5 non-null      object 
+ 1   country     5 non-null      object 
+ 2   capital     5 non-null      object 
+ 3   area        5 non-null      float64
+ 4   population  5 non-null      float64
+dtypes: float64(2), object(3)
+memory usage: 328.0+ bytes
+```
 
 * Index and select data
 
