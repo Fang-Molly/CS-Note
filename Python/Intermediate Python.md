@@ -855,6 +855,7 @@ SA  South Africa   Pretoria   1.221       52.98           12
 >>> np.random.rand()
 0.28613933495037946
 ```
+
 ```python
 >>> import numpy as np
 >>> np.random.seed(123)
@@ -871,18 +872,70 @@ heads
 
 ## 5.2 Random Walk
 
+```python
+>>> import numpy as np
+>>> np.random.seed(123)
+>>> outcomes = []
+>>> for x in range(10) :
+...     coin = np.random.randint(0,2)
+...     if coin == 0 :
+...         outcomes.append("heads")
+...     else :
+...         outcomes.append("tails")
+... 
+>>> print(outcomes)
+['heads', 'tails', 'heads', 'heads', 'heads', 'heads', 'heads', 'tails', 'tails', 'heads']
+```
 
-
-
-
-
-
-
+```python
+>>> import numpy as np
+>>> np.random.seed(123)
+>>> tails = [0]
+>>> for x in range(10) :
+...     coin = np.random.randint(0,2)
+...     tails.append(tails[x] + coin)
+... 
+>>> print(tails)
+[0, 0, 1, 1, 1, 1, 1, 1, 2, 3, 3]
+```
 
 ## 5.3 Distribution
 
+* Distribution
 
+```python
+>>> import numpy as np
+>>> np.random.seed(123)
+>>> final_tails = []
+>>> for x in range(100) :
+...     tails = [0]
+...     for x in range(10) :
+...         coin = np.random.randint(0,2)
+...         tails.append(tails[x] + coin)
+...     final_tails.append(tails[-1])
+... 
+>>> print(final_tails)
+[3, 6, 4, 5, 4, 5, 3, 5, 4, 6, 6, 8, 6, 4, 7, 5, 7, 4, 3, 3, 4, 5, 8, 5, 6, 5, 7, 6, 4, 5, 8, 5, 8, 4, 6, 6, 3, 4, 5, 4, 7, 8, 9, 4, 3, 4, 5, 6, 4, 2, 6, 6, 5, 7, 5, 4, 5, 5, 6, 7, 6, 6, 6, 3, 6, 3, 6, 5, 6, 5, 6, 4, 6, 6, 3, 4, 4, 2, 4, 5, 4, 6, 6, 6, 8, 4, 6, 5, 7, 4, 6, 5, 4, 6, 7, 3, 7, 4, 5, 7]
+```
 
+* Histogram
+
+```python
+>>> import numpy as np
+>>> import matplotlib.pyplot as plt
+>>> np.random.seed(123)
+>>> final_tails = []
+>>> for x in range(100) :
+...     tails = [0]
+...     for x in range(10) :
+...         coin = np.random.randint(0, 2)
+...         tails.append(tails[x] + coin)
+...     final_tails.append(tails[-1])
+... 
+>>> plt.hist(final_tails, bins = 10)
+(array([ 2., 10., 23.,  0., 21., 27.,  0., 10.,  6.,  1.]), array([2. , 2.7, 3.4, 4.1, 4.8, 5.5, 6.2, 6.9, 7.6, 8.3, 9. ]), <BarContainer object of 10 artists>)
+>>> plt.show()
+```
 
 
 
