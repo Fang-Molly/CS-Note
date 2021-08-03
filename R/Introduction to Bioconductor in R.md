@@ -15,8 +15,14 @@
 
 * How to install Bioconductor packages?
 
-    * Bioconductor version 3.7 or earlier uses BiocLite
-    * Bioconductor version 3.8 and later uses BiocManager
+    * Install the latest R (version 4.1.0) for mac from https://cran.r-project.org/bin/macosx/
+    * Install the current release of Bioconductor (version 3.13) https://bioconductor.org/install/
+
+```R
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install(version = "3.13")
+```
 
 * Bioconductor version and package version
 
