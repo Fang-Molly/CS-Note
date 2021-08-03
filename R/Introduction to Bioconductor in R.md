@@ -192,7 +192,8 @@ DNAStringSet object of length 17:
 [16]  948066 AAATAGCCCTCATGTACGTCTCCTCCAAGC...TCATTTTTTTTTTTTAATTTCGGTCAGAAA chrXVI
 [17]   85779 TTCATAATTAATTTTTTATATATATATTAT...AATATGCTTAATTATAATATAATATCCATA chrM
 
-> getSeq(yeast, "chrM")
+> yeast_M <- getSeq(yeast, "chrM")
+> yeast_M
 85779-letter DNAString object
 seq: TTCATAATTAATTTTTTATATATATATTATATTATAATATTAATT...TATTATTATACAGAAATATGCTTAATTATAATATAATATCCATA
 
@@ -227,6 +228,25 @@ seq: TTCATAATTAATTTTTTATATATATATTATATTATAATATTAATT...TATTATTATACAGAAATATGCTTAATT
 
 > nchar(yeast$chrM)
 [1] 85779
+
+> alphabet(yeast_M)
+ [1] "A" "C" "G" "T" "M" "R" "W" "S" "Y" "K" "V" "H" "D" "B" "N" "-" "+" "."
+> alphabetFrequency(yeast_M)
+    A     C     G     T     M     R     W     S     Y     K     V     H     D     B     N     - 
+36169  6863  7813 34934     0     0     0     0     0     0     0     0     0     0     0     0 
+    +     . 
+    0     0 
+> alphabet(yeast_M, baseOnly = TRUE)
+[1] "A" "C" "G" "T"
+
+> class(yeast_M)
+[1] "DNAString"
+attr(,"package")
+[1] "Biostrings"
+> dna_seq <- subseq(unlist(yeast_M), end = 21)
+> dna_seq
+21-letter DNAString object
+seq: TTCATAATTAATTTTTTATAT
 ```
 
 # 2 Biostrings and when to use them?
@@ -240,6 +260,7 @@ seq: TTCATAATTAATTTTTTATATATATATTATATTATAATATTAATT...TATTATTATACAGAAATATGCTTAATT
     * The BString class comes from big string
 
 ```R
+library(Biostrings)
 showClass("XString")
 showClass("BString")
 showClass("BStringSet")
@@ -292,13 +313,99 @@ seq: MIS*
 seq: MIS*
 ```
 
+## 2.2 Sequence handling
 
+* Single vs set
 
+    * XString : store a single sequence
+        * BString for any string
+        * DNAString for DNA
+        * RNAString for RNA
+        * AAString for amino acids
 
+    * XStringSet for many sequences
+        * BStringSet
+        * DNAStringSet
+        * RNAStringSet
+        * AAStringSet
 
+* Create a stringSet and collate it
+
+* Complement sequence
+
+```R
+> a_seq <- DNAString("ATGATCTCGTAA")
+> a_seq
+12-letter DNAString object
+seq: ATGATCTCGTAA
+> complement(a_seq)
+12-letter DNAString object
+seq: TACTAGAGCATT
+> rev(a_seq)
+12-letter DNAString object
+seq: AATGCTCTAGTA
+> reverse(a_seq)
+12-letter DNAString object
+seq: AATGCTCTAGTA
+> reverseComplement(a_seq)
+12-letter DNAString object
+seq: TTACGAGATCAT
+```
 
 
 
 # 3 IRanges and GenomicRanges
+
+## 3.1 IRanges and Genomic Structures
+
+* Sequence Ranges
+
+```R
+> library(IRanges)
+> myIRanges <- IRanges(start = 20, end = 30)
+> myIRanges
+IRanges object with 1 range and 0 metadata columns:
+          start       end     width
+      <integer> <integer> <integer>
+  [1]        20        30        11
+```
+
+```R
+# width = end - start + 1
+> (myIRanges_width <- IRanges(start = c(1, 20), width = c(30, 11)))
+IRanges object with 2 ranges and 0 metadata columns:
+          start       end     width
+      <integer> <integer> <integer>
+  [1]         1        30        30
+  [2]        20        30        11
+  
+> (myIRanges_end <- IRanges(start = c(1,20), end = 30))
+IRanges object with 2 ranges and 0 metadata columns:
+          start       end     width
+      <integer> <integer> <integer>
+  [1]         1        30        30
+  [2]        20        30        11
+```
+
+* Rle - run length encoding
+    * compute and store the lengths and values of a vector or factor
+    * general S4 container used to save long repetitive vectors efficiently
+
+```R
+> (some_numbers <- c(3,2,2,2,3,3,4,2))
+[1] 3 2 2 2 3 3 4 2
+> (Rle(some_numbers))
+numeric-Rle of length 8 with 5 runs
+  Lengths: 1 3 2 1 1
+  Values : 3 2 3 4 2
+```
+
+
+
+
+
+
+
+
 
 # 4 Introducing ShortRead
