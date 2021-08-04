@@ -40,6 +40,24 @@
 
 * DESeq2 vignette
 
+* analysis flow
+    * Read counts associated with genes
+    * Quality control
+        * Normalization
+        * Unsupervised clustering analyses
+    * DE analysis
+        * Modelling raw counts for each gene
+        * Shrinking log2 fold changes
+        * Testing for differential expression
+
+* Bringing in data for DESeq2 : `read.csv("csv file")`
+
+```R
+wt_rawcounts <- read.csv("wt_rawcounts.csv")
+View(wt_rawcounts)
+```
+
+
 
 
 
