@@ -146,11 +146,40 @@
 
 * `cut` : cutting out the sections from each line of files and writing the result to standard output
 
-    * cut by byte position, character and field
+> `cut OPTION... [FILE]...`
 
+    * `-b (--bytes=LIST)` - Select by specifying a byte or bytes.
+    
+```
+$ cut -b 1,2,3 state.txt  # list without ranges
+$ cut -b 1-3,5-7 state.txt  # list with ranges
+$ cut -b 1- state.txt
+$ cut -b -3 state.txt
+```
 
+    * `-c (--characters=LIST)` - Select by specifying a character or characters.
+        * `$cut -c [(k)-(n)/(k),(n)/(n)] filename`
+```
+$ cut -c 2,5,7 state.txt
+$ cut -c 1-7 state.txt
+$ cut -c 1- state.txt
+$ cut -c -5 state.txt
+```
+    
+    * `-f (--fields=LIST)` - Select by specifying a field or fields. This is the most commonly used option.
+        * `$cut -d "delimiter" -f (field number) file.txt`
+```
+$ cut -d " " -f 1 state.txt
+$ cut -d " " -f 1-4 state.txt
+```
+    * -complement : complement the output
+        
+        * with `-f` : `cut --complement -d " " -f 1 state.txt`
+        * with `-c` : `cut --complement -c 5 state.txt`
 
-
+    * -output-delimiter : `cut -d " " -f 1,2 state.txt --output-delimiter='%'`
+    
+    * -version : `cut --version`
 
 ## 2.10 Replace the contents of a file
 
