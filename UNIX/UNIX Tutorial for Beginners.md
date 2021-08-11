@@ -50,6 +50,8 @@
 
 * `ls -l` : (long listing) lists contents of current directory with extra details
 
+* `ls -lh` : show in human readable format the size fo the files
+
 * `ls /home/user/*.txt` : lists all files in /home/user ending in .txt
 
 ## 2.2 Making Directories
@@ -141,6 +143,14 @@
 
     * `wc -w file` : count how many words
     * `wc -l file` : count how many lines
+
+* `cut` : cutting out the sections from each line of files and writing the result to standard output
+
+    * cut by byte position, character and field
+
+
+
+
 
 ## 2.10 Replace the contents of a file
 
@@ -498,11 +508,18 @@ $ kill 34624
 # 9 Download files from repositories
 
 * `wget file_address`
-* `more` : display part of the content of the file
 
+```
+$ wget http://ftp.ensembl.org/pub/release-104/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.chromosome.10.fa.gz
+```
+# 10 Manipulate files, piping, parsing, reformatting
 
+* `grep`
+```
+grep ">" Homo_sapiens.GRCh38.dna.chromosome.10.fa > seq_names.txt
+```
 
-
+* `cut`
 
 
 
