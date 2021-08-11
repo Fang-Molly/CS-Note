@@ -54,9 +54,9 @@
 
 ## 2.2 Making Directories
 
-* `mkdir directory` : makes a directory
+* `mkdir directory` : makes an empty directory
 
-* `touch file` : creates a file, not a directory. updates the timestamp on the file if it already exists, without modifying its contents
+* `touch file` : creates an empty file; updates the timestamp on the file if it already exists, without modifying its contents
 
 ## 2.3 Changing to a different directory
 
@@ -79,6 +79,8 @@
 ## 2.5 Copying Files
 
 * `cp myfile1 myfile2` : copies myfile to myfile2. if myfile2 exists, this will overwrite it! doesn't work on directory!
+
+* `cp directory1 -r directory2` : copy a whole folder and its content.
 
 ## 2.6 Moving files
 
@@ -140,6 +142,18 @@
     * `wc -w file` : count how many words
     * `wc -l file` : count how many lines
 
+## 2.10 Replace the contents of a file
+
+* `sed` : `s/<TO BE REPLACED>/<TO REPLACE>/`
+    * `s/<TO BE REPLACED>/<TO REPLACE>/g` : replace every character found in the file
+    
+```
+$ sed s/T/U/g dna.txt > rna.txt
+$ cat rna.txt
+AUGUACUGACUGCAUGCAUGCCAUGCA
+```
+
+
 # 3 Redirecing standard streams
 
 ## 3.1 Redirection `command > file`
@@ -166,6 +180,12 @@ apple
 pear
 banana
 apple
+```
+
+```
+$ echo "ATGTACTGACTGCATGCATGCCATGCA" > dna.txt
+$ cat dna.txt
+ATGTACTGACTGCATGCATGCCATGCA
 ```
 
 ## 3.3 Appending to a file `command >> file`
@@ -390,13 +410,95 @@ $ kill 34624
 
 ## 7.1 Compiling UNIX software packages
 
+* The steps to install software 
+
+    * Locate and download the source code (which is usually compressed)
+    * Unpack the source code
+    * Compile the code
+    * Install the resulting executable
+    * Set paths to the installation directory
+
+* Compiling Source Code
+
+* `make` and the Makefile
+
+* configure
+
+    * The simplest way to compile a package is:
+
+        * cd to the directory containing the package's source code.
+        * Type ./configure to configure the package for your system.
+        * Type make to compile the package.
+        * type make check to run any self-tests that come with the package.
+        * Type make install to install the programs and any data files and documentation.
+        * type make clean to remove the program binaries and object files from the source code directory 
+
+    * --help
+    * --prefix
+    * --exec-prefix
+
+## 7.2 Downloading source code
+
+## 7.3 Extracting the source code
+
+# 8
+
+## 8.1 UNIX Variables
+
+* environment variables : have a farther reaching significance, and those set at login are valid for the duration of the session. UPPER CASE name!
+
+* shell variables : apply only to the current instance of the shell and are used to set short-term working conditions. lower case names!
+
+## 8.2 Environment Variables
+
+* examples : 
+
+    * OSTYPE
+    * USER (your login name) 
+    * HOME (the path name of your home directory)
+    * HOST (the name of the computer you are using)
+    * ARCH (the architecture of the computers processor)
+    * DISPLAY (the name of the computer screen to display X windows)
+    * PRINTER (the default printer to send print jobs)
+    * PATH (the directories the shell should search to find a command)
+
+* `echo` : print values to standard output   
+    * `echo $OSTYPE`
+
+* Finding out the current values of these variables
+
+    * `setenv` : set the environment variables
+    * `printenv` or `env` : display the environment variables
+    * `unsetenv` : unset the environment variables
+
+## 8.3 Shell variables
+
+* examples :
+    * history
+    * cwd (your current working directory) 
+    * home (the path name of your home directory)
+    * path (the directories the shell should search to find a command)
+    * prompt (the text string used to prompt for interactive commands shell your login shell)
+
+* Finding out the current values of these variables
+    * `set` : set and display the shell variables
+    * `unset` : unset the shell variables
+
+* What is the difference between PATH and path?
 
 
 
+## 8.4 Using and setting variables
+
+## 8.5 Setting shell variables in the .cshrc file
+
+## 8.6 Setting tha path
 
 
+# 9 Download files from repositories
 
-
+* `wget file_address`
+* `more` : display part of the content of the file
 
 
 
