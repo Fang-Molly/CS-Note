@@ -138,6 +138,8 @@
     * `-v` display those lines that do NOT match
     * `-n` precede each matching line with the line number
     * `-c` print only the total count of matched lines
+    * `-F` search a fixed string
+    * `-f` using patterns specified in a file
 
 * `wc file` : word count
 
@@ -180,6 +182,73 @@ $ cut -d " " -f 1-4 state.txt
     * -output-delimiter : `cut -d " " -f 1,2 state.txt --output-delimiter='%'`
     
     * -version : `cut --version`
+    
+* `tr` : translate    `$ tr [OPTION] SET1 [SET2]`
+
+    * convert lower case to upper case
+        * `tr “[a-z]” “[A-Z]”`
+        * `tr “[:lower:]” “[:upper:]”`
+
+    * convert white-space to tabs
+        * `tr [:space:] '\t'`
+
+    * convert braces to parenthesis
+        * `tr '{}' '()'`
+        
+    * -c : complements the set of characters in string.i.e., operations apply to characters not in the given set
+        * `$ echo "my ID is 73535" | tr -cd [:digit:]` (remove all characters except digits)
+    
+    * -d : delete characters in the first set from the output.
+        * `$ echo "Welcome To GeeksforGeeks" | tr -d 'w'`
+        * `$ echo "my ID is 73535" | tr -d [:digit:]`
+    
+    * -s : squeeze repeated characters listed in the set1 with single occurrence
+        * `$ echo "Welcome    To    GeeksforGeeks" | tr -s [:space:] ' '`
+    
+    * -t : truncates set1
+
+* `awk` :  abbreviated from the names of the developers – Aho, Weinberger, and Kernighan
+
+    * awk operations 
+        * Scans a file line by line
+        * Splits each input line into fields 
+        * Compares input line/fields to pattern 
+        * Performs action(s) on matched lines 
+
+    * `awk options 'selection _criteria {action }' input-file > output-file`
+    
+    * prints every line of data from the specified file
+```
+$ awk '{print}' em*.txt
+ajay manager account 45000
+sunil clerk account 25000
+varun manager sales 50000
+amit manager account 47000
+tarun peon sales 15000
+deepak clerk sales 23000
+sunil peon sales 13000
+satvik director purchase 80000 
+```
+    * Print the lines which matches with the given pattern. 
+```    
+$ awk '/manager/ {print}' em*.txt
+ajay manager account 45000
+varun manager sales 50000
+amit manager account 47000
+```
+    * Splitting a Line Into Fields, ($0 is the whole line)
+```    
+$ awk '{print $1,$4}' employee.txt 
+ajay 45000
+sunil 25000
+varun 50000
+amit 47000
+tarun 15000
+deepak 23000
+sunil 13000
+satvik 80000
+```
+
 
 ## 2.10 Replace the contents of a file
 
@@ -309,7 +378,8 @@ plum
 
 ## 3.5 Pipes `command1 | command2`
 
-* The symbol for a pipe is the vertical bar '|'
+* The pipe character is the vertical bar '|'
+* Pipe is used to combine two or more commands
 
 # 4 
 
@@ -444,6 +514,23 @@ $ kill 34624
     * `!5` (recall 5th command in list)
     * `!grep` (recall last command starting with grep)
     * `set history=100`
+    
+* `shuf` : writes a random permutation of the input lines to standard output. 
+
+```
+prak01:downloads fangliu$ seq 5
+1
+2
+3
+4
+5
+prak01:downloads fangliu$ seq 5 | shuf
+4
+2
+3
+5
+1
+```
 
 # 7
 
