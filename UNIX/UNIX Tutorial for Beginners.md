@@ -532,6 +532,27 @@ prak01:downloads fangliu$ seq 5 | shuf
 1
 ```
 
+* `uniq` : reports or filters out the repeated lines in a file
+
+```
+$cat kt.txt
+I love music.
+I love music.
+I love music.
+
+I love music of Kartik.
+I love music of Kartik.
+
+Thanks.
+
+$uniq kt.txt
+I love music.
+
+I love music of Kartik.
+
+Thanks.
+```
+
 # 7
 
 ## 7.1 Compiling UNIX software packages
