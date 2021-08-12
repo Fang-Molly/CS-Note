@@ -553,6 +553,15 @@ I love music of Kartik.
 Thanks.
 ```
 
+* `curl` command 
+    *  transfer data to or form a server, using any of the supported protocols(HTTP, FTP, IMAP, POP3, SCP, SFTP, SMTP, TFTP, TELNET, LDAP or FILE)
+    * Syntax : `curl [options] [URL...]`
+    * Options
+        * `-o` : saves the downloaded file on the local machine with the name provided in the parameters. `curl -o hello.zip ftp://speedtest.tele2.net/1MB.zip`
+        * 
+
+
+
 # 7
 
 ## 7.1 Compiling UNIX software packages
