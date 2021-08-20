@@ -476,10 +476,32 @@ NULL
 
 ## 3.2 Writing Functions
 
+* the `triple()` function
 
+```R
+triple <- function(x) {
+  body
+}
+```
 
+```
+> triple <- function(x) {
++   3 * x
++ }
+> triple(2)
+[1] 6
+```
 
+* return()
 
+```
+> triple <- function(x) {
++   y <- 3 * x
++   return(y)
++ }
+> triple(2)
+[1] 6
+```
 
 
 ## 3.3 R Packages
