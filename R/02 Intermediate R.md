@@ -56,7 +56,7 @@ Intermediate R
 [1] TRUE
 ```
 
-## 1.2 Relational Operators & Vectors
+* Relational Operators & Vectors
 
 ```R
 > linkedin <- c(16, 9, 13, 5, 2, 17, 14)
@@ -70,6 +70,128 @@ Intermediate R
 > facebook <= linkedin
 [1] FALSE  TRUE  TRUE FALSE FALSE  TRUE  TRUE
 ```
+
+## 1.2 Logical Operators
+
+* AND operator `&`
+
+```R
+> TRUE & TRUE
+[1] TRUE
+> FALSE & TRUE
+[1] FALSE
+> TRUE & FALSE
+[1] FALSE
+> FALSE & FALSE
+[1] FALSE
+```
+
+```R
+> x <- 12
+> x > 5 & x < 15
+[1] TRUE
+> x <- 17
+> x > 5 & x < 15
+[1] FALSE
+```
+
+* OR operator `|`
+
+```R
+> TRUE | TRUE
+[1] TRUE
+> TRUE | FALSE
+[1] TRUE
+> FALSE | TRUE
+[1] TRUE
+> FALSE | FALSE
+[1] FALSE
+```
+
+```R
+> y <- 4
+> y < 5 | y > 15
+[1] TRUE
+> y <- 14
+> y < 5 | y > 15
+[1] FALSE
+```
+
+* NOT operator `!`
+
+```R
+> !TRUE
+[1] FALSE
+> !FALSE
+[1] TRUE
+> !(x < 5)
+[1] TRUE
+> x >= 5
+[1] TRUE
+```
+
+```R
+> is.numeric(5)
+[1] TRUE
+> !is.numeric(5)
+[1] FALSE
+> is.numeric("hello")
+[1] FALSE
+> !is.numeric("hello")
+[1] TRUE
+```
+
+* Logical Operators & Vectors
+
+```R
+> c(TRUE, TRUE, FALSE) & c(TRUE, FALSE, FALSE)
+[1]  TRUE FALSE FALSE
+> c(TRUE, TRUE, FALSE) | c(TRUE, FALSE, FALSE)
+[1]  TRUE  TRUE FALSE
+> !c(TRUE, TRUE, FALSE)
+[1] FALSE FALSE  TRUE
+```
+
+* "&" vs "&&", "|" vs "||"
+
+```R
+> c(TRUE, TRUE, FALSE) & c(TRUE, FALSE, FALSE)
+[1]  TRUE FALSE FALSE
+# double & only examines the first element of each vector
+> c(TRUE, TRUE, FALSE) && c(TRUE, FALSE, FALSE)
+[1] TRUE
+
+> c(TRUE, TRUE, FALSE) | c(TRUE, FALSE, FALSE)
+[1]  TRUE  TRUE FALSE
+# double | only examines the first element of each vector
+> c(TRUE, TRUE, FALSE) || c(TRUE, FALSE, FALSE)
+[1] TRUE
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
