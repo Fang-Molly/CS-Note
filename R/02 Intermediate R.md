@@ -432,17 +432,62 @@ for (i in 1:nrow(ttt)) {
     * `list()` : create a list
     * `print()` : display a variable
     
-* Black box principle
+* Call function in R
+
+```R
+> sd(c(1, 5, 6, 7))
+[1] 2.629956
+> values <- c(1, 5, 6, 7)
+> sd(values)
+[1] 2.629956
+> my_sd <- sd(values)
+> my_sd
+[1] 2.629956
+```
+
+* Function documentation
+
+    * `help(sd)`
+    * `?sd`
+
+* `sd` function: `sd(x, na.rm = FALSE)`
+
+     * argument matching by position : `sd(values)`
+     * argument matching by name : `sd(x = values)`
 
 
+```R
+> values <- c(1, 5, 6, NA)
+> sd(values)
+[1] NA
+> sd(values, TRUE)
+[1] 2.645751
+> sd(values, na.rm = TRUE)
+[1] 2.645751
+```
 
+* Useful trick
 
+```R
+> args(sd)
+function (x, na.rm = FALSE) 
+NULL
+```
 
 ## 3.2 Writing Functions
 
 
 
+
+
+
+
 ## 3.3 R Packages
+
+
+
+
+
 
 
 
