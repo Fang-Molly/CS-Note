@@ -168,11 +168,212 @@ Intermediate R
 [1] TRUE
 ```
 
+## 1.3 Conditional Statements
 
+* `if` statement
 
+```R
+if(condition) {
+  expr
+}
+```
 
+```R
+> x <- -3
+> if(x < 0) {
++   print("x is a negative number")
++ }
+[1] "x is a negative number"
+# if false, no printout
+```
 
+* `if`, `else` statement
 
+```R
+if(condition) {
+  expr1
+} else {
+  expr2
+}
+```
+
+```R
+> x <- -3
+> if(x < 0) {
++   print("x is a negative number")
++ } else {
++   print("x is either a positive number or zero")
++ }
+[1] "x is a negative number"
+```
+
+* `if`, `else if`, `else` statement
+
+```R
+if(condition1) {
+  expr1
+} else if(condition2) {
+  expr2
+} else {
+  expr3
+}
+```
+
+```R
+> x <- -3
+> if(x < 0) {
++   print("x is a negative number")
++ } else if(x == 0) {
++   print("x is zero")
++ } else {
++   print("x is a positive number")
++ }
+[1] "x is a negative number"
+```
+
+# 2 Loops
+
+## 2.1 While loop
+
+* `while` loop
+
+```R
+while(condition) {
+  expr
+}
+```
+
+```R
+> ctr <- 0
+> while(ctr <= 7) {
++   print(paste("ctr is set to", ctr))
++   ctr <- ctr + 1
++ }
+[1] "ctr is set to 0"
+[1] "ctr is set to 1"
+[1] "ctr is set to 2"
+[1] "ctr is set to 3"
+[1] "ctr is set to 4"
+[1] "ctr is set to 5"
+[1] "ctr is set to 6"
+[1] "ctr is set to 7"
+```
+
+* Infinite while loop
+
+```R
+> ctr <- 1
+> while(ctr <= 7) {
++   print(paste("ctr is set to", ctr))
++ }
+[1] "ctr is set to 1"
+[1] "ctr is set to 1"
+[1] "ctr is set to 1"
+[1] "ctr is set to 1"
+[1] "ctr is set to 1"
+...
+```
+
+* `break` statement
+
+```R
+> ctr <- 1
+> while(ctr <= 7) {
++   if(ctr %% 5 == 0) {
++     break
++   }
++   print(paste("ctr is set to", ctr))
++   ctr <- ctr + 1
++ }
+[1] "ctr is set to 1"
+[1] "ctr is set to 2"
+[1] "ctr is set to 3"
+[1] "ctr is set to 4"
+```
+
+## 2.2 For loop
+
+* for loop
+
+```R
+for(var in seq) {
+  expr
+}
+```
+
+```R
+> cities <- c("New York", "Pairs", "London", "Tokyo", "Rio de Janeiro", "Cape Town")
+> cities
+[1] "New York"       "Pairs"          "London"         "Tokyo"         
+[5] "Rio de Janeiro" "Cape Town" 
+
+> for(city in cities) {
++   print(city)
++ }
+[1] "New York"
+[1] "Pairs"
+[1] "London"
+[1] "Tokyo"
+[1] "Rio de Janeiro"
+[1] "Cape Town"
+```
+
+* `break` statement
+
+```R
+> for(city in cities) {
++   if(nchar(city) == 6) {
++     break
++   }
++   print(city)
++ }
+[1] "New York"
+[1] "Pairs"
+```
+
+* `next` statement
+
+```R
+> for(city in cities) {
++   if(nchar(city) == 6) {
++     next
++   }
++   print(city)
++ }
+[1] "New York"
+[1] "Pairs"
+[1] "Tokyo"
+[1] "Rio de Janeiro"
+[1] "Cape Town"
+```
+
+* for loop: v2
+
+```R
+> for(i in 1:length(cities)) {
++   print(cities[i])
++ }
+[1] "New York"
+[1] "Pairs"
+[1] "London"
+[1] "Tokyo"
+[1] "Rio de Janeiro"
+[1] "Cape Town"
+```
+
+```R
+> for(i in 1:length(cities)) {
++   print(paste(cities[i], "is on position", i, "in the cities vector"))
++ }
+[1] "New York is on position 1 in the cities vector"
+[1] "Pairs is on position 2 in the cities vector"
+[1] "London is on position 3 in the cities vector"
+[1] "Tokyo is on position 4 in the cities vector"
+[1] "Rio de Janeiro is on position 5 in the cities vector"
+[1] "Cape Town is on position 6 in the cities vector"
+```
+
+# 3 Functions
 
 
 
