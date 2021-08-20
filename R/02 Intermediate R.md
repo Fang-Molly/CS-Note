@@ -362,6 +362,32 @@ for(var in seq) {
 ```
 
 ```R
+# double square brackets - [[ ]] - to select the list elements
+> nyc <- list(pop = 8405837, boroughs = c("Manhattan", "Bronx", "Brooklyn", "Queens", "Staten Island"), capital = FALSE)
+
+> for(i in 1:length(nyc)) {
++   print(nyc[i])
++ }
+$pop
+[1] 8405837
+
+$boroughs
+[1] "Manhattan"     "Bronx"         "Brooklyn"      "Queens"       
+[5] "Staten Island"
+
+$capital
+[1] FALSE
+
+> for(i in 1:length(nyc)) {
++   print(nyc[[i]])
++ }
+[1] 8405837
+[1] "Manhattan"     "Bronx"         "Brooklyn"      "Queens"       
+[5] "Staten Island"
+[1] FALSE
+```
+
+```R
 > for(i in 1:length(cities)) {
 +   print(paste(cities[i], "is on position", i, "in the cities vector"))
 + }
@@ -373,7 +399,76 @@ for(var in seq) {
 [1] "Cape Town is on position 6 in the cities vector"
 ```
 
+* nested for loop
+
+```R
+for (var1 in seq1) {
+  for (var2 in seq2) {
+    expr
+  }
+}
+```
+
+```R
+for (i in 1:nrow(ttt)) {
+  for (j in i:ncol(ttt)) {
+    print(paste("On row", i, "and column", j, "the board contains", ttt[i,j]))
+  }
+}
+[1] "On row 1 and column 1 the board contains O"
+[1] "On row 1 and column 2 the board contains NA"
+[1] "On row 1 and column 3 the board contains X"
+[1] "On row 2 and column 2 the board contains O"
+[1] "On row 2 and column 3 the board contains O"
+[1] "On row 3 and column 3 the board contains X"
+```
+
 # 3 Functions
+
+## 3.1 Introduction to Functions
+
+* Functions
+
+    * `list()` : create a list
+    * `print()` : display a variable
+    
+* Black box principle
+
+
+
+
+
+## 3.2 Writing Functions
+
+
+
+## 3.3 R Packages
+
+
+
+# 4 The apply family
+
+
+
+
+
+
+
+
+
+# 5 Utilities
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
