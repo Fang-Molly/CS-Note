@@ -503,8 +503,19 @@ triple <- function(x) {
 [1] 6
 ```
 
-
 ## 3.3 R Packages
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
