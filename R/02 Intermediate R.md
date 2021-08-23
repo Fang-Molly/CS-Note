@@ -476,7 +476,9 @@ NULL
 
 ## 3.2 Writing Functions
 
-* the `triple()` function
+* One argument
+
+    * the `triple()` function
 
 ```R
 triple <- function(x) {
@@ -492,7 +494,7 @@ triple <- function(x) {
 [1] 6
 ```
 
-* return()
+    * return()
 
 ```
 > triple <- function(x) {
@@ -501,6 +503,84 @@ triple <- function(x) {
 + }
 > triple(2)
 [1] 6
+```
+
+* two arguments
+
+```R
+math_magic <- function(arg1, arg2) {
+  body
+}
+```
+```R
+> math_magic <- function(a, b) {
++   a*b + a/b
++ }
+> math_magic(4, 2)
+[1] 10
+> math_magic(4)
+Error in math_magic(4) : argument "b" is missing, with no default
+```
+
+    * Optional argument
+
+```R
+> math_magic <- function(a, b = 1) {
++   a*b + a/b
++ }
+> 
+> math_magic(4)
+[1] 8
+
+> math_magic(4, 0)
+[1] Inf
+```
+
+```R
+> pow_two <- function(x, print_info = TRUE) {
++   y <- x ^ 2
++   if(print_info) {
++     print(paste(x, "to the power two equals", y))
++   }
++   return(y)
++ }
+
+> pow_two(5)
+[1] "5 to the power two equals 25"
+[1] 25
+> pow_two(5, FALSE)
+[1] 25
+> pow_two(5, TRUE)
+[1] "5 to the power two equals 25"
+[1] 25
+
+```
+
+    * Use return()
+
+```R
+> math_magic <- function(a, b = 1) {
++   if(b == 0) {
++     return(0)
++   }
++   a*b + a/b
++ }
+> 
+> math_magic(4, 0)
+[1] 0
+```
+
+* No argument
+
+```R
+> hello <- function() {
++   print("Hi there!")
++   TRUE
++ }
+
+> hello()
+[1] "Hi there!"
+[1] TRUE
 ```
 
 ## 3.3 R Packages
