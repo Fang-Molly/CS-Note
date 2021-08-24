@@ -57,18 +57,10 @@ wt_rawcounts <- read.csv("wt_rawcounts.csv")
 View(wt_rawcounts)
 ```
 
-
-
-
-
-
-
-
-
-
 ## 2.2 Organizing the data for DESeq2
 
-
+* DESeq2 requires the sample names in the metadata and counts datasets to be in the same order.
+* 
 
 
 
