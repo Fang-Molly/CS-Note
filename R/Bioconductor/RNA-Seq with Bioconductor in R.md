@@ -38,23 +38,36 @@
 
 ## 2.1 Introduction to differential expression analysis
 
-* DESeq2 vignette
+* Statistical packages in Bioconductor
+    * DESeq2 vignette : negative binomial model
+    * EdgeR : negative binomial model
+    * Limma-Voom
 
-* analysis flow
-    * Read counts associated with genes
-    * Quality control
-        * Normalization
-        * Unsupervised clustering analyses
-    * DE analysis
-        * Modelling raw counts for each gene
-        * Shrinking log2 fold changes
-        * Testing for differential expression
+* Differential expression analysis : DESeq2 vignette
 
-* Bringing in data for DESeq2 : `read.csv("csv file")`
+    * Open the DESeq2 : `vignette(DESeq2)`
+
+    * analysis flow
+        * Read counts associated with genes
+        * Quality control
+            * Normalization
+            * Unsupervised clustering analyses
+        * DE analysis
+            * Modelling raw counts for each gene
+            * Shrinking log2 fold changes
+            * Testing for differential expression
+
+    * Bringing in data for DESeq2 : `read.csv("csv file")`
 
 ```R
+# read in raw counts
 wt_rawcounts <- read.csv("wt_rawcounts.csv")
 View(wt_rawcounts)
+```
+```R
+# Read in metadata
+wt_metadata <- read.csv("wt_rawcounts.csv")
+View(wt_metadata)
 ```
 
 ## 2.2 Organizing the data for DESeq2
