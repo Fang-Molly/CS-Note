@@ -13,10 +13,11 @@
     * structure : elements, regions, size, order, relationships
     * function : expression, levels, regulation, phenotypes
 
-* How to install Bioconductor packages?
+* Install R
 
     * Install the latest R (version 4.1.0) for mac from https://cran.r-project.org/bin/macosx/
-    * Install the current release of Bioconductor (version 3.13) https://bioconductor.org/install/
+    
+* Install Bioconductor
 
 ```R
 if (!requireNamespace("BiocManager", quietly = TRUE))
@@ -24,11 +25,34 @@ if (!requireNamespace("BiocManager", quietly = TRUE))
 BiocManager::install(version = "3.13")
 ```
 
-    * Install Bioconductor packages
+* Install Bioconductor packages
+
+    * Install core packages
+    
+```R
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install()
+```
+    
+    * Install specific packages
     
 ```R
 BiocManager::install("BSgenome")
 ```
+
+    * Find Bioconductor packages
+    
+```R
+BiocManager::available()
+```
+    
+    * Update Installed Bioconductor Packages
+    
+```R
+BiocManager::install()
+```
+    
     
 * Bioconductor version and package version
 
@@ -89,6 +113,18 @@ other attached packages:
 loaded via a namespace (and not attached):
 [1] compiler_4.1.0     tools_4.1.0       
 [3] BiocVersion_3.13.1
+
+# check installed packages
+installed.packages()
+
+# update all available packages
+update.packages()
+
+# list all packages where an update is available
+old.packages()
+
+# update only a specific package
+install.packages("plotly")
 ```
 
 ## 1.2 The Role of S4 in Bioconductor
