@@ -72,8 +72,35 @@ View(wt_metadata)
 
 ## 2.2 Organizing the data for DESeq2
 
-* DESeq2 requires the sample names in the metadata and counts datasets to be in the same order.
-* 
+* Bringing in data for DESeq2 : sample order
+
+    * DESeq2 requires the sample names in the metadata and counts datasets to be in the same order. `rownames(wt_metabada) == colnames(wt_rawcounts)`
+
+* Matching order between vectors
+
+    * Using the `match()` function: `match(vector1, vector2)`
+        * vector1 : vector of values with the desired order
+        * vector2 : vector of values to reorder
+        * output : the indices for how to rearrange vector2 to be in the same order as vector1
+
+    * `match(colnames(wt_rawcounts), rownames(wt_metadata)`
+
+* Reordering using `match()` output
+
+```R
+idx <- match(colnames(wt_rawcounts), rownames(wt_metadata))
+reordered_wt_metadata <- wt_metadata[idx, ]
+View(reordered_wt_metadata)
+```
+
+* Creating the DESeq2 object
+
+```R
+# Create DESeq object
+dds_wt <- DESeqDataSetFromMatrix(countData = wt_rawcounts, colData = reordered_wt_metadata, design = ~ condition)
+```
+
+
 
 
 
