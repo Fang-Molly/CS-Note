@@ -158,11 +158,98 @@ install.packages("plotly")
 
 * Is it S4 or not?
 
+```R
+# load a package 
+> library(GenomeInfoDb)
+# create a new object from a class
+> mydescriptor <- new("GenomeDescription")
+# ask if an object is S4
+> isS4(mydescriptor)
+[1] TRUE
+# S4 start with 'Formal class'
+> str(mydescriptor)
+Formal class 'GenomeDescription' [package "GenomeInfoDb"] with 7 slots
+...
+
 * S4 class definition
+
+An S4 class describes a representation of an object with:
 
     * name
     * slots (methods/fields)
     * contains (inheritance definition)
+
+```R
+> MyEpicProject <- setClass(# Define class name with UpperCamelCase
+                            "MyEpicProject", 
+                            # Define slots, helpful for validation
+                            slots = c(ini = "Date", 
+                                      end = "Date", 
+                                      milestone = "character"), 
+                            # Define inheritance
+                            contains = "MyProject")
+```
+
+* S4 accessors : Basic information of an S4 object is accessed through accessor-functions, also called methods.
+
+    * Function `.S4methods()` show a summary of its accessors
+
+```R
+> .S4methods(class = "GenomeDescription")
+ [1] bsgenomeName    commonName      organism        provider       
+ [5] providerVersion releaseDate     releaseName     seqinfo        
+ [9] seqnames        show      
+```
+
+    * `showMethods()` function for the other subclasses
+```R
+> showMethods(class = "GenomeDescription", where = search())
+Function: bsgenomeName (package GenomeInfoDb)
+x="GenomeDescription"
+
+Function: commonName (package GenomeInfoDb)
+object="GenomeDescription"
+...
+```
+
+    * Show object summary : `show()`
+
+```R
+> show(mydescriptor)
+| organism:  ()
+| genome: 
+| provider: 
+| release date: 
+| ---
+| seqlengths:
+|  
+|  
+```
+```
+> showClass("BSgenome")
+Class "BSgenome" [package "BSgenome"]
+
+Slots:
+                                                
+Name:               pkgname     single_sequences
+Class:            character OnDiskNamedSequences
+                                                
+Name:    multiple_sequences              seqinfo
+Class:        RdaCollection              Seqinfo
+                                                
+Name:         user_seqnames   injectSNPs_handler
+Class:            character    InjectSNPsHandler
+                                                
+Name:           .seqs_cache         .link_counts
+Class:          environment          environment
+                           
+Name:              metadata
+Class:                 list
+
+Extends: "Annotated"   # parent classes
+
+Known Subclasses: "MaskedBSgenome"  
+```
 
 ## 1.3 Introducing biology of genomic datasets
 
@@ -228,11 +315,12 @@ DNAStringSet object of length 17:
 [16]  948066 AAATAGCCCTCATGTACGTCTCCTCCAAGC...TCATTTTTTTTTTTTAATTTCGGTCAGAAA chrXVI
 [17]   85779 TTCATAATTAATTTTTTATATATATATTAT...AATATGCTTAATTATAATATAATATCCATA chrM
 
-> yeast_M <- getSeq(yeast, "chrM")
-> yeast_M
+# Select chromosome sequence by name, one or many
+> getSeq(yeast, "chrM")
 85779-letter DNAString object
 seq: TTCATAATTAATTTTTTATATATATATTATATTATAATATTAATT...TATTATTATACAGAAATATGCTTAATTATAATATAATATCCATA
 
+# Select start, end and or width
 > getSeq(yeast, end = 10)
 DNAStringSet object of length 17:
      width seq                                                               names               
@@ -248,11 +336,25 @@ DNAStringSet object of length 17:
 [16]    10 AAATAGCCCT                                                        chrXVI
 [17]    10 TTCATAATTA                                                        chrM
 
+> getSeq(yeast, "chrM", end = 10)
+10-letter DNAString object
+seq: TTCATAATTA
+
+> head(yeast$chrM)
+6-letter DNAString object
+seq: TTCATA
+
+> tail(yeast$chrI)
+6-letter DNAString object
+seq: TGTGGG 
+
+> names(yeast)
+ [1] "chrI"    "chrII"   "chrIII"  "chrIV"   "chrV"    "chrVI"   "chrVII" 
+ [8] "chrVIII" "chrIX"   "chrX"    "chrXI"   "chrXII"  "chrXIII" "chrXIV" 
+[15] "chrXV"   "chrXVI"  "chrM"  
+
 > head(seqnames(yeast))
 [1] "chrI"   "chrII"  "chrIII" "chrIV"  "chrV"   "chrVI" 
-
-> tail(seqnames(yeast))
-[1] "chrXII"  "chrXIII" "chrXIV"  "chrXV"   "chrXVI"  "chrM"  
 
 > tail(seqlengths(yeast))
  chrXII chrXIII  chrXIV   chrXV  chrXVI    chrM 
@@ -286,7 +388,7 @@ seq: TTCATAATTAATTTTTTATAT
 ```
 
 # 2 Biostrings and when to use them?
-
+ 
 ## 2.1 Introduction to Biostrings
 
 * Biological string containers
@@ -318,6 +420,14 @@ showClass("BStringSet")
 > AA_ALPHABET
  [1] "A" "R" "N" "D" "C" "Q" "E" "G" "H" "I" "L" "K" "M" "F" "P" "S" "T" "W" "Y" "V" "U" "O" "B"
 [24] "J" "Z" "X" "*" "-" "+" "."
+```
+
+```R
+# show the letters included in the sequence
+alphabet(zikaVirus)
+# show the counts per letter
+alphabetFrequency(zikaVirus)
+alphabet(zikaVirus, baseOnly = TRUE)
 ```
 
 * Transcription DNA to RNA
@@ -359,13 +469,35 @@ seq: MIS*
         * RNAString for RNA
         * AAString for amino acids
 
-    * XStringSet for many sequences
+    * XStringSet : for many sequences
         * BStringSet
         * DNAStringSet
         * RNAStringSet
         * AAStringSet
 
 * Create a stringSet and collate it
+
+```R
+zikaVirus <- readDNAStringSet("data/zika.fa")
+length(zikaVirus)
+width(zikaVirus)
+
+1
+10794
+
+# collate the sequence use unlist
+zikaVirus_seq <- unlist(zikaVirus)
+length(zikaVirus_seq)
+
+10794
+```
+
+* From a single sequence to a set
+
+```R
+zikaSet <- DNAStringSet(zikaVirus_seq, start = c(1, 101, 201), end = c(100, 200, 300))
+zikaSet
+```
 
 * Complement sequence
 
@@ -377,27 +509,64 @@ seq: ATGATCTCGTAA
 > complement(a_seq)
 12-letter DNAString object
 seq: TACTAGAGCATT
+```
+
+* Rev a sequence : changed the sequence order, from top to bottom. 
+
+```R
 > rev(a_seq)
 12-letter DNAString object
 seq: AATGCTCTAGTA
+```
+
+* Reverse a sequence :  reverses from right to left each sequence of the set
+
+```R
 > reverse(a_seq)
 12-letter DNAString object
 seq: AATGCTCTAGTA
+```
+
+* Reverse complement
+
+```R
 > reverseComplement(a_seq)
 12-letter DNAString object
 seq: TTACGAGATCAT
 ```
 
+## 2.3 Why are you interested in patterns?
+
+* What can we find with patterns?
+
+    * Gene start
+    * Protein end
+    * Regions that enhance or silence gene expression
+    * Conserved regions between organisms
+    * Genetic Varition
+
+* Patten matching
+
+    * `matchpattern(pattern, subject)` : 1 string to 1 string
+
+    * `vmatchPattern(pattern, subject)` 
+        * 1 set of strings to 1 string
+        * 1 string to a set of strings
+
+* Palindromes : sequences that read the same backwards as forwards
+
+    * `findPalindromes()` : find palindromic regions in a single sequence
 
 
 # 3 IRanges and GenomicRanges
 
 ## 3.1 IRanges and Genomic Structures
 
-* Sequence Ranges
+* Sequence Ranges 
 
 ```R
 > library(IRanges)
+# define a range by start and end
 > myIRanges <- IRanges(start = 20, end = 30)
 > myIRanges
 IRanges object with 1 range and 0 metadata columns:
