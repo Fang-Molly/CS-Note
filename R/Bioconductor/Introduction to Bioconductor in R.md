@@ -562,11 +562,12 @@ seq: TTACGAGATCAT
 
 ## 3.1 IRanges and Genomic Structures
 
-* Sequence Ranges 
+* **Sequence Ranges**
 
 ```R
+# loading IRanges
 > library(IRanges)
-# define a range by start and end
+# create a range using the IRanges() function and define it by start and end
 > myIRanges <- IRanges(start = 20, end = 30)
 > myIRanges
 IRanges object with 1 range and 0 metadata columns:
@@ -592,7 +593,8 @@ IRanges object with 2 ranges and 0 metadata columns:
   [2]        20        30        11
 ```
 
-* Rle - run length encoding
+* **Rle - run length encoding** : construct IRanges
+
     * compute and store the lengths and values of a vector or factor
     * general S4 container used to save long repetitive vectors efficiently
 
@@ -605,8 +607,212 @@ numeric-Rle of length 8 with 5 runs
   Values : 3 2 3 4 2
 ```
 
+* **IRanges with logical vector**
 
+```R
+# create a range with logical vector
+> IRanges(start = c(FALSE, FALSE, TRUE, TRUE))
+IRanges object with 1 range and 0 metadata columns:
+          start       end     width
+      <integer> <integer> <integer>
+  [1]         3         4         2
+```
 
+* **IRanges with logical Rle**
+
+```R
+> gi <- c(TRUE, TRUE, FALSE, FALSE, TRUE, TRUE, TRUE)
+> myRle <- Rle(gi)
+> myRle
+logical-Rle of length 7 with 3 runs
+  Lengths:     2     2     3
+  Values :  TRUE FALSE  TRUE
+  
+> IRanges(start = myRle)
+IRanges object with 2 ranges and 0 metadata columns:
+          start       end     width
+      <integer> <integer> <integer>
+  [1]         1         2         2
+  [2]         5         7         3
+```
+
+## 3.2 Gene of interest using Genomic Ranges
+
+* Examples of genomic intervals
+
+    * Reads aligned to a reference
+    * Genes of interest
+    * Exonic regions
+    * Single nucleotide polymorphisms(SNPs)
+    * Regions of transcription or binding sites, RNA-seq or ChIP-seq
+
+* **Genomic Ranges**
+
+    * GRanges class is a container to save genomic intervals by chromosome
+ 
+```R
+# install the package GenomicRanges
+if (!require("BiocManager"))
+    install.packages("BiocManager")
+BiocManager::install("GenomicRanges")
+# load the package
+> library(GenomicRanges)
+
+> (myGR <- GRanges("chr1:200-300"))
+GRanges object with 1 range and 0 metadata columns:
+      seqnames    ranges strand
+         <Rle> <IRanges>  <Rle>
+  [1]     chr1   200-300      *
+  -------
+  seqinfo: 1 sequence from an unspecified genome; no seqlengths
+```
+
+* **Genomic Ranges accessors**
+
+```R
+# check available accessors
+methods(class = "GRanges")
+# used for chromosome names
+seqnames(gr)
+# returns an IRanges object for ranges
+ranges(gr)
+# stores metadata columns
+mcols(gr)
+# generic function to store sequence information
+seqinfo(gr)
+# stores the genome name
+genome(gr)
+```
+
+    * Accessors are both setter and getter functions
+    * Accessors can be inherited thanks to S4 definitions
+    
+```R
+> gr <- GRanges(
++     seqnames = Rle(c("chr1", "chr2", "chr1", "chr3"), c(1, 3, 2, 4)),
++     ranges = IRanges(101:110, end = 111:120, names = head(letters, 10)),
++     strand = Rle(strand(c("-", "+", "*", "+", "-")), c(1, 2, 2, 3, 2)),
++     score = 1:10,
++     GC = seq(1, 0, length=10))
+> gr
+GRanges object with 10 ranges and 2 metadata columns:
+    seqnames    ranges strand |     score        GC
+       <Rle> <IRanges>  <Rle> | <integer> <numeric>
+  a     chr1   101-111      - |         1  1.000000
+  b     chr2   102-112      + |         2  0.888889
+  c     chr2   103-113      + |         3  0.777778
+  d     chr2   104-114      * |         4  0.666667
+  e     chr1   105-115      * |         5  0.555556
+  f     chr1   106-116      + |         6  0.444444
+  g     chr3   107-117      + |         7  0.333333
+  h     chr3   108-118      + |         8  0.222222
+  i     chr3   109-119      - |         9  0.111111
+  j     chr3   110-120      - |        10  0.000000
+  -------
+  seqinfo: 3 sequences from an unspecified genome; no seqlengths
+>
+> seqnames(gr)
+factor-Rle of length 10 with 4 runs
+  Lengths:    1    3    2    4
+  Values : chr1 chr2 chr1 chr3
+Levels(3): chr1 chr2 chr3
+> 
+> ranges(gr)
+IRanges object with 10 ranges and 0 metadata columns:
+        start       end     width
+    <integer> <integer> <integer>
+  a       101       111        11
+  b       102       112        11
+  c       103       113        11
+  d       104       114        11
+  e       105       115        11
+  f       106       116        11
+  g       107       117        11
+  h       108       118        11
+  i       109       119        11
+  j       110       120        11
+> 
+> strand(gr)
+factor-Rle of length 10 with 5 runs
+  Lengths: 1 2 2 3 2
+  Values : - + * + -
+Levels(3): + - *
+> 
+> granges(gr)
+GRanges object with 10 ranges and 0 metadata columns:
+    seqnames    ranges strand
+       <Rle> <IRanges>  <Rle>
+  a     chr1   101-111      -
+  b     chr2   102-112      +
+  c     chr2   103-113      +
+  d     chr2   104-114      *
+  e     chr1   105-115      *
+  f     chr1   106-116      +
+  g     chr3   107-117      +
+  h     chr3   108-118      +
+  i     chr3   109-119      -
+  j     chr3   110-120      -
+  -------
+  seqinfo: 3 sequences from an unspecified genome; no seqlengths
+> 
+> mcols(gr)
+DataFrame with 10 rows and 2 columns
+      score        GC
+  <integer> <numeric>
+a         1  1.000000
+b         2  0.888889
+c         3  0.777778
+d         4  0.666667
+e         5  0.555556
+f         6  0.444444
+g         7  0.333333
+h         8  0.222222
+i         9  0.111111
+j        10  0.000000
+> 
+> mcols(gr)$score
+ [1]  1  2  3  4  5  6  7  8  9 10
+```
+  
+* **Chromosome X GRanges**
+
+```R    
+# install annotation package for TxDb object(s)
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install("TxDb.Hsapiens.UCSC.hg38.knownGene")
+
+# load the package
+> library(TxDb.Hsapiens.UCSC.hg38.knownGene)
+> hg <- TxDb.Hsapiens.UCSC.hg38.knownGene
+
+# select genes from chromosome X
+> hg_chrXg <- genes(hg, filter = list(tx_chrom = c("chrX")))
+> hg_chrXg
+GRanges object with 1071 ranges and 1 metadata column:
+            seqnames              ranges strand |     gene_id
+               <Rle>           <IRanges>  <Rle> | <character>
+      10009     chrX 120250752-120258398      + |       10009
+  100093698     chrX   13310652-13319933      + |   100093698
+  100124540     chrX   47388649-47388777      + |   100124540
+  100126270     chrX 147909431-147911817      - |   100126270
+  100126301     chrX 147258760-147258850      - |   100126301
+        ...      ...                 ...    ... .         ...
+       9823     chrX 101655281-101659850      - |        9823
+       9843     chrX   66162549-66268867      + |        9843
+       9947     chrX 141903894-141909374      + |        9947
+       9949     chrX 110194186-110440233      - |        9949
+       9968     chrX   71118556-71142454      + |        9968
+  -------
+  seqinfo: 595 sequences (1 circular) from hg38 genome
+```
+
+## 3.3 Manipulating collections of GRanges
+
+* GRangesList
+
+    * 
 
 
 
@@ -614,3 +820,14 @@ numeric-Rle of length 8 with 5 runs
 
 
 # 4 Introducing ShortRead
+
+
+
+
+
+
+
+
+
+
+
