@@ -810,9 +810,194 @@ GRanges object with 1071 ranges and 1 metadata column:
 
 ## 3.3 Manipulating collections of GRanges
 
-* GRangesList
+* **GRangesList**
 
-    * 
+    * The `GRangesList-class` is a container for storing a collection of `GRanges`
+        * Efficient for sorting a large number of elements
+
+    * To construct a `GRangesList`
+        * `as(mylist, "GRangesList")`
+        * `GRangesList(myGranges1, myGranges2, ...)`
+
+    * To convert back to `GRanges`
+        * `unlist(myGRangesList)`
+
+    * Accessors `methods(class = "GRangesList")`
+
+* When to use lists?
+
+    * Multiple GRanges objects may be combined into a GRangesList
+        * GRanges in a list will be taken as compound features of a larger object
+
+    * Examples of GRangesLists are
+        * transcripts by gene
+        * exons by transcripts
+        * read alignments
+        * sliding windows
+```R
+> hg_chrXg
+GRanges object with 1071 ranges and 1 metadata column:
+            seqnames              ranges strand |     gene_id
+               <Rle>           <IRanges>  <Rle> | <character>
+      10009     chrX 120250752-120258398      + |       10009
+  100093698     chrX   13310652-13319933      + |   100093698
+  100124540     chrX   47388649-47388777      + |   100124540
+  100126270     chrX 147909431-147911817      - |   100126270
+  100126301     chrX 147258760-147258850      - |   100126301
+        ...      ...                 ...    ... .         ...
+       9823     chrX 101655281-101659850      - |        9823
+       9843     chrX   66162549-66268867      + |        9843
+       9947     chrX 141903894-141909374      + |        9947
+       9949     chrX 110194186-110440233      - |        9949
+       9968     chrX   71118556-71142454      + |        9968
+  -------
+  seqinfo: 595 sequences (1 circular) from hg38 genome
+
+> slidingWindows(hg_chrXg, width = 2000, step = 2000)
+GRangesList object of length 1071:
+$`10009`
+GRanges object with 4 ranges and 0 metadata columns:
+        seqnames              ranges strand
+           <Rle>           <IRanges>  <Rle>
+  10009     chrX 120250752-120252751      +
+  10009     chrX 120252752-120254751      +
+  10009     chrX 120254752-120256751      +
+  10009     chrX 120256752-120258398      +
+  -------
+  seqinfo: 595 sequences (1 circular) from hg38 genome
+
+$`100093698`
+GRanges object with 5 ranges and 0 metadata columns:
+            seqnames            ranges strand
+               <Rle>         <IRanges>  <Rle>
+  100093698     chrX 13310652-13312651      +
+  100093698     chrX 13312652-13314651      +
+  100093698     chrX 13314652-13316651      +
+  100093698     chrX 13316652-13318651      +
+  100093698     chrX 13318652-13319933      +
+  -------
+  seqinfo: 595 sequences (1 circular) from hg38 genome
+
+$`100124540`
+GRanges object with 1 range and 0 metadata columns:
+            seqnames            ranges strand
+               <Rle>         <IRanges>  <Rle>
+  100124540     chrX 47388649-47388777      +
+  -------
+  seqinfo: 595 sequences (1 circular) from hg38 genome
+
+...
+<1068 more elements>
+```
+
+* `GenomicFeatures` uses transcript database (`TxDb`) objects to store metadata, manage genomic locations and relationships between features and its identifiers.
+
+```R
+# load the TxDb library
+> library(TxDb.Hsapiens.UCSC.hg38.knownGene)
+# store the object hg
+> (hg <- TxDb.Hsapiens.UCSC.hg38.knownGene)
+TxDb object:
+# Db type: TxDb
+# Supporting package: GenomicFeatures
+# Data source: UCSC
+# Genome: hg38
+# Organism: Homo sapiens
+# Taxonomy ID: 9606
+# UCSC Table: knownGene
+# UCSC Track: GENCODE V36
+# Resource URL: http://genome.ucsc.edu/
+# Type of Gene ID: Entrez Gene ID
+# Full dataset: yes
+# miRBase build ID: NA
+# Nb of transcripts: 232184
+# Db created by: GenomicFeatures package from Bioconductor
+# Creation time: 2021-04-28 16:32:07 +0000 (Wed, 28 Apr 2021)
+# GenomicFeatures version at creation time: 1.41.3
+# RSQLite version at creation time: 2.2.6
+# DBSCHEMAVERSION: 1.2
+```
+
+* **Genes, transcripts, exons**
+
+```R
+# load the library TxDb
+> library(TxDb.Hsapiens.UCSC.hg38.knownGene)
+# store the project hg
+> hg <- TxDb.Hsapiens.UCSC.hg38.knownGene
+# prefilter results to chrX
+> seqlevels(hg) <- c("chrX")
+# transcripts
+> transcripts(hg, columns = c("tx_id", "tx_name"), filter = NULL)
+GRanges object with 7169 ranges and 2 metadata columns:
+         seqnames              ranges strand |     tx_id           tx_name
+            <Rle>           <IRanges>  <Rle> | <integer>       <character>
+     [1]     chrX       253743-255091      + |    223936 ENST00000431238.7
+     [2]     chrX       276322-303353      + |    223937 ENST00000399012.6
+     [3]     chrX       276324-291537      + |    223938 ENST00000484611.7
+     [4]     chrX       276353-291629      + |    223939 ENST00000430923.7
+     [5]     chrX       281055-288869      + |    223940 ENST00000445062.6
+     ...      ...                 ...    ... .       ...               ...
+  [7165]     chrX 155828585-155829576      - |    231100 ENST00000412936.6
+  [7166]     chrX 155978992-155979325      - |    231101 ENST00000456370.6
+  [7167]     chrX 155985370-155986249      - |    231102 ENST00000421233.6
+  [7168]     chrX 156014623-156016837      - |    231103 ENST00000399966.9
+  [7169]     chrX 156025664-156027877      - |    231104 ENST00000507418.6
+  -------
+  seqinfo: 1 sequence from hg38 genome
+# exons
+> exons(hg, columns = c("tx_id", "exon_id"), filter = list(tx_id = "179161"))
+GRanges object with 0 ranges and 2 metadata columns:
+   seqnames    ranges strand |         tx_id   exon_id
+      <Rle> <IRanges>  <Rle> | <IntegerList> <integer>
+  -------
+  seqinfo: 1 sequence from hg38 genome
+# genes
+> genes(hg, columns = c("tx_id", "gene_id"), filter = NULL)
+GRanges object with 1071 ranges and 2 metadata columns:
+            seqnames              ranges strand |                    tx_id     gene_id
+               <Rle>           <IRanges>  <Rle> |            <IntegerList> <character>
+      10009     chrX 120250752-120258398      + |            226612,226613       10009
+  100093698     chrX   13310652-13319933      + |                   224200   100093698
+  100124540     chrX   47388649-47388777      + |                   224935   100124540
+  100126270     chrX 147909431-147911817      - | 230565,230566,230567,...   100126270
+  100126301     chrX 147258760-147258850      - |                   230554   100126301
+        ...      ...                 ...    ... .                      ...         ...
+       9823     chrX 101655281-101659850      - | 229713,229714,229715,...        9823
+       9843     chrX   66162549-66268867      + | 225468,225469,225470,...        9843
+       9947     chrX 141903894-141909374      + |            227045,227046        9947
+       9949     chrX 110194186-110440233      - | 229944,229945,229946,...        9949
+       9968     chrX   71118556-71142454      + | 225568,225569,225570,...        9968
+  -------
+  seqinfo: 1 sequence from hg38 genome
+# cds
+> cds(hg, columns = c("tx_id", "cds_id", filter = NULL))
+GRanges object with 9025 ranges and 2 metadata columns:
+         seqnames              ranges strand |                    tx_id    cds_id
+            <Rle>           <IRanges>  <Rle> |            <IntegerList> <integer>
+     [1]     chrX       284188-284314      + | 223937,223939,223940,...    266827
+     [2]     chrX       288733-288787      + |                   223941    266828
+     [3]     chrX       288733-288829      + |                   223944    266829
+     [4]     chrX       288733-288869      + | 223937,223939,223940,...    266830
+     [5]     chrX       290648-290757      + |                   223947    266831
+     ...      ...                 ...    ... .                      ...       ...
+  [9021]     chrX 155513986-155514265      - |     231094,231095,231097    275847
+  [9022]     chrX 155524456-155524632      - |     231094,231095,231097    275848
+  [9023]     chrX 155545096-155545276      - |            231094,231097    275849
+  [9024]     chrX 155545096-155545277      - |                   231095    275850
+  [9025]     chrX 155669758-155669789      - |                   231095    275851
+  -------
+  seqinfo: 1 sequence from hg38 genome
+```
+
+> `columns` and `filter` can be `NULL` or any of these:
+> `"gene_id", "tx_id", "tx_name", "tx_chrom", "tx_strand", "exon_id", "exon_name", "exon_chrom", "exon_strand", "cds_id", "cds_name", "cds_chrom", "cds_strand" and "exon_rank"`
+
+* **Exons by transcripts**
+
+```R
+
+
 
 
 
