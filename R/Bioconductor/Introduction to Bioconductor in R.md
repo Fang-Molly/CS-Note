@@ -1083,12 +1083,84 @@ writeFasta(fasample, file = "data/sample.fasta")
 
 ## 4.2 Sequence quality
 
-* Quality scores - Phred table
+* **Quality scores - Phred table**       
 
- Quality value | Chance is wrong | Accuracy (%)     
- : --------- : | : ----------- : | : -------- :          
- 10            | 1 in 10         | 90                       
- 20            | 1 in 100        | 99                 
+| Quality value | Chance is wrong | Accuracy(%) |
+| :-----------: | :-------------: | :---------: |
+| 10            | 1 in 10         | 90          |
+| 20            | 1 in 100        | 99          |
+| 30            | 1 in 1000       | 99.9        |
+| 40            | 1 in 10000      | 99.99       |
+| 50            | 1 in 100000     | 99.999      |
+
+
+* **Encoding - Phred +33**
+
+```R
+# quality encoding
+encoding(quality(fqsample))
+```
+    * Good quality encodings are B and above or, in other words, scores of 33 or above.
+    
+```
+!  "  #  $  %  &  '  (  )  *  +   ,   -   .      # encoding
+0  1  2  3  4  5  6  7  8  9  10  11  12  13     # score
+
+/   0   1   2   3   4   5   6   7   8   9   :   ;   <     # encoding
+14  15  16  17  18  19  20  21  22  23  24  25  26  27    # score
+
+=   >   ?   @   A   B   C   D   E   F   G   H   I      # encoding
+28  29  30  31  32  33  34  35  36  37  38  39  40     # score
+```
+
+* **fastq quality**
+
+```R
+library(ShortRead)
+quality(fqsample)
+quality(fqsample)[1]
+pq <- PhredQuality(quality(fqsample))
+qs <- as(pq, "IntegerList")
+qs
+```
+
+* **Quality assessment**
+
+```
+# quality assessment
+> fls <- dir("/path/to", "*.fastq", full=TRUE)
+# collect statistics over the file
+> qaSummary <- qa(fls, type="fastq")
+# creating and viewing a report
+browseURL(report(qaSummary))
+# check baseQuality
+qaSummary[["baseQuality"]]
+```
+
+## 4.3 Match and filter
+
+* **Duplicate sequences**
+
+    * Biological sequence duplicates occur in nature
+    * Amplification from the steps in library preparation (PCR)
+    * Sequencing the sample more than once
+    * Remove duplicates or at least mark them
+    * Whole genome sequencing or exome sequencing
+        * mark duplicates using a threshold
+    * RNA-seq and ChIP-seq
+
+* **srduplicated**
+
+
+
+
+
+
+
+
+
+
+           
 
 
 
