@@ -996,20 +996,90 @@ GRanges object with 9025 ranges and 2 metadata columns:
 * **Exons by transcripts**
 
 ```R
+> hg <- TxDb.Hsapiens.UCSC.hg38.knownGene
+# prefilter chromosome X
+> seqlevels(hg) <- c("chrX")
+# exons by transcript
+> exonsBytx <- exonsBy(hg, by = "tx")
+# transcript id
+> abcd1_223937 <- exonsBytx[["223937"]]
+# width of each exon
+> width(abcd1_223937)
+[1]   73  203  148  137  129  156  184 4257
+```
 
+* Overlaps
+    * query and subject are either a GRanges or GRangesList objects
+    * Overlaps might be complete all partial
 
-
-
-
-
-
+```R
+# countOverlaps results in an integer vector of counts
+countOverlaps(query, subject)
+# findOverlaps results in a Hits object
+findOverlaps(query, subject)
+# subsetByOverlaps returns a GRangesList object
+subsetByOverlaps(query, subject)
+```
 
 # 4 Introducing ShortRead
 
+## 4.1 Introducing ShortRead
 
+* **fastq vs fasta** : two main text formats to store DNA or protein sequences together with sequence names
 
+    * fastq : common file extensions are .fastq or .fq
 
+```
+# in four lines
+# first line : start with @ sign and a sequence identifier or description
+@ unique sequence identifier
+# second line
+raw sequence string
+# third line : start with + sign and sequence identifier
++ optional id
+# fourth line : the quality values of the sequence
+quality encoding per sequence letter
+```
 
+    * fasta : common file extensions are .fasta, .fa, .seq
+
+```
+# in two lines
+> unique sequence identifier
+raw sequence string
+```
+
+* fasta
+
+```R
+# instrall the package shortread
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install("ShortRead")
+
+# load the library shortread
+> library(ShortRead)
+
+# read fasta
+> fasample <- readFasta(dirPath = "data/", pattern = "fasta")
+
+# print fasample
+print(fasample)
+
+# methods accessors
+> methods(class = "ShortRead")
+
+# write a ShortRead object
+writeFasta(fasample, file = "data/sample.fasta")
+```
+
+* fastq
+
+```R
+> library(ShortRead)
+> fqsample <- readFastq(dirPath = "data/", pattern = "fastq")
+> writeFastq(fqsample, file = "data/sample.fastq.gz")
+```
 
 
 
