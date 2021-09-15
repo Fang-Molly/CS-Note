@@ -1081,8 +1081,14 @@ writeFasta(fasample, file = "data/sample.fasta")
 > writeFastq(fqsample, file = "data/sample.fastq.gz")
 ```
 
+## 4.2 Sequence quality
 
+* Quality scores - Phred table
 
+ Quality value | Chance is wrong | Accuracy (%)     
+ : --------- : | : ----------- : | : -------- :          
+ 10            | 1 in 10         | 90                       
+ 20            | 1 in 100        | 99                 
 
 
 
