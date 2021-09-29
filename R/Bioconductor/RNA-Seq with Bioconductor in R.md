@@ -66,7 +66,7 @@ View(wt_rawcounts)
 ```
 ```R
 # Read in metadata
-wt_metadata <- read.csv("wt_rawcounts.csv")
+wt_metadata <- read.csv("wt_metadata.csv")
 View(wt_metadata)
 ```
 
@@ -74,7 +74,7 @@ View(wt_metadata)
 
 * Bringing in data for DESeq2 : sample order
 
-    * DESeq2 requires the sample names in the metadata and counts datasets to be in the same order. `rownames(wt_metabada) == colnames(wt_rawcounts)`
+    * DESeq2 requires the sample names in the metadata and counts datasets to be in the same order.  `rownames(wt_metabada) == colnames(wt_rawcounts)`
 
 * Matching order between vectors
 
@@ -96,13 +96,9 @@ View(reordered_wt_metadata)
 * Creating the DESeq2 object
 
 ```R
-# Create DESeq object
+# Create DESeq object using the DESeqDataSetFromMatrix() function
 dds_wt <- DESeqDataSetFromMatrix(countData = wt_rawcounts, colData = reordered_wt_metadata, design = ~ condition)
 ```
-
-
-
-
 
 ## 2.3 Count normalization
 
