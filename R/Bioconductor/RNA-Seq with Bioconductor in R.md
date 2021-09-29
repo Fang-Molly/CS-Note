@@ -102,8 +102,27 @@ dds_wt <- DESeqDataSetFromMatrix(countData = wt_rawcounts, colData = reordered_w
 
 ## 2.3 Count normalization
 
+* normalize the raw counts to assess sample-level quality control metrics by removing the influence of these factors on the overal counts.
 
+* The factors influence the number of reads aligning to each gene
 
+    * **RNA expression**
+    * library depth/size
+    * gene length
+    * RNA composition
+
+* `estimateSizeFactor()` function : to calculate the normalized counts
+
+* `sizeFactor()` function : to view the size factor used for normalization
+
+* `counts()` function : to extract the normalized counts
+    * with the `normalized = TRUE` argument : extract the normalized counts
+    * with the `normalized = FALSE` argument : extract the raw counts
+
+```R
+dds_smoc2 <- estimateSizeFactors(dds_moc2)
+smoc2_normalized_counts <- counts(dds_smoc2, normalized = TRUE)
+```
 
 ## 2.4 Hierarchical heatmap
 
