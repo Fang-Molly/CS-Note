@@ -126,12 +126,45 @@ smoc2_normalized_counts <- counts(dds_smoc2, normalized = TRUE)
 
 ## 2.4 Hierarchical heatmap
 
+* visualiztion methods for unsupervised clustering analyses
+    * hierarchical clustering heatmaps
+    * principal component analysis (PCA)
 
+* log transformation : variance stabilizing transformation (VST)
 
+```R
+vsd_wt <- vst(dds_wt, blind=TRUE)
+```
 
-## 2.5 Principal component analysis 
+* Hierarchical clustering with correlation heatmaps
 
+```R
+# extract the vst matrix from the object
+vsd_mat_wt <- assay(vsd_wt)
 
+# compute pairwise correlation values
+vsd_cor_wt <- cor(vsd_mat_wt)
+View(vsd_cor_wt)
+
+# load pheatmap libraries
+library(pheatmap)
+
+# plot heatmap
+pheatmap(vsd_cor_wt, annotation = select(wt_metadata, condition))
+```
+
+## 2.5 Principal component analysis (PCA)
+
+* emphasize the variation present in a dataset
+
+```R
+# plot PCA
+plotPCA(vsd_wt, intgroup="condition")
+``` 
+
+# 3 Differential expression analysis with DESeq2
+
+## 3.1 DE analysis
 
 
 
