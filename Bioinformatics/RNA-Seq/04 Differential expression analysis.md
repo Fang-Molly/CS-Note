@@ -124,6 +124,11 @@ results_genes_phenotype = arrange(results_genes_phenotype, pval)
     * GLM (Generalized Linear Model) fit for each gene.
 * Testing for differential expression (Wald test).
 
+## Raw count matrices
+
+* Prepare data from STAR
+
+
 
 
 
