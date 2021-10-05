@@ -166,8 +166,31 @@ plotPCA(vsd_wt, intgroup="condition")
 
 ## 3.1 DE analysis
 
+* The differential expression analysis with DESeq2 consists of roughly three steps:
 
+    * fitting the raw counts for each gene to the DESeq2 negative binomial model and testing for differential expression
+    * shrinking the log2 fold changes
+    * extracting and visualizing the results
 
+* DESeq2 workflow : Model
+
+```R
+# Create DESeq object
+dds_wt <- DESeqDataSetFromMatrix(countData = wt_rawcounts, colData = reordered_wt_metadata, design = ~ condition)
+```
+
+* DESeq2 workflow : Design formula
+
+```R
+~ strain + sex + treatment + sex : treatment
+```
+
+* DESeq2 workflow : Running
+
+```R
+# run analysis
+dds_wt <- DESeq(dds_wt)
+```
 
 
 
