@@ -228,12 +228,71 @@ ggplot(df) +
 plotDispEsts(dds_wt)
 ```
 
+## 3.3 DESeq2 model -contrasts
 
+```R
+results(wt_dds, alpha = 0.05)
+```
 
+```R
+results(dds, contrast = c("condition_factor", "level_to_compare", "base_level"), alpha = 0.05)
+```
 
+```R
+wt_res <- results(dds_wt, contrast = c("condition", "fibrosis", "normal"), alpha = 0.05)
+# DESeq2 LFC shrinkage
+plotMA(wt_res, ylim=c(-8,8))
+```
 
+## 3.4 DESeq2 results
 
+* get descriptions for the columns in the results table
 
+```R
+mcols(wt_res)
+head(wt_res, n=10)
+```
+
+* Significant DE genes - summary
+
+```
+summary(wt_res)
+```
+
+* Significant DE genes - fold-change threshold
+
+```
+wt_res <- results(dds_wt, contrast = c("condition", "fibrosis", "normal"), alpha = 0.05, lfcThreshold = 0.32)
+
+wt_res <- lfcShrink(dds_wt, contrast = c("condition", "fibrosis", "normal"), res = wt_res)
+```
+
+* results - annotate
+
+```R
+library(annotables)
+grcm38
+```
+
+* results - extract
+
+```
+wt_res_all <- data.frame(wt_res) %>%
+              rownames_to_column(var = "ensgene") %>%
+              left_join(x = wt_res_all,
+                        y = grcm38[, c("ensgene", "symbol", "description")],
+                        by = "ensgene")
+view(wt_res_all)
+```
+
+* Significant DE genes - arrange
+
+```
+wt_res_sig <- subset(wt_res_all, padj < 0.05)
+wt_res_sig <- wt_res_sig %>%
+        arrange(padj)
+View(wt_res_all)
+```
 
 
 
