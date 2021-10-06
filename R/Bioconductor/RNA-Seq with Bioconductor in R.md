@@ -192,6 +192,50 @@ dds_wt <- DESeqDataSetFromMatrix(countData = wt_rawcounts, colData = reordered_w
 dds_wt <- DESeq(dds_wt)
 ```
 
+## 3.2 DESeq2 model -dispersion
+
+* DESeq2 model - mean-variance relationship
+
+```R
+# syntax for apply()
+apply(data, rows/columns, function_to_apply)
+
+# calculating mean for each gene (each row)
+mean_counts <- apply(wt_rawcounts[, 1:3], 1, mean)
+
+# calculating variance for each gene (each row)
+variance_counts <- apply(wt_rawcounts[, 1:3], 1, var)
+
+# creating data frame with mean and variance for every gene
+df <- data.frame(mean_counts, variance_counts)
+
+ggplot(df) + 
+        geom_point(aes(x=mean_counts, y=variance_counts)) +
+        scale_y_log10() +
+        scale_x_log10() +
+        xlab("Mean counts per gene") +
+        ylab("Variance per gene")
+```
+
+* Dispersion formula : Var = u + a * u2
+    * Var: variance
+    * u : mean
+    * a : dispersion
+    * Variance + => dispersion +  ; mean + => dispersion -
+
+```R
+# plot dispersion estimates
+plotDispEsts(dds_wt)
+```
+
+
+
+
+
+
+
+
+
 
 
 
