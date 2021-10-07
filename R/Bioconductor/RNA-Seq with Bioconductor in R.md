@@ -294,6 +294,29 @@ wt_res_sig <- wt_res_sig %>%
 View(wt_res_all)
 ```
 
+# 4 Exploration of differential expression results
+
+## 4.1 Visualization of results
+
+* Visualizing results -Expression heatmap
+
+```R
+# Subset normalized counts to significant genes
+sig_norm_counts_wt <- normalized_counts_wt[wt_res_si$ensgene, ]
+# choose a color palette from RColorBrewer
+library(RColorBrewer)
+heat_colors <- brewer.pal(6, "YlOrRd")
+display.brewer.all()
+```
+
+
+## 4.2 RNA-Seq DE analysis summary -setup
+
+## 4.3 RNA-Seq DE analysis summary
+
+
+## 4.4 RNA-Seq next steps
+
 
 
 
