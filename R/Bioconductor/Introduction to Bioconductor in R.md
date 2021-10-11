@@ -1151,6 +1151,55 @@ qaSummary[["baseQuality"]]
 
 * **srduplicated**
 
+```R
+library(ShortRead)
+# Counting duplicates TRUE is the number of duplicates
+table(srduplicated(dfqsample))
+# Cleaning reads from duplicates x[fun(x)]
+cleanReads <- mydReads[srduplicated(mydReads) == FALSE]
+# Counting duplicates
+table(srduplicated(cleanReads))
+```
+
+* Creating your own filters
+
+```R
+# use a custom filter to remove reads from fqsample
+# this filter to remove reads shorter than a min number of bases
+readWidthCutOff <- srFilter(function(x) {width(x) >= minWidth}, name = "MinWidth")
+minWidth <- 51
+fqsample[readWidthCutOff(fqsample)]
+```
+
+* nFilter
+
+```R
+library(ShortRead)
+# save your filter, .name is optional
+myFilter <- nFilter(threshold = 10, .name = "cleanNFilter")
+# use the filter at reading point
+filtered <- readFastq(dirPath = "data", pattern = ".fastq", filter = myFilter)
+# you will retrieve only those reads that have a maximum of 10 N's
+filtered
+```
+
+* idFilter and polynFilter
+
+```R
+library(ShortRead)
+# id filter example
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
