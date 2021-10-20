@@ -667,13 +667,62 @@ grep ">" Homo_sapiens.GRCh38.dna.chromosome.10.fa > seq_names.txt
 
 * `cut`
 
+# 11. `printf` command
 
+* `printf` :display the given string, number or any other format specifier on the terminal window
 
+* syntax: `$printf [-v var] format [arguments]`
 
+* Format Specifiers: The most commonly used printf specifiers are %s, %b, %d, %x and %f.
 
+* `%s` specifier : It is basically a string specifier for string output.
 
+```
+$ printf "%s\n" "Hello, World!"
+Hello, World!
+```
 
+* `%b` specifier : It is same as string specifier but it allows us to interpret escape sequences with an argument.
 
+```
+$ printf "%s\n" "Hello, World! \n" "From Geeks For Geeks\n"
+Hello, World! \n
+From Geeks For Geeks\n
+$ printf "%b\n" "Hello, World! \n" "From Geeks For Geeks\n"
+Hello, World! 
+
+From Geeks For Geeks
+
+% printf "%b\n" "Geeks" "for" "\nGeeks\n"
+Geeks
+for
+
+Geeks
+
+```
+
+* `%d` specifier : It is an integer specifier for showing the integral values.
+
+```
+% printf "%d\n" "213" "109"
+213
+109
+```
+
+* `%f` specifier: It is used for output of floating point values.
+
+```
+% printf "%f\n" "1.32" "3.14"
+1.320000
+3.140000
+```
+
+* `%x` specifier: It is used for output of lowercase hexadecimal values for integers and for padding the output.
+
+```
+% printf "%08x\n" "1024"
+00000400
+```
 
 
 
