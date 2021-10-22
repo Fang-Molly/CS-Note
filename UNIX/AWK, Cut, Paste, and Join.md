@@ -91,7 +91,16 @@ olivine
 
 ## 1.2 awk Variables
 
-
+| awk variable name | what it stands for |
+|:-----------------:|:------------------:|
+| FILENAME          | Name of current input file|
+| RS                | Input record separator (Default is new line)|
+| OFS               | Output field separator string (Blank is default)|
+| ORS               | Output record separator string (Default is new line)|
+| NF                | Number of fields in input record |
+| NR                | Number of input record |
+| OFMT              | Output format of number |
+| FS                | Field separator character (Blank & tab is default)
 
 
 
