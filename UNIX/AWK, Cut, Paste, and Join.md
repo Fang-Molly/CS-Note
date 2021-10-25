@@ -212,15 +212,90 @@ olivine
 End of Example
 ```
 
-* 
+* awk assignment operator
 
+| Assignment operator | Use for        | Example  | Equivalent to|
+|:-------------------:|:--------------:|:--------:|:-------------|
+| +=                  | addition       | a += 10  | a = a + 10   |
+| -=                  | substraction   | a -= 10  | a = a - 10   |
+| \*=                 | multiplication | a \*= 10 | a = a * 10   |
+| %=                  | modulo         | a %= 10  | a = a % 10   |
 
+```
+% awk 'BEGIN {x=1} {print $0, x++}' example.txt
+1 shear 5 20.00 1
+2 compressional 10 2.00 2
+3 anisotropy 30 3.50 3
+4 perovskite 2 45.50 4
+5 olivine 25 33.19 5
+%
+% awk 'BEGIN {x=0} {print $0, x+=10}' example.txt
+1 shear 5 20.00 10
+2 compressional 10 2.00 20
+3 anisotropy 30 3.50 30
+4 perovskite 2 45.50 40
+5 olivine 25 33.19 50
+```
 
+* Control structures
 
+```
+# if
+% awk '{if(NR>3) print $0}' example.txt
+4 perovskite 2 45.50
+5 olivine 25 33.19
+%
+# if, else
+% awk '{if($1>2) print$0; else print $1}' example.txt
+1
+2
+3 anisotropy 30 3.50
+4 perovskite 2 45.50
+5 olivine 25 33.19
+&
+# if, else if, else
+% awk '{if($1>2) print $0; else if ($1>1) print $2; else print $1}' example.txt
+1
+compressional
+3 anisotropy 30 3.50
+4 perovskite 2 45.50
+5 olivine 25 33.19
+```
 
+* printf : format the output from awk
+    * d: integer
+    * s: string
+    * f: floating
+    * -: Left-justify within the given field width; Right justification is the default
+    * \n : new line
 
+```
+% awk '{printf("%4d %-20s %-5d %-7.2f\n", $1, $2, $3, $4)}' example.txt
+   1 shear                5     20.00  
+   2 compressional        10    2.00   
+   3 anisotropy           30    3.50   
+   4 perovskite           2     45.50  
+   5 olivine              25    33.19 
+```
 
+# 2. Cut, Paste, and Join
 
+## Paste : extract columns of information from different files and combine them into one file
+
+```
+>> paste A.txt B.txt > C.txt 
+```
+
+## join : if two separate files share a common field they can combined with join
+
+```
+>> join A.txt B.txt > C.txt 
+```
+
+## cut : chop up files into fields
+
+* -d : specify a new delimiter
+* -f : state which fields to print out
 
 
 
