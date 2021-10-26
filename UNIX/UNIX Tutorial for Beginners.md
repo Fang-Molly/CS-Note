@@ -252,14 +252,17 @@ satvik 80000
 
 ## 2.10 Replace the contents of a file
 
-* `sed` : `s/<TO BE REPLACED>/<TO REPLACE>/`
-    * `s/<TO BE REPLACED>/<TO REPLACE>/g` : replace every character found in the file
-    
+* `sed` : a stream editor, used to perform basic text transformations on an input stream.
+
+* `sed SCRIPT INPUTFILE...`
+
 ```
-$ sed s/T/U/g dna.txt > rna.txt
-$ cat rna.txt
-AUGUACUGACUGCAUGCAUGCCAUGCA
+# replace 'hello' to 'world'
+sed 's/hello/world/' input.txt > output.txt
+sed 's/hello/world/' < input.txt > output.txt
+cat input.txt | sed 's/hello/world/' - > output.txt
 ```
+
 
 
 # 3 Redirecing standard streams
