@@ -122,14 +122,14 @@ library(DESeq2)
 
 2.2 Load the count data from STAR into an DESeq object
 
-* Read matirx
+* 1. Read in a matirx
 
 ```R
 # read in the matrix
 count_matrix <- 
 
 
-
+* 2. compile one file per sample
 
 
 
