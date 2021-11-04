@@ -112,6 +112,13 @@ library(DESeq2)
 
 # display the first 6 rows
 > head(metadata)
+  SampleName     FileName Phenotype    Treatment
+A          A A_counts.txt  wildtype nontreatment
+B          B B_counts.txt  wildtype    treatment
+C          C C_counts.txt  knockout nontreatment
+D          D D_counts.txt  knockout    treatment
+E          E E_counts.txt  wildtype nontreatment
+F          F F_counts.txt  wildtype    treatment
 
 # check the number of rows and columns
 > nrow(metadata)
@@ -126,14 +133,96 @@ library(DESeq2)
 
 ```R
 # read in the matrix
-count_matrix <- 
+> count_matrix <- read.delim("raw_counts_matrix.txt", header = TRUE, sep = "\t", row.names = 1)
+> head(count_matrix)
+                     A  B  C D E F G H K M X Z
+ENSMUSG00000102693.2 0  0  0 0 0 0 0 0 0 0 0 0
+ENSMUSG00000064842.3 0  0  0 0 0 0 0 0 0 0 0 0
+ENSMUSG00000051951.6 6 16 10 9 4 9 7 9 9 6 8 6
+ENSMUSG00000102851.2 0  0  0 0 0 0 0 0 0 0 0 0
+ENSMUSG00000103377.2 0  0  0 1 0 0 0 0 0 0 0 0
+ENSMUSG00000104017.2 0  0  0 0 1 0 0 1 0 0 0 0
+> nrow(count_matrix)
+[1] 55359
+> ncol(count_matrix)
+[1] 12
 
+# check if the rownames of metadata are same as the colnames of the count_matrix
+> rownames(metadata) == colnames(count_matrix)
+ [1] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+ 
+# create the DESeq object
+
+```R
+# countData is the matrix containing the counts
+# sampletable is the sample sheet / metadata we created
+# design is how we wish to model the data: what we want to measure here is the difference between the treatment times
+
+se_star_matrix <- DESeqDataSetFromMatrix(countData = count_matrix,
+> des_rawcounts <- DESeqDataSetFromMatrix(countData = rawcounts, colData = metadata, design = ~ Treatment)
+```
 
 * 2. compile one file per sample
 
+```R
+# sampleTable is the sample sheet / metadata we created
+# directory is the path to the directory where the counts are stored (one file per sample)
+# design is how we wish to model the data: what we want to measure here is the difference between the treatment times
 
+> des_star <- DESeqDataSetFromHTSeqCount(sampleTable = metadata, directory = "counts", design = ~ Treatment)
+```
 
+2.3 Load the count data from SALMON into an DESeq object
 
+```R
+# Load the tximport package that we use to import Salmon counts
+> library(tximport)
+
+# List the quantification files from Salmon: one quant.sf file per sample
+# dir is list all files in "~/full_data/counts_salmon" and in any directories inside, that have the pattern "quant.sf". full.names = TRUE means that we want to keep the whole paths
+
+> files <- dir("~/Desktop/rnaseq/04_Mapping/alignments/salmon", recursive = T, pattern = "quant.sf", full.names = T)
+
+# files is a vector of file paths. we will name each element of this vector with a simplified corresponding sample name
+
+> names(files) <- dir("~/Desktop/rnaseq/04_Mapping/alignments/salmon")
+
+# Read in the two-column data.frame linking transcript id (column 1) to gene id (column 2)
+
+> tx2gene <- read.table("tx2gene.gencode.vM27.csv", sep = "\t", header = F)
+
+# tximport can import data from Salmon, Kallisto, Sailfish, RSEM, Stringtie
+# here we summarize the transcript-level counts to gene-level counts
+
+> txi <- tximport(files, type = "salmon", tx2gene = tx2gene)
+
+# check the names of the "slots" of the txi object
+> names(txi)
+[1] "abundance"           "counts"              "length"             
+[4] "countsFromAbundance"
+
+# display the first rows of the counts per gene information
+> head(txi$counts)
+                             A       B   C       D       E   F      G
+ENSMUSG00000000001.5  1070.000 844.000 842 808.000 940.000 961 930.00
+ENSMUSG00000000003.16    0.000   0.000   0   0.000   0.000   0   0.00
+ENSMUSG00000000028.16   29.507  29.142  35  27.161  48.734  24  35.42
+ENSMUSG00000000031.17   75.000   5.000   6   9.018  10.000   8  12.00
+ENSMUSG00000000037.18    2.000   3.000   3   2.000   5.000   3   9.00
+ENSMUSG00000000049.12    0.000   2.000   1   0.000   2.000   3   0.00
+                           H   K   M       X   Z
+ENSMUSG00000000001.5  785.00 823 711 849.000 708
+ENSMUSG00000000003.16   0.00   0   0   0.000   0
+ENSMUSG00000000028.16  26.14  29  25  51.019  18
+ENSMUSG00000000031.17 209.00  83  11  18.000  10
+ENSMUSG00000000037.18   5.00   3   3   3.000   6
+ENSMUSG00000000049.12   1.00   0   2   2.000   0
+
+# Create a DESeq2 object based on Salmon per-gene counts
+> des_salmon <- DESeqDataSetFromTximport(txi, colData = metadata, design = ~ Treatment)
+```
+
+3. Filtering
 
 
 
