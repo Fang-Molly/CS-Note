@@ -585,7 +585,25 @@ Error in math_magic(4) : argument "b" is missing, with no default
 
 ## 3.3 R Packages
 
+* Install packages
 
+```R
+install.packages("ggvis")
+```
+
+* CRAN : Comprehensive R Archive Network
+
+* Load packages
+
+```R
+# show the packages and environments you can use
+search()
+
+# load packages
+library("ggvis")
+
+require()
+```
 
 
 
