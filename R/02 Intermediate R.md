@@ -605,24 +605,107 @@ library("ggvis")
 require()
 ```
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # 4 The apply family
+
+## 4.1 lapply (short for list apply)
+
+```R
+> nyc <- list(pop = 8405837, boroughs = c("Manhattan", "Bronx", "Brooklyn", "Queens", "Staten Island"), capital = FALSE)
+
+# one way: to find out the class of each element of the list
+> for(info in nyc) {print(class(info))}
+[1] "numeric"
+[1] "character"
+[1] "logical"
+
+# lapply()
+> lapply(nyc, class)
+$pop
+[1] "numeric"
+
+$boroughs
+[1] "character"
+
+$capital
+[1] "logical"
+```
+
+```R
+> cities <- c("New York", "Pairs", "London", "Tokyo", "Rio de Janeiro", "Cape Town")
+
+# find out the number of characters of each city name
+> num_chars <- c()
+> for(i in 1:length(cities)) { num_chars[i] <- nchar(cities[i])}
+> num_chars
+[1]  8  5  6  5 14  9
+
+# lapply()
+> lapply(cities, nchar)
+[[1]]
+[1] 8
+
+[[2]]
+[1] 5
+
+...
+
+[[6]]
+[1] 9
+
+# unlist()
+> unlist(lapply(cities, nchar))
+[1]  8  5  6  5 14  9
+```
+
+```R
+> oil_prices <- list(2.37, 2.49, 2.18, 2.22, 2.47, 2.32)
+> triple <- function(x) { 3*x }
+> result <- lapply(oil_prices, triple)
+> str(result)
+List of 6
+ $ : num 7.11
+ $ : num 7.47
+ $ : num 6.54
+ $ : num 6.66
+ $ : num 7.41
+ $ : num 6.96
+> result
+[[1]]
+[1] 7.11
+
+[[2]]
+[1] 7.47
+
+...
+
+[[6]]
+[1] 6.96
+
+> unlist(result)
+[1] 7.11 7.47 6.54 6.66 7.41 6.96
+
+> multiply <- function(x, factor) { x * factor }
+> times3 <- lapply(oil_prices, multiply, factor = 3)
+> unlist(times3)
+[1] 7.11 7.47 6.54 6.66 7.41 6.96
+> times4 <- lapply(oil_prices, multiply, factor = 4)
+> unlist(times4)
+[1] 9.48 9.96 8.72 8.88 9.88 9.28
+
+# lapply and anonymous functions
+times3 <- lapply(oil_prices, function(x) { x*3 })
+```
+
+## 4.2 sapply (short for simplify apply)
+
+```R
+> cities <- c("New York", "Pairs", "London", "Tokyo", "Rio de Janeiro", "Cape Town")
+> sapply(cities, nchar)
+      New York          Pairs         London          Tokyo Rio de Janeiro      Cape Town 
+             8              5              6              5             14              9 
+> sapply(cities, nchar, USE.NAMES = FALSE)
+[1]  8  5  6  5 14  9
+```
 
 
 
