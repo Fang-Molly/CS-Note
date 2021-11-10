@@ -698,6 +698,8 @@ times3 <- lapply(oil_prices, function(x) { x*3 })
 
 ## 4.2 sapply (short for simplify apply)
 
+* `sapply(x, FUN, ...)`
+
 ```R
 > cities <- c("New York", "Pairs", "London", "Tokyo", "Rio de Janeiro", "Cape Town")
 > sapply(cities, nchar)
@@ -707,9 +709,70 @@ times3 <- lapply(oil_prices, function(x) { x*3 })
 [1]  8  5  6  5 14  9
 ```
 
+```R
+> first_and_last <- function(name) {
++     name <- gsub(" ", "", name)
++     letters <- strsplit(name, split = "")[[1]]
++     c(first = min(letters), last = max(letters))
++ }
+> first_and_last("New York")
+first  last 
+  "e"   "Y" 
 
+> cities <- c("New York", "Pairs", "London", "Tokyo", "Rio de Janeiro", "Cape Town")
+> sapply(cities, first_and_last)
+      New York Pairs London Tokyo Rio de Janeiro Cape Town
+first "e"      "a"   "d"    "k"   "a"            "a"      
+last  "Y"      "s"   "o"    "y"   "R"            "w"   
+```
 
+```R
+> unique_letters <- function(name) {
++     name <- gsub(" ", "", name)
++     letters <- strsplit(name, split = "")[[1]]
++     unique(letters)
++ }
+> unique_letters("London")
+[1] "L" "o" "n" "d"
 
+> lapply(cities, unique_letters)
+[[1]]
+[1] "N" "e" "w" "Y" "o" "r" "k"
+
+[[2]]
+[1] "P" "a" "i" "r" "s"
+
+[[3]]
+[1] "L" "o" "n" "d"
+
+[[4]]
+[1] "T" "o" "k" "y"
+
+[[5]]
+[1] "R" "i" "o" "d" "e" "J" "a" "n" "r"
+
+[[6]]
+[1] "C" "a" "p" "e" "T" "o" "w" "n"
+
+> sapply(cities, unique_letters)
+$`New York`
+[1] "N" "e" "w" "Y" "o" "r" "k"
+
+$Pairs
+[1] "P" "a" "i" "r" "s"
+
+$London
+[1] "L" "o" "n" "d"
+
+$Tokyo
+[1] "T" "o" "k" "y"
+
+$`Rio de Janeiro`
+[1] "R" "i" "o" "d" "e" "J" "a" "n" "r"
+
+$`Cape Town`
+[1] "C" "a" "p" "e" "T" "o" "w" "n"
+```
 
 
 
