@@ -609,6 +609,9 @@ require()
 
 ## 4.1 lapply (short for list apply)
 
+* apply function over list or vector
+* output = list
+
 ```R
 > nyc <- list(pop = 8405837, boroughs = c("Manhattan", "Bronx", "Brooklyn", "Queens", "Staten Island"), capital = FALSE)
 
@@ -699,6 +702,8 @@ times3 <- lapply(oil_prices, function(x) { x*3 })
 ## 4.2 sapply (short for simplify apply)
 
 * `sapply(x, FUN, ...)`
+* apply function over list or vector
+* try to simplify list to array
 
 ```R
 > cities <- c("New York", "Pairs", "London", "Tokyo", "Rio de Janeiro", "Cape Town")
@@ -773,6 +778,13 @@ $`Rio de Janeiro`
 $`Cape Town`
 [1] "C" "a" "p" "e" "T" "o" "w" "n"
 ```
+
+## 4.3 vapply
+
+* apply function over list or vector
+* explicitly specify output format
+* vapply(x, FUN, FUN.VALUE, ..., USE.NAMES = TRUE)
+* 
 
 
 
