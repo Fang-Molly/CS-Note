@@ -865,19 +865,238 @@ Error in vapply(cities, unique_letters, character(4)) :
 
 * Functions for data structures
 
+> `seq()` : generate a sequence from 1 to 10, taking steps of 2
 
+```R
+> seq(1, 10, by = 3)
+[1]  1  4  7 10
+> seq(8, 2, by = -2)
+[1] 8 6 4 2
+```
 
+> `rep()` : replicate its input, a vector or list
 
+```R
+# repeat the entire vector by times
+> rep(c(8, 6, 4, 2), times = 2)
+[1] 8 6 4 2 8 6 4 2
+# repeat every element by each
+> rep(c(8, 6, 4, 2), each = 2)
+[1] 8 8 6 6 4 4 2 2
+```
 
+> `sort()` : sort the input vector
 
+```R
+# sort in ascending order
+> sort(c(8, 6, 4, 2, 8, 6, 4, 2))
+[1] 2 2 4 4 6 6 8 8
+# sort in descending order
+> sort(c(8, 6, 4, 2, 8, 6, 4, 2), decreasing = TRUE)
+[1] 8 8 6 6 4 4 2 2
+```
 
+```R
+> li <- list(log = TRUE,
++            ch = "hello",
++            int_vec = sort(rep(seq(8, 2, by = -2), times = 2)))
+> li
+$log
+[1] TRUE
 
+$ch
+[1] "hello"
 
+$int_vec
+[1] 2 2 4 4 6 6 8 8
+```
 
+> `str()` : inspect the structure of this list
+> `is.*()` : check the type of your data structure, return TRUE or FALSE
+> `as.*()` : convert vector to a list
+> `unlist()` : convert list to vector
 
+```R
+# str() to inspect the structure of the list
+> str(li)
+List of 3
+ $ log    : logi TRUE
+ $ ch     : chr "hello"
+ $ int_vec: num [1:8] 2 2 4 4 6 6 8 8
+ 
+> is.list(li)
+[1] TRUE
 
+> as.list(li)
+$log
+[1] TRUE
 
+$ch
+[1] "hello"
 
+$int_vec
+[1] 2 2 4 4 6 6 8 8
+
+> is.list(c(1, 2, 3))
+[1] FALSE
+
+> li2 <- as.list(c(1, 2, 3))
+> is.list(li2)
+[1] TRUE
+
+> unlist(li)
+     log       ch int_vec1 int_vec2 int_vec3 int_vec4 int_vec5 int_vec6 int_vec7 int_vec8 
+  "TRUE"  "hello"      "2"      "2"      "4"      "4"      "6"      "6"      "8"      "8" 
+```
+
+> `append()` : add elements to a vector or a list in a very readable way
+> `rev()` : reverse the list
+
+```R
+> rev(li)
+$int_vec
+[1] 2 2 4 4 6 6 8 8
+
+$ch
+[1] "hello"
+
+$log
+[1] TRUE
+
+> append(li, rev(li))
+$log
+[1] TRUE
+
+$ch
+[1] "hello"
+
+$int_vec
+[1] 2 2 4 4 6 6 8 8
+
+$int_vec
+[1] 2 2 4 4 6 6 8 8
+
+$ch
+[1] "hello"
+
+$log
+[1] TRUE
+
+> str(append(li, rev(li)))
+List of 6
+ $ log    : logi TRUE
+ $ ch     : chr "hello"
+ $ int_vec: num [1:8] 2 2 4 4 6 6 8 8
+ $ int_vec: num [1:8] 2 2 4 4 6 6 8 8
+ $ ch     : chr "hello"
+ $ log    : logi TRUE
+ 
+> str(rev(li))
+List of 3
+ $ int_vec: num [1:8] 2 2 4 4 6 6 8 8
+ $ ch     : chr "hello"
+ $ log    : logi TRUE
+```
+
+## 5.2 Regular Expressions
+
+> `grepl()` : `grepl(pattern = <regex>, x = <string>)`
+> `grep()` : returna a vector of indices of the elements of x that yield a match
+
+```R
+> animals <- c("cat","moose", "impala", "ant", "kiwi")
+
+# include letter "a"
+> grepl(pattern = "a", x = animals)
+[1]  TRUE FALSE  TRUE  TRUE FALSE
+
+# begin with an "a"
+> grepl(pattern = "^a", x = animals)
+[1] FALSE FALSE FALSE  TRUE FALSE
+> grepl(pattern = "a$", x = animals)
+[1] FALSE FALSE  TRUE FALSE FALSE
+
+> grep(pattern = "a", x = animals)
+[1] 1 3 4
+> which(grepl(pattern = "a", x = animals))
+[1] 1 3 4
+> grep(pattern = "^a", x = animals)
+[1] 4
+```
+
+> `sub()` : `sub(pattern = <regex>, replacement = <str>, x = <str>)
+> `gsub()`
+
+```R
+# replace the first match in the string
+> sub(pattern = "a", replacement = "o", x = animals)
+[1] "cot"    "moose"  "impola" "ont"    "kiwi"
+
+# replace all the match in the string
+> gsub(pattern = "a", replacement = "o", x = animals)
+[1] "cot"    "moose"  "impolo" "ont"    "kiwi" 
+
+> gsub(pattern = "a|i", replacement = "_", x = animals)
+[1] "c_t"    "moose"  "_mp_l_" "_nt"    "k_w_"  
+> gsub(pattern = "a|i|o", replacement = "_", x = animals)
+[1] "c_t"    "m__se"  "_mp_l_" "_nt"    "k_w_"  
+```
+
+```R
+> emails <- c("john.doe@ivyleague.edu", "education@world.gov", "dalai.lama@peace.org", "invalid.edu", "quant@bigdatacollege.edu", "cookie.monster@sesame.tv")
+> grepl("@.*\\.edu$", x = emails)
+[1]  TRUE FALSE FALSE FALSE  TRUE FALSE
+
+> hits <- grep("@.*\\.edu$", x = emails)
+> hits
+[1] 1 5
+> emails[hits]
+[1] "john.doe@ivyleague.edu"   "quant@bigdatacollege.edu"
+```
+
+> `.*` : any character that is matched zero or more times
+> `\\s` : Match a space. The "s" is normally a character, escaping it (\\) makes it a metacharacter.
+> `[0-9]+` : Match the numbers 0 to 9, at least once (+).
+
+## 5.3 Times & Dates
+
+```R
+> today <- Sys.Date()
+> today
+[1] "2021-11-11"
+> class(today)
+[1] "Date"
+
+> now <- Sys.time()
+> now
+[1] "2021-11-11 16:53:50 EST"
+> class(now)
+[1] "POSIXct" "POSIXt" 
+```
+
+* Create Date objects
+
+```R
+> my_date <- as.Date("1998-09-09")
+> my_date
+[1] "1998-09-09"
+> class(my_date)
+[1] "Date"
+> my_date <- as.Date("1999-14-05")
+Error in charToDate(x) : 
+  character string is not in a standard unambiguous format
+> my_date <- as.Date("1999-14-05", format = "%Y-%d-%m")
+> my_date
+[1] "1999-05-14"
+```
+
+* Create POSIXct objects
+
+```R
+> my_time <- as.POSIXct("1971-05-14 11:25:15")
+> my_time
+[1] "1971-05-14 11:25:15 EDT"
+```
 
 
 
