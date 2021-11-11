@@ -784,15 +784,86 @@ $`Cape Town`
 * apply function over list or vector
 * explicitly specify output format
 * vapply(x, FUN, FUN.VALUE, ..., USE.NAMES = TRUE)
-* 
 
+```R
+> cities <- c("New York", "Pairs", "London", "Tokyo", "Rio de Janeiro", "Cape Town")
 
+> sapply(cities, nchar)
+      New York          Pairs         London          Tokyo Rio de Janeiro      Cape Town 
+             8              5              6              5             14              9 
 
+> vapply(cities, nchar, numeric(1))
+      New York          Pairs         London          Tokyo Rio de Janeiro      Cape Town 
+             8              5              6              5             14              9 
+```
 
+```R
+> first_and_last <- function(name) {
++     name <- gsub(" ", "", name)
++     letters <- strsplit(name, split = "")[[1]]
++     c(first = min(letters), last = max(letters))
++ }
+
+> sapply(cities, first_and_last)
+      New York Pairs London Tokyo Rio de Janeiro Cape Town
+first "e"      "a"   "d"    "k"   "a"            "a"      
+last  "Y"      "s"   "o"    "y"   "R"            "w" 
+
+> vapply(cities, first_and_last, character(2))
+      New York Pairs London Tokyo Rio de Janeiro Cape Town
+first "e"      "a"   "d"    "k"   "a"            "a"      
+last  "Y"      "s"   "o"    "y"   "R"            "w"      
+> vapply(cities, first_and_last, character(1))
+Error in vapply(cities, first_and_last, character(1)) : 
+  values must be length 1,
+ but FUN(X[[1]]) result is length 2
+> vapply(cities, first_and_last, numeric(2))
+Error in vapply(cities, first_and_last, numeric(2)) : 
+  values must be type 'double',
+ but FUN(X[[1]]) result is type 'character'
+```
+
+```R
+> unique_letters <- function(name) {
++     name <- gsub(" ", "", name)
++     letters <- strsplit(name, split = "")[[1]]
++     unique(letters)
++ }
+
+> sapply(cities, unique_letters)
+$`New York`
+[1] "N" "e" "w" "Y" "o" "r" "k"
+
+...
+
+$`Cape Town`
+[1] "C" "a" "p" "e" "T" "o" "w" "n"
+
+> vapply(cities, unique_letters, character(4))
+Error in vapply(cities, unique_letters, character(4)) : 
+  values must be length 4,
+ but FUN(X[[1]]) result is length 7
+```
 
 # 5 Utilities
 
+## 5.1 Useful Functions
 
+* Mathematical utilities
+
+> `abs()` : calculate the absolute value of an array of numerical values
+> `round()` : rounds the input
+> `sum()` : calculate the sum of the elements
+> `mean()` : calculate the arithmetic mean
+
+```R
+> v1 <- c(1.1, -7.1, 5.4, -2.7)
+> v2 <- c(-3.6, 4.1, 5.8, -8.0)
+> mean(c(sum(round(abs(v1))), sum(round(abs(v2)))))
+[1] 19
+```
+
+* Functions for data structures
 
 
 
