@@ -1082,9 +1082,11 @@ List of 3
 [1] "1998-09-09"
 > class(my_date)
 [1] "Date"
+
 > my_date <- as.Date("1999-14-05")
 Error in charToDate(x) : 
   character string is not in a standard unambiguous format
+  
 > my_date <- as.Date("1999-14-05", format = "%Y-%d-%m")
 > my_date
 [1] "1999-05-14"
@@ -1098,15 +1100,54 @@ Error in charToDate(x) :
 [1] "1971-05-14 11:25:15 EDT"
 ```
 
+* Date arithmetic
 
+```R
+> my_date
+[1] "1971-05-14"
+> my_date + 1
+[1] "1971-05-15"
 
+> my_date2 <- as.Date("1998-09-29")
+> my_date2 - my_date
+Time difference of 10000 days
+```
 
+* POSIXct arithmetic
 
+```R
+> my_time
+[1] "1971-05-14 11:25:15 EDT"
 
+> my_time + 1
+[1] "1971-05-14 11:25:16 EDT"
 
+> my_time2 <- as.POSIXct("1974-07-14 21:11:55 EDT")
+> my_time2 - my_time
+Time difference of 1157.407 days
+```
 
+* Under the hood
 
+```R
+> my_date
+[1] "1971-05-14"
+> unclass(my_date)
+[1] 498
 
+> my_time
+[1] "1971-05-14 11:25:15 EDT"
+> unclass(my_time)
+[1] 43082715
+attr(,"tzone")
+[1] ""
+```
+
+* Dedicated R Packages
+
+> `lubridate`
+> `zoo`
+> `xts`
 
 
 
