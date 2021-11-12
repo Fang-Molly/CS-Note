@@ -1076,6 +1076,15 @@ List of 3
 
 * Create Date objects
 
+> `%Y` : 4-digit year (1982)
+> `%y` : 2-digit year (82)
+> `%m` : 2-digit month (01)
+> `%d` : 2-digit day of the month (13)
+> `%A` : weekday (Wednesday)
+> `%a` : abbreviated weekday (Wed)
+> `%B` : month (January)
+> `%b` : abbreviated month (Jan)
+
 ```R
 > my_date <- as.Date("1998-09-09")
 > my_date
@@ -1090,9 +1099,28 @@ Error in charToDate(x) :
 > my_date <- as.Date("1999-14-05", format = "%Y-%d-%m")
 > my_date
 [1] "1999-05-14"
+
+> my_date <- as.Date("Jan-13-82", format = "%b-%d-%y")
+> my_date
+[1] "1982-01-13"
+
+> my_data <- as.Date("13 January, 1982", format = "%d %B, %Y")
+> my_date
+[1] "1982-01-13"
+
+# extract information from the dates
+> format(my_date, "%Y %B %d")
+[1] "1982 January 13"
 ```
 
 * Create POSIXct objects
+
+> `%H` : hours as a decimal number (00-23)
+> `%I` : hours as a decimal number (01-12)
+> `%M` : minutes as a decimal number
+> `%S` : seconds as a decimal number
+> `%T` : shorthand notation for the typical format `%H:%M:%S`
+> `%p` : AM/PM indicator
 
 ```R
 > my_time <- as.POSIXct("1971-05-14 11:25:15")
