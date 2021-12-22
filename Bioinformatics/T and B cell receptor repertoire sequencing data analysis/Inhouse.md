@@ -1,12 +1,57 @@
-# 1. use mixcr.jar
+T and B cell receptor repertoire sequencing data analysis
+=========================================================
 
-## 1.1 prepare files
+# 1. Prepare files
 
-* Transfer fastq files from sequencer to your folder.
+## 1.1 rename filenames
 
-* type `cmd` to go to terminal
+## 1.2 list files
 
-* generate a txt file, including all file names `dir > l.txt`
+# 2. Run Mixcr
 
-* rename file names `ren original_file new_file`
+```
+for filename in *.fastq; do
+
+mixcr analyze amplicon --species hsa \
+      --starting-material dna \
+      --5-end v-primers \
+      --3-end j-primers \
+      --adapters adapters-present \
+      --receptor-type trb \
+      --report "$filename".report.txt \
+      --assemble "-OaddReadsCountOnClustering=true" \
+      "$filename" "$filename"; done
+```
+
+# 3. Run vdjtools
+
+## 3.1 convert mixcr to VDJtools format
+
+```
+java -jar vdjtools.jar Convert -S mixcr *.txt  vdj
+```
+
+## 3.2 Basic analysis
+
+#### CalcBasicStats
+
+```
+java -jar vdjtools.jar CalcBasicStats  vdj*.txt out
+```
+
+#### TrackClonotypes
+
+```
+java -Xmx1024m -jar vdjtools.jar TrackClonotypes -i aaV -p *.txt out
+```
+
+### PoolSamples
+
+```
+for rep1 in *rep1.txt; do
+
+    rep2="${rep1%1.txt}2.txt"
+    java -jar vdjtools.jar poolsamples -i aaV "$rep1" "$rep2" "$rep1" ; done
+```
+
 
