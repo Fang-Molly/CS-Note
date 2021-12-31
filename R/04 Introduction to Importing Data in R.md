@@ -27,7 +27,7 @@ Vermont,Montpelier,0.627,9616
 Hawaii,Honolulu,1.420,10931
 ```
    
-   * utils - read.csv
+   * utils package - read.csv
       * Loaded by default when you start R
   
 ```R
@@ -171,6 +171,102 @@ Hawaii/Honolulu/1.420/10931
 4      Vermont Montpelier      0.627  9616
 5       Hawaii   Honolulu      1.420 10931
 ```
+
+* colClasses = c("character", "numeric", "logical")
+* colClasses = c("factor", "NULL", "numeric")
+
+
+# 2 readr & data.table
+
+## 2.1 readr: read_csv & read_tsv
+
+* Specific R packages
+
+    * readr
+    * data.table
+
+* `readr`
+
+    * Written by Hadley Wickham
+    * Fast, easy to use, consistent
+    * utils: verbose, slower
+
+ utils        | readr       
+: --------- : | : --------- :  
+ read.table() | read_delim()  
+ read.csv()   | read_csv()    
+ read.delim() | read_tsv()    
+ 
+```R
+install.packages("readr")
+library(readr)
+
+> read.csv("states.csv", stringsAsFactors = F)
+         state    capital pop_mill area_sqm
+1 South Dakota     Pierre    0.853    77116
+2     New York     Albany   17.946    54555
+3       Oregon      Salem    3.970    98381
+4      Vermont Montpelier    0.627     9616
+5       Hawaii   Honolulu    1.420    10931
+
+> read_csv("states.csv")
+Rows: 5 Columns: 4                                        
+── Column specification ────────────────────────────────────
+Delimiter: ","
+chr (2): state, capital
+dbl (2): pop_mill, area_sqm
+# A tibble: 5 × 4
+  state        capital    pop_mill area_sqm
+  <chr>        <chr>         <dbl>    <dbl>
+1 South Dakota Pierre        0.853    77116
+2 New York     Albany       17.9      54555
+3 Oregon       Salem         3.97     98381
+4 Vermont      Montpelier    0.627     9616
+5 Hawaii       Honolulu      1.42     10931
+
+> read.delim("states.txt", stringsAsFactors = F)
+         state    capital pop_mill area_sqm
+1 South Dakota     Pierre    0.853    77116
+2     New York     Albany   17.946    54555
+3       Oregon      Salem    3.970    98381
+4      Vermont Montpelier    0.627     9616
+5       Hawaii   Honolulu    1.420    10931
+
+> read_tsv("states.txt")
+Rows: 5 Columns: 4                                        
+── Column specification ────────────────────────────────────
+Delimiter: "\t"
+chr (2): state, capital
+dbl (2): pop_mill, area_sqm
+# A tibble: 5 × 4
+  state        capital    pop_mill area_sqm
+  <chr>        <chr>         <dbl>    <dbl>
+1 South Dakota Pierre        0.853    77116
+2 New York     Albany       17.9      54555
+3 Oregon       Salem         3.97     98381
+4 Vermont      Montpelier    0.627     9616
+5 Hawaii       Honolulu      1.42     10931
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
