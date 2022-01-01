@@ -490,8 +490,15 @@ List of 2
   ..$ pop_mill: num [1:5] 0.853 17.946 3.97 0.627 1.42
 ```
 
-
-
+```R
+> read_excel("states.xlsx", sheet = 1, col_names = T, col_types = NULL, skip = 2)
+# A tibble: 3 × 4                                                   
+  `New York` Albany     `17.946000000000002` `54555`
+  <chr>      <chr>                     <dbl>   <dbl>
+1 Oregon     Salem                     3.97    98381
+2 Vermont    Montpelier                0.627    9616
+3 Hawaii     Honolulu                  1.42    10931
+```
 
 
 
