@@ -425,14 +425,70 @@ library(data.table)
 
     * Different sheets with tabular data
 
- 
+ * readxl contains two main functions
 
+    * excel_sheets()
+        * list different sheets
+    * read_excel()
+        * actually import data into R
+        
+* readxl can handle both dot-xls and dot-xlsm files.
 
+```R
+> install.packages("readxl")
+> library(readxl)
 
+# print the names of all worksheets
+> excel_sheets("states.xlsx")
+[1] "states"    "year_2000"
 
+> read_excel("states.xlsx")
+# A tibble: 5 × 4                                                       
+  state        capital    pop_mill area_sqm
+  <chr>        <chr>         <dbl>    <dbl>
+1 South Dakota Pierre        0.853    77116
+2 New York     Albany       17.9      54555
+3 Oregon       Salem         3.97     98381
+4 Vermont      Montpelier    0.627     9616
+5 Hawaii       Honolulu      1.42     10931
 
+> read_excel("states.xlsx", sheet = 2)
+# A tibble: 5 × 2                                                       
+  capital    pop_mill
+  <chr>         <dbl>
+1 Pierre        0.853
+2 Albany       17.9  
+3 Salem         3.97 
+4 Montpelier    0.627
+5 Honolulu      1.42 
 
+> read_excel("states.xlsx", sheet = "year_2000")
+# A tibble: 5 × 2                                                       
+  capital    pop_mill
+  <chr>         <dbl>
+1 Pierre        0.853
+2 Albany       17.9  
+3 Salem         3.97 
+4 Montpelier    0.627
+5 Honolulu      1.42 
+```
 
+* lapply()
+
+```R
+> states <- lapply(excel_sheets("states.xlsx"), read_excel, path = "states.xlsx")
+
+> str(states)
+List of 2
+ $ : tibble [5 × 4] (S3: tbl_df/tbl/data.frame)
+  ..$ state   : chr [1:5] "South Dakota" "New York" "Oregon" "Vermont" ...
+  ..$ capital : chr [1:5] "Pierre" "Albany" "Salem" "Montpelier" ...
+  ..$ pop_mill: num [1:5] 0.853 17.946 3.97 0.627 1.42
+  ..$ area_sqm: num [1:5] 77116 54555 98381 9616 10931
+ $ : tibble [5 × 2] (S3: tbl_df/tbl/data.frame)
+  ..$ capital : chr [1:5] "Pierre" "Albany" "Salem" "Montpelier" ...
+  ..$ pop_mill: num [1:5] 0.853 17.946 3.97 0.627 1.42
+```
 
 
 
