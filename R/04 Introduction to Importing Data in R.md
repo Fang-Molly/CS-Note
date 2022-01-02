@@ -490,7 +490,10 @@ List of 2
   ..$ pop_mill: num [1:5] 0.853 17.946 3.97 0.627 1.42
 ```
 
+* read_excel() - col_names
+
 ```R
+# col_names = TRUE: the first row of the Excel sheet contains the column names
 > read_excel("states.xlsx", sheet = 1, col_names = T, col_types = NULL, skip = 2)
 # A tibble: 3 × 4                                                   
   `New York` Albany     `17.946000000000002` `54555`
@@ -498,12 +501,106 @@ List of 2
 1 Oregon     Salem                     3.97    98381
 2 Vermont    Montpelier                0.627    9616
 3 Hawaii     Honolulu                  1.42    10931
+
+# col_names = FALSE: R assigns names itself
+> read_excel("states.xlsx", sheet = 1, col_names = F, col_types = NULL, skip = 2)
+New names:                                                          
+* `` -> ...1
+* `` -> ...2
+* `` -> ...3
+* `` -> ...4
+# A tibble: 4 × 4
+  ...1     ...2         ...3  ...4
+  <chr>    <chr>       <dbl> <dbl>
+1 New York Albany     17.9   54555
+2 Oregon   Salem       3.97  98381
+3 Vermont  Montpelier  0.627  9616
+4 Hawaii   Honolulu    1.42  10931
+
+# col_names = character vector: manually specify the column names
+# different data types: such as text, numeric and date
 ```
 
+* read_excel() - col_types
 
+```
+# col_types = NULL: default, R guess the data types of the different columns
 
+# col_types = character vector: manually specify the col_types
+# different types: such as text, numeric, date, blank
+> read_excel("states.xlsx", col_types = c("text", "text", "numeric", "numeric"))
+# A tibble: 5 × 4                                                   
+  state        capital    pop_mill area_sqm
+  <chr>        <chr>         <dbl>    <dbl>
+1 South Dakota Pierre        0.853    77116
+2 New York     Albany       17.9      54555
+3 Oregon       Salem         3.97     98381
+4 Vermont      Montpelier    0.627     9616
+5 Hawaii       Honolulu      1.42     10931
+
+# col_types = blank: ignore that column
+> read_excel("states.xlsx", col_types = c("text", "blank", "numeric", "numeric"))
+`col_type = "blank"` deprecated. Use "skip" instead.
+# A tibble: 5 × 3                                                   
+  state        pop_mill area_sqm
+  <chr>           <dbl>    <dbl>
+1 South Dakota    0.853    77116
+2 New York       17.9      54555
+3 Oregon          3.97     98381
+4 Vermont         0.627     9616
+5 Hawaii          1.42     10931
+```
+
+* read_excel() - skip : skip the number of rows before importing the data
+* n_max not available in readxl
+
+## 3.2 gdata package
+
+* Gregory Warnes
+* Entire suite of tools for data manipulation
+* Supercharges basic R
+* read.xls()
+* Support for XLS
+* Support for XLSX with additional driver
+* No readxl::excel_sheets() equivalent
+* XLS -> (Perl) -> CSV -> (read.csv()) -> R data frame
+* Elegant extension of utils package
+* Easy if familiar with utils
+* Extremely inefficient
+* readxl < v1.x
+
+```R
+> install.packages("gdata")
+> library(gdata)
+
+> read.xls("states.xls")
+         state    capital pop_mill area_sqm
+1 South Dakota     Pierre    0.853    77116
+2     New York     Albany   17.946    54555
+3       Oregon      Salem    3.970    98381
+4      Vermont Montpelier    0.627     9616
+5       Hawaii   Honolulu    1.420    10931
+
+> read.xls("states.xls", sheet = "year_2000")
+     capital pop_mill
+1     Pierre    0.853
+2     Albany   17.946
+3      Salem    3.970
+4 Montpelier    0.627
+5   Honolulu    1.420
+```
 
 # 4 Reproducible Excel work with XLConnect
+
+## 4.1 Reading sheets
+
+
+
+
+
+
+
+
 
 
 
