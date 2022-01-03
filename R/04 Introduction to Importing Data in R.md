@@ -594,7 +594,102 @@ New names:
 
 ## 4.1 Reading sheets
 
+* XLConnect
 
+   * Martin Studer
+   * Work with Excel through R
+   * Bridge between Excel and R
+   * XLS and XLSX
+   * Easy-to-use functionality
+
+```R
+> install.packages("XLConnect")
+> library(XLConnect)
+
+> state <- loadWorkbook("states.xlsx")
+
+> state
+[1] "states.xlsx"
+
+> str(state)
+Formal class 'workbook' [package "XLConnect"] with 2 slots
+  ..@ filename: chr "states.xlsx"
+  ..@ jobj    :Formal class 'jobjRef' [package "rJava"] with 2 slots
+  .. .. ..@ jobj  :<externalptr> 
+  .. .. ..@ jclass: chr "com/miraisolutions/xlconnect/integration/r/RWorkbookWrapper"
+  
+> getSheets(state)
+[1] "states"    "year_2000"
+> excel_sheets("states.xlsx")
+[1] "states"    "year_2000"
+
+> readWorksheet(state, sheet = "year_2000")
+     capital pop_mill
+1     Pierre    0.853
+2     Albany   17.946
+3      Salem    3.970
+4 Montpelier    0.627
+5   Honolulu    1.420
+
+> readWorksheet(state, sheet = 1, startRow = 2, endRow = 4, startCol = 2, header = F)
+    Col1   Col2  Col3
+1 Pierre  0.853 77116
+2 Albany 17.946 54555
+3  Salem  3.970 98381
+```
+
+## 4.2 Adapting sheets
+
+```R
+> pop_2010 <- data.frame(Capital = c("New York", "Berlin", "Madrid", "Stockholm"), Population = c(8191900, 3460725, 3273000, 1372565))
+
+> pop_2010
+
+    Capital Population
+1  New York    8191900
+2    Berlin    3460725
+3    Madrid    3273000
+4 Stockholm    1372565
+```
+
+* `createSheet()`
+
+```R
+> state <- loadWorkbook("states.xlsx")
+> createSheet(state, name = "year_2010")
+```
+
+* `writeWorksheet()`
+
+```R
+> writeWorksheet(state, pop_2010, sheet = "year_2010")
+> readWorksheet(state, sheet = 3)
+    Capital Population
+1  New York    8191900
+2    Berlin    3460725
+3    Madrid    3273000
+4 Stockholm    1372565
+```
+
+* `saveWorkbook()`
+
+```R
+saveWorkbook(state, file = "states2.xlsx")
+```
+
+* `renameSheet()`
+
+```
+> renameSheet(state, "states", "year_1990")
+> saveWorkbook(state, file = "states2.xlsx")
+```
+
+* `removeSheet()`
+
+```
+> removeSheet(state, sheet = "year_2010")
+> saveWorkbook(state, file = "states3.xlsx")
+```
 
 
 
