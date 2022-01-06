@@ -41,7 +41,51 @@ counties_selected %>%
   arrange(desc(population))
 ```
 
+* Filter
 
+```
+counties_selected %>%
+  arrange(desc(population)) %>%
+  filter(state == "New York")
+  
+counties_selected %>%
+  arrange(desc(population)) %>%
+  filter(unemployment < 6)
+```
+
+* Combining conditions
+
+```
+counties_selected %>%
+	arrange(desc(population)) %>%
+	filter(state == "New York", unemployment < 6)
+```
+
+## 1.3 Mutate
+
+* Mutate
+
+```
+counties_selected %>%
+	mutate(unemployed_population = population * unemployment / 100) %>%
+	arrange(desc(unemployed_population))
+```
+
+# 2. Aggregating Data
+
+## 2.1 The count verb
+
+```
+counties %>%
+	count()
+```
+
+* count variable
+
+```
+counties %>%
+	count(state)
+```
 
 
 
