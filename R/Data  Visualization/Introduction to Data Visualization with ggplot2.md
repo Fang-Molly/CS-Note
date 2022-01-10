@@ -78,8 +78,8 @@ ggplot(mammals, aes(x = body, y = brain)) +
 		* Plotting framework
 		* Leland Wilkinson, Grammar of Graphics, 1999
 		* 2 principles
-				* Graphics = distinct layers of grammatical elements
-				* Meaningful plots through aesthetic mappings
+		    * Graphics = distinct layers of grammatical elements
+		    * Meaningful plots through aesthetic mappings
 
 * Grammatical elements
 
@@ -99,15 +99,68 @@ ggplot(mammals, aes(x = body, y = brain)) +
 
 		* The grammar of graphics implemented in R
 		* Two key concepts :
-				* 1. Layer grammatical elements
-				* 2. Aesthetic mappings
+		    1. Layer grammatical elements
+		    2. Aesthetic mappings
 
+* Iris dataset
+
+```
+> iris
+    Sepal.Length Sepal.Width Petal.Length Petal.Width    Species
+1            5.1         3.5          1.4         0.2     setosa
+2            4.9         3.0          1.4         0.2     setosa
+3            4.7         3.2          1.3         0.2     setosa
+...
+50           5.0         3.3          1.4         0.2     setosa
+51           7.0         3.2          4.7         1.4 versicolor
+52           6.4         3.2          4.5         1.5 versicolor
+53           6.9         3.1          4.9         1.5 versicolor
+...
+100          5.7         2.8          4.1         1.3 versicolor
+101          6.3         3.3          6.0         2.5  virginica
+102          5.8         2.7          5.1         1.9  virginica
+103          7.1         3.0          5.9         2.1  virginica
+...
+150          5.9         3.0          5.1         1.8  virginica
+```
+
+```
+> g <- ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width)) +
++     geom_jitter()
+> g
+> 
+> g <- g +
++     labs(x = "Sepal Lengh (cm)", y = "Sepal Width (cm)") +
++     theme_classic()
+> g
+```
 
 # 2. Aesthetics
 
 ## 2.1 Visible aesthetics
 
+* Mapping onto the X and Y axes
 
+```
+> ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width)) +
++     geom_point()
+```
+
+* Mapping onto color
+
+> Species: a dataframe column, is mapped onto color, a visible aesthetic.
+
+```
+> ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
++     geom_point()
+```
+
+* Mapping onto the color aesthetic in geom
+
+```
+> ggplot(iris) + 
++     geom_point(aes(x = Sepal.Length, y = Sepal.Width, col = Species))
+```
 
 
 ## 2.2 Using attributes
