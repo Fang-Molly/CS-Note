@@ -162,16 +162,97 @@ ggplot(mammals, aes(x = body, y = brain)) +
 +     geom_point(aes(x = Sepal.Length, y = Sepal.Width, col = Species))
 ```
 
+* Typical visible aesthetics
+
+|Aesthetic|Description                                 |
+|:-------:|:------------------------------------------:|
+|X        |X axis position                             |
+|y        |Y axis position                             |
+|fill     |Fill color                                  |
+|color    |Color of points, outlines of other geoms    |
+|size     |Area or radius of points, thickness of lines|
+|alpha    |Transparency                                |
+|linetype |line dash pattern                           |
+|labels   |Text on a plot or axes                      |
+|shape    |Shape                                       |
 
 ## 2.2 Using attributes
 
+```
+> library(ggplot2)
+> ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width)) +
++     geom_point(color = "red")
 
-
+> ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width)) +
++     geom_point(shape = 4)
+```
 
 ## 2.3 Modifying aesthetics
 
+* Positions : Adjustment for overlapping
+    * identity
+    * dodge
+    * stack
+    * fill
+    * jitter
+    * jitterdodge
+    * nudge
 
+* position = "identity" (default)
 
+```
+> ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
++     geom_point()
+
+> ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
++     geom_point(position = "identity")
+```
+
+* position = "jitter"
+
+```
+> ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
++     geom_point(position = "jitter")
+
+# position_jitter()
+> posn_j <- position_jitter(0.1)
+> ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
++     geom_point(position = posn_j)
+
+> posn_j <- position_jitter(0.1, seed = 136)
+> ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
++     geom_point(position = posn_j)
+```
+
+* Scale functions
+
+    * `scale_x_*()`, `scale_x_continuous()`
+    * `scale_y_*()`
+    * `scale_color_*()` or `scale_colour_*()`, `scale_color_discrete()`
+    * `scale_fill_*()`
+    * `scale_shape_*()`
+    * `scale_linetype_*()`
+    * `scale_size_*()`
+
+```
+ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
++     geom_point(position = "jitter") +
++     scale_x_continuous("Sepal Length") +
++     scale_color_discrete("Species")
+
+> ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
++     geom_point(position = "jitter") +
++     scale_x_continuous("Sepal Length", limits = c(2,8), breaks = seq(2, 8, 3), expand = c(0, 0), labels = c("Setosa", "Versicolor", "Virginica")) +
++     scale_color_discrete("Species")
+```
+
+* labs()
+
+```
+> ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
++     geom_point(position = "jitter") +
++     labs(x = "Sepal Length", y = "Sepal Width", color = "Species")
+```
 
 ## 2.4 Aesthetics best practices
 
