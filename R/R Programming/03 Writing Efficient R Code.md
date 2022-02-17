@@ -120,6 +120,70 @@ Unit: nanoseconds
       seq_by(n) 1450610164 1580209425 1612289078.9 1601634488.0 1669056857 1756707381    10
 ```
 
+## 1.3 How good is your machine?
+
+* The benchmarkme package
+
+```R
+> install.packages("benchmarkme")
+> library(benchmarkme)
+# run each benchmark 3 times
+# benchmark_std
+> res <- benchmark_std(runs = 3)
+> plot(res)
+# The first plot is elapsed time, the second is relative timing
+> upload_results(res)
+```
+
+```R
+# get the amount of RAM on your machine
+get_ram()
+# get the CPU specifications on your machine
+get_cpu()
+```
+
+```R
+# benchmark_io
+# record the length of time it takes to read and write a file
+> res <- benchmark_io(runs = 1, size = 5)
+> plot(res)
+```
+
+
+# 2. Fine Tuning : Efficient Base R
+
+## 2.1 Memory allocation
+
+* Avoid growing a vector
+
+## 2.2 Importance of vectorizing your code
+
+* General rule
+
+    * Calling an R function eventually leads to C or FORTRAN code
+        * This code is very heavily optimized
+
+* Goal
+
+    * Access the underlying C or 
+
+
+
+
+## 2.3 Data frames and matrices
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
