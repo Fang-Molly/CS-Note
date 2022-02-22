@@ -158,14 +158,62 @@ get_cpu()
 
 ## 2.2 Importance of vectorizing your code
 
-* General rule
+* **General rule**
 
     * Calling an R function eventually leads to C or FORTRAN code
         * This code is very heavily optimized
 
-* Goal
+> **Goal**
 
-    * Access the underlying C or 
+>    * Access the underlying C or FORTRAN code as quickly as possible; the fewer functions call the better.
+
+* **Vectorized functions**
+
+    * Many R functions are vectorized 
+
+        * Single number but return a vector
+
+	```
+	> rnorm(4)
+	[1] -0.3396113 -0.8526215  0.2050147 -0.9276649
+	```
+
+    * Vector as input
+    
+	```
+	> mean(c(36, 48))
+	[1] 42
+	```
+
+* Generating random numbers
+
+```
+> library(microbenchmark)
+> microbenchmark(
++     x <- rnorm(n), 
++     {
++         for(i in seq_along(x))
++             x[i] <- rnorm(1)
++         }, 
++     times = 10
++ )
+Unit: milliseconds
+                                             expr        min        lq       mean     median         uq        max neval
+                                    x <- rnorm(n)   59.77967   59.8563   62.66324   60.50078   65.78511   70.73464    10
+ {     for (i in seq_along(x)) x[i] <- rnorm(1) } 2164.92506 2172.7027 2235.53233 2220.51049 2231.07852 2479.21898    10
+```
+
+```
+> microbenchmark(
++     x <- rnorm(n), times = 10
++ )
+Unit: milliseconds
+          expr      min       lq     mean   median       uq      max neval
+ x <- rnorm(n) 59.88627 60.12717 62.35421 62.25651 64.12752 66.25636    10
+```
+
+* Why is the loop slow?
+
 
 
 
