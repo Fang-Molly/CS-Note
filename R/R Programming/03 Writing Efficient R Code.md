@@ -163,6 +163,8 @@ get_cpu()
     * Calling an R function eventually leads to C or FORTRAN code
         * This code is very heavily optimized
 
+    * Use a vectorized solution wherever possible
+
 > **Goal**
 
 >    * Access the underlying C or FORTRAN code as quickly as possible; the fewer functions call the better.
@@ -215,11 +217,22 @@ Unit: milliseconds
 * Why is the loop slow?
 
 
-
-
-
 ## 2.3 Data frames and matrices
 
+* The data frame
+
+	* Copied in other languages
+
+		* Pyhton: pandas data frame
+		* If you can't beat them, join them!
+
+	* Tabular structure : rows and colums
+	
+		* `read.csv()` and friends returns a data frame
+
+			* Columns
+
+		* Data must be the same type
 
 
 
