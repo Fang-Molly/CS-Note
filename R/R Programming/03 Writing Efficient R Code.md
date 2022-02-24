@@ -163,8 +163,6 @@ get_cpu()
     * Calling an R function eventually leads to C or FORTRAN code
         * This code is very heavily optimized
 
-    * Use a vectorized solution wherever possible
-
 > **Goal**
 
 >    * Access the underlying C or FORTRAN code as quickly as possible; the fewer functions call the better.
@@ -216,6 +214,9 @@ Unit: milliseconds
 
 * Why is the loop slow?
 
+* The second rule of R club:
+
+    * Use a vectorized solution wherever possible
 
 ## 2.3 Data frames and matrices
 
@@ -233,8 +234,121 @@ Unit: milliseconds
 			* Columns
 
 		* Data must be the same type
+			* Rows
+
+		* Different type
+
+* Matrices
+
+	* It's a rectangular data structure
+
+		* You can perform usual subsetting and extracting operations
+		* But - every element must be the same data type
+
+* The third rule of R club: Use a matrix whenever appropriate
+
+```
+# compare which is faster
+> microbenchmark(mat[, 1], df[, 1])
+Unit: microseconds
+     expr   min     lq    mean median     uq    max neval
+ mat[, 1] 1.353 1.5955 1.84349 1.7475 1.9215  5.770   100
+  df[, 1] 7.964 8.4395 9.73245 8.6640 9.3620 58.734   100
+  
+> microbenchmark(mat[1, ], df[1, ])
+Unit: microseconds
+     expr      min        lq       mean    median       uq       max neval
+ mat[1, ]    5.494    7.1865   19.40911    8.3225   33.571    42.635   100
+  df[1, ] 5929.712 7153.0825 8347.77326 7694.3085 8848.912 16869.853   100
+```
+
+# 3. Diagnosing Problems: Code Profiling
+
+## 3.1 What is code profiling
+
+* **Code profiling**
+
+	* The general idea is to:
+
+		* Run the code
+		* Every few milliseconds, record what is being currently executed
+
+	* `Rprof()` comes with R and does exactly this 
+
+		* Tricky to use
+
+	* Use **profvis** instead
+
+* **IMDB data set**
+
+	* From the **ggplot2movies** package
+
+	```
+	> data(movies, package = "ggplot2movies")
+	> dim(movies)
+	[1] 58788    24
+	```
+	
+	* Data frame: around 60,000 rows and 24 columns
+	
+	* Each row corresponds to a particular movie
+
+* **Braveheart**
+
+	```
+	> braveheart = movies[7288,]
+	> braveheart
+	          title year length   budget rating votes  r1  r2  r3  r4  r5  r6   r7   r8   r9  r10 mpaa Action Animation Comedy Drama Documentary Romance Short
+	7288 Braveheart 1995    177 53000000    8.3 92437 4.5 4.5 4.5 4.5 4.5 4.5 14.5 14.5 24.5 34.5    R      1         0      0     1           0       0     0
+	```
+	
+	```
+	# Load data
+	> data(movies, package = "ggplot2movies")
+	> braveheart <- movies[7288,]
+	> movies <- movies[movies$Action==1,]
+	> plot(movies$year, movies$rating, xlab = "year", ylab = "Rating")
+	
+	# local regression line
+	> model <- loess(rating ~ year, data = movies)
+	> j <- order(movies$year)
+	> lines(movies$year[j], model$fitted[j], col = "forestgreen")
+	> points(braveheart$year, braveheart$rating, pch = 21, bg = "steelblue")
+	```
+	
+* **Profvis**
+
+	* RStudio has integrated support for profiling with profvis
+
+		* Highlight the code you want to profile
+
+		* `Profile -> Profile Selected lines`
+
+	* Command line
+	
+	```
+	> library("profvis")
+	> profvis({
+	+     data(movies, package = "ggplot2movies")
+	+     braveheart = movies[7288,]
+	+     movies <- movies[movies$Action==1,]
+	+     plot(movies$year, movies$rating, xlab = "year", ylab = "Rating")
+	+     model <- loess(rating ~ year, data = movies)
+	+     j <- order(movies$year)
+	+     lines(movies$year[j], model$fitted[j], col = "forestgreen", lwd=2)
+	+     points(braveheart$year, braveheart$rating, pch = 21, bg = "steelblue", cex = 3)
+	+ })
+	```
+
+## 3.2 Profvis: Larger example
 
 
+
+## 3.3 Monopoly overview
+
+
+
+# 4. Turbo Charged Code: Parallel Programming
 
 
 
