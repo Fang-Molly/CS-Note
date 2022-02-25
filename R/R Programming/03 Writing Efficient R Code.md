@@ -343,13 +343,49 @@ Unit: microseconds
 ## 3.2 Profvis: Larger example
 
 
-
 ## 3.3 Monopoly overview
 
 
 
 # 4. Turbo Charged Code: Parallel Programming
 
+## 4.1 CPUs - why do we have more than one?
+
+* CPUs: brains of the computer
+	
+	* Speed has slowly stabilized
+		* CPUs were getting too hot
+
+	* Multi-core CPUs
+
+	* But R only uses 1 core
+
+* Your CPU
+
+```
+> library("parallel")
+> detectCores()
+[1] 8
+
+> library("benchmarkme")
+> get_cpu()
+$vendor_id
+[1] "GenuineIntel"
+
+$model_name
+[1] "Intel(R) Xeon(R) CPU E5-1620 v2 @ 3.70GHz"
+
+$no_of_cores
+[1] 8
+```
+
+## 4.2 What sort of problems benefit from parallel computing?
+
+* Running in parallel
+
+	* Not every analysis can make use of multiple cores
+
+		* Many statistical algorithms can only use a single core
 
 
 
