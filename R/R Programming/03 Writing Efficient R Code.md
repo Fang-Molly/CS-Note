@@ -385,8 +385,190 @@ $no_of_cores
 
 	* Not every analysis can make use of multiple cores
 
-		* Many statistical algorithms can only use a single core
+	* Many statistical algorithms can only use a single core
 
+* Monte-Carlo simulations
+
+```
+for(i in 1:8)
+	sims[i] <- monte_carlo()
+	
+combine(sims)
+```
+
+	* 8 core machine
+
+		* One simulation per core
+		* Combine the results at the end
+		* Embarrassingly parallel
+
+
+
+* Not everything runs in parallel
+
+```
+x <- 1:8
+for(i in 2:8)
+	x[i] <- x[i-1]
+	
+x[8] = x[7] = ... x[2] = x[1] = 1
+```
+
+	* Can we run this in parallel?
+
+		* No
+			* But order of evaluation in parallel computing can't be predicted
+			* We'll get the wrong answer, since `x[3]` may get evaluated before `x[2]`
+
+
+* Rule of thumb
+
+	* Can the loop be run forward and backwards?
+
+```
+for(i in 1:8)
+	sim[i] <- monte_carlo_simulation()
+	
+for(i in 8:1)
+	sim[i] <- monte_carlo_simulation()
+```
+
+	* Both loops give the same results
+	* So we can run the loops in parallel
+	
+```
+x <- 1:8
+for(i in 2:8)
+	x[i] <- x[i-1]
+for(i in 8:2)
+	x[i] <- x[i-1]
+```
+
+	* The loops give different answers
+		* The first: `x[8] = x[7] = ... = 1`
+		* The second: `x[8] = x[7] = 7`
+		
+	* Can't use parallel computing
+	
+	Remember: If you can run your loop in reverse, you can probably use parallel computing.
+
+## 4.3 The parallel package - parApply
+
+* Part of R since 2011
+
+```
+library("parallel")
+```
+
+	* Cross platform: Code works under Windows, Linux, Mac
+	* Has parallel versions of standard functions
+	
+* The apply() function
+
+	* `apply()` is similar to a for loop
+
+		* We apply a function to each row/column of a matrix
+
+	* A 10 column, 10,000 row matrix:
+
+	`m <- matrix(rnorm(10000), ncol = 10)`
+	
+	* apply is neater than a for loop
+
+	`res <- apply(m, 1, median)`
+	
+* Converting to parallel
+
+```
+# Load the package
+library("parallel")
+
+# Specify the number of cores
+copies_of_r <- 7
+
+# Create a cluster object
+cl <- makeCluster(copies_of_r)
+
+# Swap to `parApply()`
+parApply(cl, m, 1, median)
+
+# Stop!
+stopCluster(cl)
+```
+
+* The bad news
+
+	* As Lewis Caroll said
+	
+	* The hurrier I go, the behinder I get.
+	
+		* Sometimes running in parallel is slower due to thread communication
+
+		```
+		# Serial version
+		apply(m, 1, median)
+		
+		# Parallel version
+		parApply(cl, m, 1, median)
+		```
+		
+		* Benchmark both solutions
+
+## 4.4 The parallel package - parSapply
+
+* The apply family
+
+There are parallel versions of
+
+	* `apply()` - `parApply()`
+	
+	* `sapply()` - `parSapply()`
+		* applying a function to a vector, i.e. a for loop
+		
+	* `lapply()` - `parLapply()`
+		* applying a function to a list
+
+* The sapply() function
+
+	* sapply() is just another way of writing a for loop
+
+The loop
+
+```
+for (i in 1:10)
+	x[i] <- simulate(i)
+```
+
+Can be written as
+
+```
+sapply(1:10, simulate)
+```
+
+We are applying a function to each value of a vector
+
+* Switching to parSapply()
+
+It's the same recipe!
+
+1. Load the package
+2. Make a cluster
+3. Switch to `parSapply()`
+4. Stop!
+
+* Bootstrapping
+
+In a perfect world, we would resample from the population; but we can't
+
+Instead, we assume the original sample is representative of the population
+
+1. Sample with replacement from your data
+
+	* The same point could appear multiple times
+
+2. Calculate the correlation statistics from your new sample
+
+3. Repeat
 
 
 
