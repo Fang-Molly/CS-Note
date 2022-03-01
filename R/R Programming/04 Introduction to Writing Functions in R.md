@@ -15,7 +15,7 @@ Mean has 3 arguments
 	
 	* `na.rm`: A logical value determining whether missing values should be removed
 	
-```
+```R
 # show the arguments to mean()
 > args(mean)
 function (x, ...) 
@@ -49,7 +49,7 @@ NULL
 
 * A basic function template
 
-```
+```R
 my_function <- function(arg1, arg2) {
 	# Do something
 }
@@ -57,13 +57,13 @@ my_function <- function(arg1, arg2) {
 
 	* The signature
 	
-	```
+	```R
 	function(arg1, arg2)
 	```
 	
 	* The body
 	
-	```			
+	```R			
 	{
 		# Do something
 	}
@@ -71,7 +71,7 @@ my_function <- function(arg1, arg2) {
 
 * Make a template
 
-```
+```R
 import_test_scores <- function() {
 
 }
@@ -79,7 +79,7 @@ import_test_scores <- function() {
 
 * Paste your script into the body
 
-```
+```R
 import_test_scores <- function() {
 	test_scores_geography_raw <- read_csv("test_scores_geography.csv")
 	
@@ -92,7 +92,7 @@ import_test_scores <- function() {
 
 * Choose the arguments
 
-```
+```R
 import_test_scores <- function(filename) {   # <- only 1 argument
 	test_scores_geography_raw <- read_csv("test_scores_geography.csv")
 	
@@ -105,7 +105,7 @@ import_test_scores <- function(filename) {   # <- only 1 argument
 
 * Replace specific values with arguments
 
-```
+```R
 import_test_scores <- function(filename) {  
 	test_scores_geography_raw <- read_csv(filename)  # <- replace specific filename
 	
@@ -118,7 +118,7 @@ import_test_scores <- function(filename) {
 
 * Generalize variable names
 
-```
+```R
 import_test_scores <- function(filename) {  
 	test_scores_raw <- read_csv(filename)  # <- variable names generalized
 	
@@ -223,6 +223,267 @@ function (x, y = NULL, use = "everything", method = c("pearson",
 
 
 ## 2.3 Checking arguments
+
+
+
+
+
+# 3. Return values and scope
+
+## 3.1 Returning values from functions
+
+
+## 3.2 Returning multiple values from functions
+
+* **Getting the session information**
+
+```R
+> R.version.string
+[1] "R version 4.1.2 (2021-11-01)"
+
+> Sys.info()[c("sysname", "release")]
+ sysname  release 
+"Darwin" "21.3.0" 
+
+> loadedNamespaces()
+ [1] "htmlwidgets"    "microbenchmark" "compiler"       "magrittr"      
+ [5] "fastmap"        "profvis"        "graphics"       "parallel"      
+ [9] "htmltools"      "tools"          "utils"          "yaml"          
+[13] "grDevices"      "stats"          "datasets"       "stringi"       
+[17] "methods"        "jsonlite"       "stringr"        "digest"        
+[21] "rlang"          "base"   
+```
+
+* **Defining session()**
+
+```R
+> session <- function() {
++     list(
++         r_version = R.version.string,
++         operating_system = Sys.info()[c("sysname", "release")],
++         loaded_pkgs = loadedNamespaces()
++     )
++ }
+
+# calling session()
+
+> session()
+$r_version
+[1] "R version 4.1.2 (2021-11-01)"
+
+$operating_system
+ sysname  release 
+"Darwin" "21.3.0" 
+
+$loaded_pkgs
+ [1] "htmlwidgets"    "microbenchmark" "compiler"       "magrittr"      
+ [5] "fastmap"        "profvis"        "graphics"       "parallel"      
+ [9] "htmltools"      "tools"          "utils"          "yaml"          
+[13] "grDevices"      "stats"          "datasets"       "stringi"       
+[17] "methods"        "jsonlite"       "stringr"        "digest"        
+[21] "rlang"          "base"          
+```
+
+* **Multi-assignment**
+
+```R
+> library(zeallot)
+> c(vrsn, os, pkgs) %<-% session()
+> vrsn
+[1] "R version 4.1.2 (2021-11-01)"
+> os
+ sysname  release 
+"Darwin" "21.3.0" 
+> pkgs
+ [1] "htmlwidgets"    "microbenchmark" "compiler"       "magrittr"      
+ [5] "fastmap"        "profvis"        "graphics"       "parallel"      
+ [9] "htmltools"      "tools"          "utils"          "yaml"          
+[13] "grDevices"      "stats"          "datasets"       "stringi"       
+[17] "zeallot"        "methods"        "jsonlite"       "stringr"       
+[21] "digest"         "rlang"          "base"          
+```
+
+* **Attributes**
+
+```R
+> month_no <- setNames(1:12, month.abb)
+> month_no
+Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec 
+  1   2   3   4   5   6   7   8   9  10  11  12 
+  
+> attributes(month_no)
+$names
+ [1] "Jan" "Feb" "Mar" "Apr" "May" "Jun" "Jul" "Aug" "Sep" "Oct" "Nov"
+[12] "Dec"
+
+> attr(month_no, "names")
+ [1] "Jan" "Feb" "Mar" "Apr" "May" "Jun" "Jul" "Aug" "Sep" "Oct" "Nov"
+[12] "Dec"
+
+> attr(month_no, "names") <- month.name
+> month_no
+  January  February     March     April       May      June      July 
+        1         2         3         4         5         6         7 
+   August September   October  November  December 
+        8         9        10        11        12 
+```
+
+* **Attributes of a data frame**
+
+* **Attributes added by group_by()**
+
+```
+library(dplyr)
+orange_trees %>%
+	group_by(Tree) %>%
+	attributes()
+```
+
+* **When to use each technique**
+
+	* If you need the result to have a particular type, add additional return values as attributes.
+	* Otherwise, collect all return values into a list
+
+* **broom**
+
+Model objects are converted into 3 data frames
+
+|function   |level      |example           |
+|:---------:|:---------:|:----------------:|
+|`glance()` |model      |degrees of freedom|
+|`tidy()`   |coefficient|p-values          |
+|`augment()`|observation|residuals         |
+
+* Practice
+
+```R
+# Look at the structure of model (it's a mess!)
+str(model)
+
+# Use broom tools to get a list of 3 data frames
+list(
+  # Get model-level values
+  model = glance(model),
+  # Get coefficient-level values
+  coefficients = tidy(model),
+  # Get observation-level values
+  observations = augment(model)
+)
+
+# Wrap this code into a function, groom_model
+groom_model <- function(model) {
+
+  list(
+    model = glance(model),
+    coefficients = tidy(model),
+    observations = augment(model)
+  )
+}
+
+# From previous step
+groom_model <- function(model) {
+  list(
+    model = glance(model),
+    coefficients = tidy(model),
+    observations = augment(model)
+  )
+}
+
+# Call groom_model on model, assigning to 3 variables
+c(mdl, cff, obs) %<-% groom_model(model)
+
+# See these individual variables
+mdl; cff; obs
+```
+
+```R
+pipeable_plot <- function(data, formula) {
+  plot(formula, data)
+  # Add a "formula" attribute to data
+  attr(data, "formula") <- formula
+  invisible(data)
+}
+
+# From previous exercise
+plt_dist_vs_speed <- cars %>% 
+  pipeable_plot(dist ~ speed)
+
+# Examine the structure of the result
+str(plt_dist_vs_speed)
+```
+
+## 3.3 Environments
+
+* **Environments are like lists**
+
+```R
+> datacamp_lst <- list(
++     name = "DataCamp",
++     founding_year = 2013,
++     website = "http://www.datacamp.com"
++ )
+
+> ls.str(datacamp_lst)
+founding_year :  num 2013
+name :  chr "DataCamp"
+website :  chr "http://www.datacamp.com"
+
+# convert the list to an environment
+> datacamp_env <- list2env(datacamp_lst)
+
+> ls.str(datacamp_env)
+founding_year :  num 2013
+name :  chr "DataCamp"
+website :  chr "http://www.datacamp.com"
+```
+
+* **Environments have parents**
+
+* **Getting the parent environment** 
+
+```R
+> parent <- parent.env(datacamp_env)
+> environmentName(parent)
+[1] "R_GlobalEnv"
+> grandparent <- parent.env(parent)
+> environmentName(grandparent)
+[1] "package:zeallot"
+
+# show all the parent environment to store all its functions and other variables
+> search()
+ [1] ".GlobalEnv"             "package:zeallot"       
+ [3] "package:parallel"       "package:profvis"       
+ [5] "package:microbenchmark" "tools:rstudio"         
+ [7] "package:stats"          "package:graphics"      
+ [9] "package:grDevices"      "package:utils"         
+[11] "package:datasets"       "package:methods"       
+[13] "Autoloads"              "package:base"    
+```
+
+* **Does a variable exist?**
+
+```R
+> datacamp_lst <- list(
++     name = "DataCamp",
++     website = "http://www.datacamp.com"
++ )
+
+> datacamp_env <- list2env(datacamp_lst)
+> founding_year <- 2013
+
+> exists("founding_year", envir = datacamp_env)
+[1] TRUE
+
+> exists("founding_year", envir = datacamp_env, inherits = FALSE)
+[1] FALSE
+```
+
+
+
+
+
+## 3.4 Scope and precedence
+
 
 
 
