@@ -260,39 +260,51 @@ function (x, max = NULL, ...)
 
 ## 2.2 1. Methodical Thinking
 
+* **`methods()` function**
 
+```R
+> methods("mean")
+[1] mean.Date     mean.default  mean.difftime mean.IDate*   mean.ITime*   mean.POSIXct 
+[7] mean.POSIXlt 
+see '?methods' for accessing help and source code
+```
 
+```R
+> methods(class = "glm") # or methods(class = glm)
+ [1] add1           anova          coerce         confint        cooks.distance
+ [6] deviance       drop1          effects        extractAIC     family        
+[11] formula        influence      initialize     logLik         model.frame   
+[16] nobs           predict        print          residuals      rstandard     
+[21] rstudent       show           slotsFromS3    summary        vcov          
+[26] weights       
+see '?methods' for accessing help and source code
+```
 
+* **methods() returns S3 and S4 methods**
 
+```R
+# find only the S3 methods for a given generic or class
+> .S3methods(class = "glm")
+ [1] add1           anova          confint        cooks.distance deviance      
+ [6] drop1          effects        extractAIC     family         formula       
+[11] influence      logLik         model.frame    nobs           predict       
+[16] print          residuals      rstandard      rstudent       summary       
+[21] vcov           weights       
+see '?methods' for accessing help and source code
+```
 
-There are a lot of S3 functions in R, and now you are going learn how to find what is available.
+```R
+> .S4methods(class = "glm")
+[1] coerce      initialize  show        slotsFromS3
+see '?methods' for accessing help and source code
+```
 
-2. generic
-First of all, if you have an S3 generic function, it is often useful to know which methods are available for that generic. To answer this,
+* **Summary**
 
-3. methods
-you can use the methods function. To call it,
+	* `methods()` finds methods for a generic
+	* `...` or for a class
+	* `.S3methods()` finds only S3 methods
 
-4. methods
-either pass it a function, or a string naming that function. In both cases you get the same result. In this case you can see that there are five methods available for mean. A second question is
-
-5. class
-"what methods are available for a given class of object?". Again, the methods function has an answer. This time you pass the class argument to methods. Just as before, you can pass the argument with or without quotes. Let's take a look at
-
-6. methods
-the glm class, used to contain generalized linear regression models. Actually, methods is more generous with its return value than giving just the S3 methods for a given generic or class.
-
-7. methods() returns S3 and S4 methods
-It will return both the S3 methods and the S4 methods. Working with S4 is beyond the scope of this course, but let's briefly look at how you can discover only the S3 methods, or only the S4 methods. Most of the time, the methods function is the one that you should use, but you should at least be aware of the existence of these other two functions.
-
-8. S3methods
-To find only the S3 methods for a given generic or class, use the dot-S3methods function. Remember to type the dot at the start of the name. The usage is exactly the same as for the methods function.
-
-9. S4methods
-Likewise, you can dot-S4methods to return the S4 methods for a generic or class, and again, the usage is the same as before.
-
-10. Summary
-To summarise, the methods function allows you to find all the available methods for generic, or for a class. You can restrict the results to only S3 methods using the dot-S3methods function.
 
 
 
