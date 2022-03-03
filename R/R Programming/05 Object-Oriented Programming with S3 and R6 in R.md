@@ -258,7 +258,7 @@ function (x, max = NULL, ...)
 	* Include a `...` arg
 	* Use `lower_snake_case` or `lowerCamelCase`
 
-## 2.2 1. Methodical Thinking
+## 2.2 Methodical Thinking
 
 * **`methods()` function**
 
@@ -305,12 +305,106 @@ see '?methods' for accessing help and source code
 	* `...` or for a class
 	* `.S3methods()` finds only S3 methods
 
+## 2.3 Method Lookup for Primitive Generics
+
+* For many data analyses, the most time-consuming tasks are writing, debugging and maintaining the code. 
+
+* **R vs. C**
+
+	* C code often runs faster
+	* R code is usually easier to write
+	* ... and easier to debug
+
+* **R -> C**
+
+R has several interfaces to the C language, and the highest performance of these is known as the "primitive" interface. 
+
+* **Primitive functions**
+
+	* common mathematical functions:
+		* `function(x) .Primitive("exp")`
+		* `function(x) .Primitive("sin")`
+	* arithmetic operators:
+		* `function(e1, e2) .Primitive("+")`
+		* `function(e1, e2) .Primitive("-")`
+	* language constructs:
+		* `.Primitive("if")`
+		* `.Primitive("for")`
+	* generic functions
+
+	```R
+	> .S3PrimitiveGenerics
+	 [1] "anyNA"          "as.character"   "as.complex"     "as.double"     
+	 [5] "as.environment" "as.integer"     "as.logical"     "as.call"       
+	 [9] "as.numeric"     "as.raw"         "c"              "dim"           
+	[13] "dim<-"          "dimnames"       "dimnames<-"     "is.array"      
+	[17] "is.finite"      "is.infinite"    "is.matrix"      "is.na"         
+	[21] "is.nan"         "is.numeric"     "length"         "length<-"      
+	[25] "levels<-"       "names"          "names<-"        "rep"           
+	[29] "seq.int"        "xtfrm"      
+	```
+	
+```R
+> all_of_time <- c("1970-01-01", "2012-12-21")
+> as.Date(all_of_time)
+[1] "1970-01-01" "2012-12-21"
+
+> class(all_of_time)
+[1] "character"
+
+# override the class
+> class(all_of_time) <- "data_strings"
+# as.Date is not primitive generic
+> as.Date(all_of_time)
+Error in as.Date.default(all_of_time) : 
+  do not know how to convert 'all_of_time' to class “Date”
+# length is a primitive generic
+> length(all_of_time)
+[1] 2
+```
+
+* **Summary**
+
+	* Some R functions are actually written in C
+
+	* The primitive interface gives best performance
+
+	* `.S3PrimitiveGenerics` lists primitive S3 generics
+
+	* Primitive generics don't throw an error when no method is found
+
+## 2.4 Too Much Class
 
 
 
+Consider this vector. It's a numeric vector, but you can also be more specific in describing it. It's also a vector of natural numbers; that is, positive whole numbers. Even more specifically, it's a vector of triangular numbers. That means that you could describe it using three or more classes. The order of the classes is important. You should always have the most specific class first, and gradually get less specific as you move from left to right. It is good practise to keep the original class – in this case "numeric" – as the final class. To test for numeric vectors, as I'm sure you know by now,
 
+3. is.numeric()
+you would use is-dot-numeric. Since you've just invented the triangular_numbers class, base-R doesn't have an equivalent is-dot-triangular_numbers function. To test for arbitrary classes, you can use
 
+4. inherits
+the general purpose inherits function. As you may imagine, x inherits from triangular_numbers, and from natural_numbers, and from numeric. In this last case, testing that x inherits from numeric will return the same thing as calling is-dot-numeric, but the more gernal function is slower. For this reason you should use the more specific function if it is available. If your object has multiple classes, you can call multiple S3 methods by using the NextMethod function.
 
+5. what_am_i
+To demonstrate this, take a look at this S3 generic, called what_am_i.
+
+6. what_am_i.triangular_numbers
+Now you can define a method for what_am_i that acts on triangular numbers. This just prints a message that explains what it is, and moves on the next method. That is, R will look at the second class of x, in this case natural numbers, and call that method. Lets define the natural numbers method in the same way. Now the methods are being chained together, so R will next look at the third class of x, which is numeric. Finally you can add a method for numeric vectors. Since this is the last class, you can't call NextMethod here. Now lets see it in action.
+
+7. what_am_i()
+When you call what_am_i on x, you can see that three messages have been printed. The generic function was called first, then UseMethod found
+
+8. what_am_i()
+the triangular numbers method. That printed the first message, then NextMethod looked at the second class and
+
+9. what_am_i()
+found the natural numbers method. That printed the second message, and this time NextMethod looked at the third class and
+
+10. what_am_i()
+found the numeric method. That printed the third message.
+
+11. Summary
+To summarise, objects can have more than one class. To test for arbitrary classes, you can use the inherits function. When you have multiple classes, you can chain methods together using NextMethod.
 
 
 
