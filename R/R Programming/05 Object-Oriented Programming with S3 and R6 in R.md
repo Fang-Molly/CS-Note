@@ -375,9 +375,17 @@ Error in as.Date.default(all_of_time) :
 
 ## 2.4 Too Much Class
 
+* Describe the vector using three or more classes
 
+	* The order of the classes is important. You should always have the most specific class first, and gradually get less specific as you move from left to right. 
 
-Consider this vector. It's a numeric vector, but you can also be more specific in describing it. It's also a vector of natural numbers; that is, positive whole numbers. Even more specifically, it's a vector of triangular numbers. That means that you could describe it using three or more classes. The order of the classes is important. You should always have the most specific class first, and gradually get less specific as you move from left to right. It is good practise to keep the original class – in this case "numeric" – as the final class. To test for numeric vectors, as I'm sure you know by now,
+```R
+> x <- c(1, 3, 6, 10, 15)
+> class(x) <- c(
++     "triangular_numbers", "natural_numbers", "numeric"
++ )
+```
+
 
 3. is.numeric()
 you would use is-dot-numeric. Since you've just invented the triangular_numbers class, base-R doesn't have an equivalent is-dot-triangular_numbers function. To test for arbitrary classes, you can use
@@ -403,8 +411,14 @@ found the natural numbers method. That printed the second message, and this time
 10. what_am_i()
 found the numeric method. That printed the third message.
 
-11. Summary
-To summarise, objects can have more than one class. To test for arbitrary classes, you can use the inherits function. When you have multiple classes, you can chain methods together using NextMethod.
+* **Summary**
+
+	* Multiple classes are allowed
+	* Use `inherits()` to test for arbitrary classes
+	* Use `NextMethod()` to chain method calls
+
+
+
 
 
 
