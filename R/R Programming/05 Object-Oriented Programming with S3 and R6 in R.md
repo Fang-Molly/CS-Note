@@ -373,6 +373,7 @@ Error in as.Date.default(all_of_time) :
 
 	* Primitive generics don't throw an error when no method is found
 
+
 ## 2.4 Too Much Class
 
 * Describe the vector using three or more classes
