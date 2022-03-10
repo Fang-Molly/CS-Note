@@ -382,9 +382,17 @@ Error in as.Date.default(all_of_time) :
 
 ```R
 > x <- c(1, 3, 6, 10, 15)
+> class(x)
+[1] "numeric"
 > class(x) <- c(
 +     "triangular_numbers", "natural_numbers", "numeric"
 + )
+> class(x)
+[1] "triangular_numbers" "natural_numbers"    "numeric"  
+
+# test for numeric vectors
+> is.numeric(x)
+[1] TRUE
 ```
 
 
