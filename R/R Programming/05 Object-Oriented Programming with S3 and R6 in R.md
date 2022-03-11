@@ -434,41 +434,74 @@ Error in is.triangular_numbers(x) :
 
 ## 3.1 The Object Factory
 
+* The R6 system provides a way of storing data and objects within the same variable.
 
-The R6 system provides a way of storing data and objects within the same variable.
+	* The first step is to create a class generator for each of your objects.
 
-2. teapot
-Recall the teapot from Chapter 1. This contains the teapot-related data fields like the capacity, and teapot functionality like pour and refill methods. The first step in working with R6 is to create a class generator for each of your objects.
+* A class generator is a template that describes what data can be stored in the object, and what functions can be applied to the object. 
 
-3. class generators
-A class generator is a template that describes what data can be stored in the object, and what functions can be applied to the object. It is also used to create the specified objects. For this reason, I like to call class generators
+	* It is also used to create the specified objects. 
 
-4. class generators
-"factories". For the rest of the course, the terms "class generator" and "factory" will be used interchangeably. Throughout the next three chapters, we're going to look at
+	* For this reason, I like to call class generators "factories". 
 
-5. microwave
-a real-world example of a microwave oven. The class generator
+```R
+# Load the R6 package
+> library(R6)
 
-6. factory
-is our microwave oven factory, and
+# Define class generators with `R6Class()`
+# Class names should be UpperCamelCase
+> thing_factory <- R6Class(
++     "Thing",
+	  # Data fields stored in `private` list, name each element of the list
++     private = list(
++         a_field = "a value",
++         another_field = 123
++     )
++ )
 
-7. factory
-the factory is used to create microwave oven objects. Lets look at some code.
+# create some objects by calling the new() method
+> a_thing <- thing_factory$new()
+> another_thing <- thing_factory$new()
+> yet_another_thing <- thing_factory$new()
+```
 
-8. library(R6)
-Factories are defined using the R6Class function. The first argument to R6Class is the name of the class. By convention, this should be in UpperCamelCase. The second argument you need to know about is called "private". This stores the object's data. It is always a list, and each of the elements of the list must be named. Here you can see that the thing has two fields.
+* **Summary**
 
-9. Coming soon ...
-There are two more arguments, named "public" and "active", that I'll describe in later videos.
+	* Load the R6 package to work with R6!
+	* Define class generators with `R6Class()`
+	* Class names should be UpperCamelCase
+	* Data fields stored in `private` list
+	* Create objects with factory's `new()` method
 
-10. a_thing
-The second step to working with R6 is to create some objects. You do this by calling the new method of the factory. Since it is a factory, you can churn out as many of these objects as you like.
-
-11. Summary
-To summarize, you need to load the R6 package to work with R6. You define what the object contains using the R6Class function. This takes a string naming the class, which should be UpperCamelCase. Data fields for the object are stored in a named list variable called private. To create an object, you call the factory's new method.
+## 3.2 Hiding Complexity with Encapsulation
 
 
 
+2. Blank
+I only have a very rudimentary understanding of how they work. Fortunately, that doesn't stop me being able to use one. That's because regardless of how advanced the technology is inside the microwave, the user interface is pretty simple. In fact, there are only four pieces of functionality. I can change the power level. I can open the door. I can close it again, and of course, I can cook some food.
+
+3. Encapsulation
+In object-oriented programming, the term for
+
+4. Encapsulation
+separating the implementation of the object from its user interface is called "encapsulation".
+
+5. microwave_oven_factory
+The power rating element of the microwave that you saw in the previous exercises was an example of an implementation detail. In R6, all these implementation details are stored in the private element of the class. By contrast, the user interface details are stored in an element named "public". Just like private, the public element is specified as a named list. Its contents are usually functions. Since the microwave has four pieces of functionality, the R6 MicrowaveOven class needs to have four functions in its public element. Here's the existing version with only the power rating. Let's add a function to open the microwave door. To make this function work, you need another private variable to hold the state of the door. Then, you fill in the body of the function to make it do something. The data fields in the private element can be accessed using a prefix of
+
+6. private$
+"private" followed by the dollar indexing operator. It is also possible to access other public elements of a class. This time, rather than using the private dollar prefix, you use "self", then a dollar. You'll see this feature in action in the next chapter.
+
+* **Summary**
+
+	* Encapsulation = separating implementation from UI
+	* Store data in `private` list
+	* Store methods in `public` list
+	* Use `private$` to access private elements
+	* `...` and `self$` to access public elements
+
+
+To summarise, encapsulation means separating implementation details from the user interface. For R6 classes, this means storing data fields in the private element of the class, and functions that you want the user to be able to access in the public element. These public functions can access private elements by typing their name prefixed by "private" and a dollar symbol. Likewise, you can access public elements by using a self-dollar prefix.
 
 
 
