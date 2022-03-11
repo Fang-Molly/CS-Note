@@ -393,32 +393,35 @@ Error in as.Date.default(all_of_time) :
 # test for numeric vectors
 > is.numeric(x)
 [1] TRUE
+
+# base-R doesn't have an equivalent is.triangular_numbers()
+> is.triangular_numbers(x)
+Error in is.triangular_numbers(x) : 
+  could not find function "is.triangular_numbers"
+
+# general purpose inherits function
+> inherits(x, "triangular_numbers")
+[1] TRUE
+> inherits(x, "natural_numbers")
+[1] TRUE
+> inherits(x, "numeric")
+[1] TRUE
 ```
+* The more gernal function is slower. For this reason you should use the more specific function if it is available. If your object has multiple classes, you can call multiple S3 methods by using the NextMethod function.
 
-
-3. is.numeric()
-you would use is-dot-numeric. Since you've just invented the triangular_numbers class, base-R doesn't have an equivalent is-dot-triangular_numbers function. To test for arbitrary classes, you can use
-
-4. inherits
-the general purpose inherits function. As you may imagine, x inherits from triangular_numbers, and from natural_numbers, and from numeric. In this last case, testing that x inherits from numeric will return the same thing as calling is-dot-numeric, but the more gernal function is slower. For this reason you should use the more specific function if it is available. If your object has multiple classes, you can call multiple S3 methods by using the NextMethod function.
-
-5. what_am_i
-To demonstrate this, take a look at this S3 generic, called what_am_i.
-
-6. what_am_i.triangular_numbers
-Now you can define a method for what_am_i that acts on triangular numbers. This just prints a message that explains what it is, and moves on the next method. That is, R will look at the second class of x, in this case natural numbers, and call that method. Lets define the natural numbers method in the same way. Now the methods are being chained together, so R will next look at the third class of x, which is numeric. Finally you can add a method for numeric vectors. Since this is the last class, you can't call NextMethod here. Now lets see it in action.
-
-7. what_am_i()
-When you call what_am_i on x, you can see that three messages have been printed. The generic function was called first, then UseMethod found
-
-8. what_am_i()
-the triangular numbers method. That printed the first message, then NextMethod looked at the second class and
-
-9. what_am_i()
-found the natural numbers method. That printed the second message, and this time NextMethod looked at the third class and
-
-10. what_am_i()
-found the numeric method. That printed the third message.
+```R
+> what_am_i.triangular_numbers <- function(x, ...) {
++     message("I'm triangular numbers")
++     NextMethod("what_am_i")
++ }
+> what_am_i.natural_numbers <- function(x, ...) {
++     message("I'm natural numbers")
++     NextMethod("what_am_i")
++ }
+> what_am_i.numeric <- function(x, ...) {
++     message("I'm numeric")
++ }
+```
 
 * **Summary**
 
@@ -427,6 +430,42 @@ found the numeric method. That printed the third message.
 	* Use `NextMethod()` to chain method calls
 
 
+# 3. Using R6
+
+## 3.1 The Object Factory
+
+
+The R6 system provides a way of storing data and objects within the same variable.
+
+2. teapot
+Recall the teapot from Chapter 1. This contains the teapot-related data fields like the capacity, and teapot functionality like pour and refill methods. The first step in working with R6 is to create a class generator for each of your objects.
+
+3. class generators
+A class generator is a template that describes what data can be stored in the object, and what functions can be applied to the object. It is also used to create the specified objects. For this reason, I like to call class generators
+
+4. class generators
+"factories". For the rest of the course, the terms "class generator" and "factory" will be used interchangeably. Throughout the next three chapters, we're going to look at
+
+5. microwave
+a real-world example of a microwave oven. The class generator
+
+6. factory
+is our microwave oven factory, and
+
+7. factory
+the factory is used to create microwave oven objects. Lets look at some code.
+
+8. library(R6)
+Factories are defined using the R6Class function. The first argument to R6Class is the name of the class. By convention, this should be in UpperCamelCase. The second argument you need to know about is called "private". This stores the object's data. It is always a list, and each of the elements of the list must be named. Here you can see that the thing has two fields.
+
+9. Coming soon ...
+There are two more arguments, named "public" and "active", that I'll describe in later videos.
+
+10. a_thing
+The second step to working with R6 is to create some objects. You do this by calling the new method of the factory. Since it is a factory, you can churn out as many of these objects as you like.
+
+11. Summary
+To summarize, you need to load the R6 package to work with R6. You define what the object contains using the R6Class function. This takes a string naming the class, which should be UpperCamelCase. Data fields for the object are stored in a named list variable called private. To create an object, you call the factory's new method.
 
 
 
