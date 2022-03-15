@@ -621,15 +621,255 @@ Error in assert_is_a_number(value) :
 
 # 4. R6 Inheritance
 
+## 4.1 Propagating Functionality with Inheritance
+
+* Inherit argument
+
+	* parent class and child class
+	* All of the data and functionality of the parent class is passed on to the child. That is, all the fields from the private, public, and active elements. 
+	* inheritance only works in one direction
+```R
+# parent class
+> thing_factory <- R6Class(
++     "Thing",
++     private = list(
++         a_field = "a value",
++         another_field = 123
++     ),
++     public = list(
++         do_something = function(x, y, z) {
++             # do something here
++         }
++     )
++ )
+
+# inherit argument
+# child classes
+> child_thing_factory <- R6Class(
++     "ChildThing",
++     inherit = thing_factory
++     public = list(
+>         do_something_else = function() {
++             # more functionality
++         }
+>     )
+> )
+
+> a_thing <- thing_factory$new()
+> class(a_thing)
+[1] "Thing" "R6"   
+> inherits(a_thing, "Thing")
+[1] TRUE
+> inherits(a_thing, "R6")
+[1] TRUE
+```
+
+* **Summary**
+
+	* Propagate functionality using inheritance
+	* Use the `inherit` arg to `R6Class()`
+	* Children get their parent's functionality
+	* ... but the converse is not true
 
 
+## 4.2 Embrace, Extend, Override
+
+```R
+> thing_factory <- R6Class(
++     "Thing",
++     public = list(
++         do_something = function() {
++             message("the parent do_something method")
++         }
++     )
++ )
+> 
+> child_thing_factory <- R6Class(
++     "ChildThing",
++     inherit = thing_factory,
++     public = list(
+	      # To override functionality, you define elements with the same name as those in the parent.
++         do_something = function() {
++             message("the child do_something method")
++         },
+          # To extend the functionality, you simply define new public methods, or private data fields.
++         do_something_else = function() {
++             message("the child do_something_else method")
++         }
++     )
++ )
+
+> a_child_thing <- child_thing_factory$new()
+> a_child_thing$do_something()
+the child do_something method
+```
+
+* accesses
+	* `private$` accesses private fields
+	* `self$` accesses public methods in self
+	* `super$` accesses public methods in parent
+
+```R
+> child_thing_factory <- R6Class(
++     "ChildThing",
++     inherit = thing_factory,
++     public = list(
++         do_something = function() {
++             message("the child do_something method")
++         },
++         do_something_else = function() {
++             message("the child do_something_else method")
++           self$do_something()
++           super$do_something()
++         }
++      )
++ )
+> a_child_thing <- child_thing_factory$new()
+> a_child_thing$do_something_else()
+the child do_something_else method
+the child do_something method
+the parent do_something method
+```
+
+* **Summary**
+
+	* Override by giving the same name
+	* Extend by giving a new name
+	* `self$` accesses public methods in self
+	* `super$` accesses public methods in parent
+
+## 4.3 Multiple Levels of Inheritance
+
+```R
+> thing_factory <- R6Class(
++     "Thing"
++ )
+
+> child_thing_factory <- R6Class(
++     "ChildThing",
++     inherit = thing_factory
++ )
+
+> grand_child_thing_factory <- R6Class(
++     "GrandChildThing",
++     inherit = child_thing_factory
++ )
+
+> thing_factory <- R6Class(
++     "Thing",
++     public = list(
++         do_something = function() {
++             message("the parent do_something method")
++         } )
++ )
+
+> child_thing_factory <- R6Class(
++     "ChildThing",
++     inherit = thing_factory,
++     public = list(
++         do_something = function() {
++             message("the child do_something method")
++         } )
++ )
+
+> grand_child_thing_factory <- R6Class(
++     "GrandChildThing",
++     inherit = child_thing_factory,
++     public = list(
++         do_something = function() {
++             message("the grand-child do_something method")
++             super$do_something()
++             super$super$do_something()
++         } )
++ )
+
+# This doesn't work for trying to access the grandparent method.R6 classes only have access to their direct parent. The grand-child class cannot access its grand-parent
+
+> a_grand_child_thing <- grand_child_thing_factory$new()
+> a_grand_child_thing$do_something()
+the grand-child do_something method
+the child do_something method
+Error in a_grand_child_thing$do_something() : 
+  attempt to apply non-function
+  
+> child_thing_factory <- R6Class(
++     "ChildThing",
++     inherit = thing_factory,
++     public = list(
++         do_something = function() {
++             message("the child do_something method")
++         } ),
++     active = list(
++         super_ = function() super
++     ) )
+
+# the intermediate classes can make use of active bindings to expose their own parent. The active binding you need to add is read-only, and it simply returns super.
+
+> grand_child_thing_factory <- R6Class(
++     "GrandChildThing",
++     inherit = child_thing_factory,
++     public = list(
++         do_something = function() {
++             message("the grand-child do_something method")
++             super$do_something()
++             super$super_$do_something() 
++         } )
++ )
+> a_grand_child_thing <- grand_child_thing_factory$new()
+> a_grand_child_thing$do_something()
+the grand-child do_something method
+the child do_something method
+the parent do_something method
+```
+
+* **Summary**
+
+	* R6 objects can only access their direct parent
+	* Intermediate classes can expose their parent
+	* Use an active binding named `super_`
+	* `super_` should simply return `super`
 
 
+# 5. Advanced R6 Usage
 
+## 5.1 Environments, Reference Behavior, & Shared Fields
 
+1. Environments, Reference Behavior, & Shared Fields
+Back in Chapter 1, you learned that there are two types of variable that can be used to store other variables.
 
+2. list
+One of them was the list type, and you've seen lots of examples of working with lists so far in the course. The second variable type that can store other variables
 
+3. list environment
+is called an environment, and that is the focus of this video.
 
+4. env
+To create a new environment, you call the new-dot-env function. Unlike lists, where it is common to fill them with elements when you create them, environments are always created empty, and you add their contents afterwards. The syntax for adding variables to an environment is the same as for a list. For example, you can use the dollar operator, or the double square brackets operator. Let's check that the contents of the list and the environment are the same.
 
+5. lst
+The print method for environments isn't very informative, so it's best to use
 
+6. ls.str()
+ls-dot-str, which gives the structure of each element. There is one way that environments behave differently from lists that becomes important when working with R6 classes.
+
+7. lst2
+Take a copy of the list, then change one of the elements. Here you can change the "x" element from pi to the power 1 to 5, to e to the power 1 to 5. Now look at the corresponding "x" element in the second list. The changes, of course, haven't been passed along to the copy, so the lists are no longer identical. Let's do the same thing with environments.
+
+8. env
+Take a copy of the environment, change the "x" element in the first environment, and see what happens to the corresponding element in the second environment. Recall that in the case of lists, the change wasn't transferred to the second list. However, with environments, the change has been transferred over. Both x elements remain identical. Most R variables use a copying strategy known as
+
+9. copy by value
+"copy by value". That is, when you copy a variable, each version of the variable has its own copies of the values. By contrast,
+
+10. copy by reference
+environments use "copy by reference". This means that when you copy them, each version refers to the same copy of the values.
+
+11. thing_factory
+R6 classes can take advantage of copying by reference to share data between all instances of a class. There is one simple trick this, which involves defining a private element, by convention named "shared". The shared element takes several lines of code to define, so it needs braces. First, you define a new environment. This can be named anything. Then, you assign any variables that you like inside the environment. In this case, the code assigns the number 123 to a variable named "a shared field". Finally, you return the environment. To access the shared fields, you use active bindings, just as you saw in the previous chapter. The syntax is the same, except that this time, the fields are accessed using a private dollar shared dollar prefix. To see how shared fields work, let's create a couple of Thing objects.
+
+12. a_thing
+For both of these Things, the shared field defaults to the value 123. So far, this is just the same behavior as any other field. But now look what happens when you change the shared field in one of the objects. Since the field is shared, the copy by reference behavior means that the value is changed in the second Thing object as well.
+
+13. Summary
+In summary, environments are created using the new-dot-env function. You can assign variables to them, and access them again using the same syntax as with lists. The most important difference between lists and environments is that environments use copy by reference behavior, which means that all instances of an environment share the same variables. R6 classes can use this feature to provide variables that are shared across all objects. They do this by defining a private field that is an environment. This field, by convention, is named shared.
 
