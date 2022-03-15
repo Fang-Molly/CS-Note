@@ -475,22 +475,69 @@ Error in is.triangular_numbers(x) :
 
 ## 3.2 Hiding Complexity with Encapsulation
 
+* **Encapsulation**
 
+In object-oriented programming, the term for separating the implementation of the object from its user interface is called "encapsulation".
 
-2. Blank
-I only have a very rudimentary understanding of how they work. Fortunately, that doesn't stop me being able to use one. That's because regardless of how advanced the technology is inside the microwave, the user interface is pretty simple. In fact, there are only four pieces of functionality. I can change the power level. I can open the door. I can close it again, and of course, I can cook some food.
+```R
+> microwave_oven_factory <- R6Class(
++     "MicrowaveOven",
+	  # In R6, all these implementation details are stored in the private element of the class.
++     private = list(
++         power_rating_watts = 800,
++         door_is_open = FALSE
++     ),
+      # the user interface details are stored in an element named "public".
++     public = list(
++         open_door = function() {
++             private$door_is_open <- TRUE
++         }
++     )
++ )
+```
 
-3. Encapsulation
-In object-oriented programming, the term for
+* `private$` accesses private elements
+* `self$` accesses public elements
 
-4. Encapsulation
-separating the implementation of the object from its user interface is called "encapsulation".
+* `initialize()` : one special public method, it is called automatically when an object is created
 
-5. microwave_oven_factory
-The power rating element of the microwave that you saw in the previous exercises was an example of an implementation detail. In R6, all these implementation details are stored in the private element of the class. By contrast, the user interface details are stored in an element named "public". Just like private, the public element is specified as a named list. Its contents are usually functions. Since the microwave has four pieces of functionality, the R6 MicrowaveOven class needs to have four functions in its public element. Here's the existing version with only the power rating. Let's add a function to open the microwave door. To make this function work, you need another private variable to hold the state of the door. Then, you fill in the body of the function to make it do something. The data fields in the private element can be accessed using a prefix of
+```R
+# Add an initialize method
+microwave_oven_factory <- R6Class(
+  "MicrowaveOven",
+  private = list(
+    power_rating_watts = 800,
+    door_is_open = FALSE
+  ),
+  public = list(
+    cook = function(time_seconds) {
+      Sys.sleep(time_seconds)
+      print("Your food is cooked!")
+    },
+    open_door = function() {
+      private$door_is_open <- TRUE
+    },
+    close_door = function() {
+      private$door_is_open <- FALSE
+    },
+    # Add initialize() method here
+    initialize = function(power_rating_watts, door_is_open) {
+      if(!missing(power_rating_watts)) {
+        private$power_rating_watts <- power_rating_watts
+      }
+      if(!missing(door_is_open)) {
+        private$door_is_open <- door_is_open
+      }
+    }
+  )
+)
 
-6. private$
-"private" followed by the dollar indexing operator. It is also possible to access other public elements of a class. This time, rather than using the private dollar prefix, you use "self", then a dollar. You'll see this feature in action in the next chapter.
+# Make a microwave
+a_microwave_oven <- microwave_oven_factory$new(
+  power_rating_watts = 650,
+  door_is_open = TRUE
+)
+```
 
 * **Summary**
 
@@ -501,7 +548,78 @@ The power rating element of the microwave that you saw in the previous exercises
 	* `...` and `self$` to access public elements
 
 
-To summarise, encapsulation means separating implementation details from the user interface. For R6 classes, this means storing data fields in the private element of the class, and functions that you want the user to be able to access in the public element. These public functions can access private elements by typing their name prefixed by "private" and a dollar symbol. Likewise, you can access public elements by using a self-dollar prefix.
+
+## 3.3 Getting and Setting with Active Bindings
+
+* controlled access to private fields
+
+	* getting = read the data field
+	* setting = write the data field
+
+* Active Bindings
+
+	* defined like functions
+	* accessed like data variables
+
+* `active()` use syntax
+
+	* Just like the private and public elements, the active element must be a named list.
+
+	* One of the restrictions of R6 is that the elements of private, public, and active must all have different names. 
+
+	* A useful convention to help distinguish private and active elements is to start all private fields with a double dot. 
+
+
+```R
+> thing_factory <- R6Class(
++     "Thing",
++     private = list(
++         ..a_field = "a value",
++         ..another_field = 123
++     ),
++     active = list(
+		  # read-only active binding
+		  # takes no arguments
++         a_field = function() {
++             if(is.na(private$..a_field)) {
++                 return("a missing value")
++             }
++             private$..a_field
++         },
+		  # read and write
+		  # take a single argument
++         another_field = function(value) {
++             if(missing(value)) {
++                 private$..another_filed
++             } else {
++                 assert_is_a_number(value)
++                 private$..another_field <- value
++             }
++         }
++     )
++ )
+
+> a_thing <- thing_factory$new()
+> a_thing$a_field
+[1] "a value"
+> a_thing$a_field <- "a new value"
+Error in (function ()  : unused argument (base::quote("a new value"))
+> a_thing$another_field <- 456
+Error in assert_is_a_number(value) : 
+  could not find function "assert_is_a_number"
+> a_thing$another_field <- "456"
+Error in assert_is_a_number(value) : 
+  could not find function "assert_is_a_number"
+```
+
+* **Summary**
+
+	* Control private access with active bindings
+	* Defined like functions
+	* Accessed like data
+
+
+# 4. R6 Inheritance
 
 
 
