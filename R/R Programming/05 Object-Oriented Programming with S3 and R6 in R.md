@@ -834,14 +834,22 @@ the parent do_something method
 
 ## 5.1 Environments, Reference Behavior, & Shared Fields
 
-1. Environments, Reference Behavior, & Shared Fields
-Back in Chapter 1, you learned that there are two types of variable that can be used to store other variables.
+* There are two types of variable that can be used to store other variables.
 
-2. list
-One of them was the list type, and you've seen lots of examples of working with lists so far in the course. The second variable type that can store other variables
+	* list
+	
+	```R
+	lst <- list(x = pi ^ (1:5), y = matrix(month.abb, 3))
+	```
+	
+	* environment
 
-3. list environment
-is called an environment, and that is the focus of this video.
+
+
+```R
+# Create a new environment
+env <- new.env()
+```
 
 4. env
 To create a new environment, you call the new-dot-env function. Unlike lists, where it is common to fill them with elements when you create them, environments are always created empty, and you add their contents afterwards. The syntax for adding variables to an environment is the same as for a list. For example, you can use the dollar operator, or the double square brackets operator. Let's check that the contents of the list and the environment are the same.
@@ -872,4 +880,16 @@ For both of these Things, the shared field defaults to the value 123. So far, th
 
 13. Summary
 In summary, environments are created using the new-dot-env function. You can assign variables to them, and access them again using the same syntax as with lists. The most important difference between lists and environments is that environments use copy by reference behavior, which means that all instances of an environment share the same variables. R6 classes can use this feature to provide variables that are shared across all objects. They do this by defining a private field that is an environment. This field, by convention, is named shared.
+
+
+## 5.2 Cloning R6 Objects
+
+
+
+
+
+
+
+## 5.3 Shut it Down
+
 
