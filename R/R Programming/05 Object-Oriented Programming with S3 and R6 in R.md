@@ -838,58 +838,261 @@ the parent do_something method
 
 	* list
 	
-	```R
-	lst <- list(x = pi ^ (1:5), y = matrix(month.abb, 3))
-	```
-	
 	* environment
-
-
-
+	
 ```R
-# Create a new environment
-env <- new.env()
+# create a new list with contents
+> lst <- list(x = pi ^ (1:5), y = matrix(month.abb, 3))
+
+# print the list
+> lst
+$x
+[1]   3.141593   9.869604  31.006277  97.409091 306.019685
+
+$y
+     [,1]  [,2]  [,3]  [,4] 
+[1,] "Jan" "Apr" "Jul" "Oct"
+[2,] "Feb" "May" "Aug" "Nov"
+[3,] "Mar" "Jun" "Sep" "Dec"
+
+# check the structure
+> ls.str(lst)
+x :  num [1:5] 3.14 9.87 31.01 97.41 306.02
+y :  chr [1:3, 1:4] "Jan" "Feb" "Mar" "Apr" "May" "Jun" "Jul" "Aug" "Sep" ...
 ```
 
-4. env
-To create a new environment, you call the new-dot-env function. Unlike lists, where it is common to fill them with elements when you create them, environments are always created empty, and you add their contents afterwards. The syntax for adding variables to an environment is the same as for a list. For example, you can use the dollar operator, or the double square brackets operator. Let's check that the contents of the list and the environment are the same.
+```R
+# Create a new environment with no contents, empty
+env <- new.env()
 
-5. lst
-The print method for environments isn't very informative, so it's best to use
+# Add contents
+# use dollar operator
+> env$x <- pi ^ (1:5)
+# use double square brackets operator
+> env[["y"]] <- matrix(month.abb, 3)
 
-6. ls.str()
-ls-dot-str, which gives the structure of each element. There is one way that environments behave differently from lists that becomes important when working with R6 classes.
+# check the contents of the environment
+# The print method for environments isn't very informative
+> env
+<environment: 0x7fba0aa4e0e8>
+# check the structure
+> ls.str(env)
+x :  num [1:5] 3.14 9.87 31.01 97.41 306.02
+y :  chr [1:3, 1:4] "Jan" "Feb" "Mar" "Apr" "May" "Jun" "Jul" "Aug" "Sep" ...
+```
 
-7. lst2
-Take a copy of the list, then change one of the elements. Here you can change the "x" element from pi to the power 1 to 5, to e to the power 1 to 5. Now look at the corresponding "x" element in the second list. The changes, of course, haven't been passed along to the copy, so the lists are no longer identical. Let's do the same thing with environments.
+* The environments behave differently from lists when working with R6 classes.
 
-8. env
-Take a copy of the environment, change the "x" element in the first environment, and see what happens to the corresponding element in the second environment. Recall that in the case of lists, the change wasn't transferred to the second list. However, with environments, the change has been transferred over. Both x elements remain identical. Most R variables use a copying strategy known as
+```R
+# copy by value
+> lst2 <- lst
+> (lst$x <- exp(1:5))
+[1]   2.718282   7.389056  20.085537  54.598150 148.413159
+> lst$x
+[1]   2.718282   7.389056  20.085537  54.598150 148.413159
+> lst2$x
+[1]   3.141593   9.869604  31.006277  97.409091 306.019685
+# the change wasn't transferred to the second list
+> identical(lst$x, lst2$x)
+[1] FALSE
+```
 
-9. copy by value
-"copy by value". That is, when you copy a variable, each version of the variable has its own copies of the values. By contrast,
+```R
+# copy by reference
+> env2 <- env
+> (env$x <- exp(1:5))
+[1]   2.718282   7.389056  20.085537  54.598150 148.413159
+> env2$x
+[1]   2.718282   7.389056  20.085537  54.598150 148.413159
+# the change has been transferred to the second environment
+> identical(env$x, env2$x)
+[1] TRUE
+```
 
-10. copy by reference
-environments use "copy by reference". This means that when you copy them, each version refers to the same copy of the values.
+* R6 classes can take advantage of copying by reference to share data between all instances of a class. 
 
-11. thing_factory
-R6 classes can take advantage of copying by reference to share data between all instances of a class. There is one simple trick this, which involves defining a private element, by convention named "shared". The shared element takes several lines of code to define, so it needs braces. First, you define a new environment. This can be named anything. Then, you assign any variables that you like inside the environment. In this case, the code assigns the number 123 to a variable named "a shared field". Finally, you return the environment. To access the shared fields, you use active bindings, just as you saw in the previous chapter. The syntax is the same, except that this time, the fields are accessed using a private dollar shared dollar prefix. To see how shared fields work, let's create a couple of Thing objects.
+```R
+> thing_factory <- R6Class(
++     "Thing",
++     private = list(
++         shared = {
++             e <- new.env()
++             e$a_shared_field = 123
++             e
++         }
++     ),
++     active = list(
++         a_shared_field = function(value) {
++             if(missing(value)) {
++                 private$shared$a_shared_field
++             } else {
++                 private$shared$a_shared_field <- value
++             }
++         }
++     )
++ )
 
-12. a_thing
-For both of these Things, the shared field defaults to the value 123. So far, this is just the same behavior as any other field. But now look what happens when you change the shared field in one of the objects. Since the field is shared, the copy by reference behavior means that the value is changed in the second Thing object as well.
+> a_thing <- thing_factory$new()
+> another_thing <- thing_factory$new()
+> a_thing$a_shared_field
+[1] 123
+> another_thing$a_shared_field
+[1] 123
 
-13. Summary
-In summary, environments are created using the new-dot-env function. You can assign variables to them, and access them again using the same syntax as with lists. The most important difference between lists and environments is that environments use copy by reference behavior, which means that all instances of an environment share the same variables. R6 classes can use this feature to provide variables that are shared across all objects. They do this by defining a private field that is an environment. This field, by convention, is named shared.
+> a_thing$a_shared_field <- 456
+> another_thing$a_shared_field
+[1] 456
+```
+
+* **Summary**
+
+	* Create environments with `new.env()`
+	* Manipulate them using list syntax
+	* Environments copy by reference
+	* Shared R6 fields using an environment field
 
 
 ## 5.2 Cloning R6 Objects
 
+* Environments use copy by reference. R6 objects are built using environments, they also use copy by reference.
 
+```R
+> thing_factory <- R6Class(
++     "Thing",
++     private = list(
++         ..a_field = 123
++     ),
++     active = list(
++         a_field = function(value) {
++             if(missing(value)) {
++                 private$..a_field
++             } else {
++                 private$..a_field <- value
++             }
++         }
++     )
++ )
+> 
+> a_thing <- thing_factory$new()
+> a_copy <- a_thing
+> a_thing$a_field <- 456
+> a_copy$a_field
+[1] 456
+```
 
+* clone() copies by value
 
+```R
+# when you change one of the fields in the original, the clone is unaffected.
+> a_clone <- a_thing$clone()
+> a_thing$a_field <- 789
+> a_clone$a_field
+[1] 456
+```
 
+* One special case is when R6 classes contain other R6 classes.
+
+```R
+> container_factory <- R6Class(
++     "Container",
++     private = list(
++         ..thing = thing_factory$new()
++     ),
++     active = list(
++         thing = function(value) {
++             if(missing(value)) {
++                 private$..thing
++             } else {
++                 private$..thing <- value
++             }
++         }
++     )
++ )
+
+> a_container <- container_factory$new()
+> a_clone <- a_container$clone()
+
+> a_container$thing$a_field <- "a new value"
+> a_clone$thing$a_field
+[1] "a new value"
+
+# To use copy by value for the fields of the internal R6 object, you need to call clone with the argument deep equals TRUE. 
+> a_deep_clone <- a_container$clone(deep = TRUE)
+> a_container$thing$a_field <- "a different value"
+> a_deep_clone$thing$a_field
+[1] "a new value"
+```
+
+* **Summary**
+
+	* R6 objects copy by reference
+	* Copy them by value using `clone()`
+	* `clone()` is autogenerated
+	* `clone(deep = TRUE)` is for R6 fields
 
 
 ## 5.3 Shut it Down
+
+If an R6 object connects to a database or a file, then it can be dangerous to delete it without making sure that you close the connections first. Similarly, if the R6 object has any side effects such as changing global options or global plotting parameters, then it is good practise to return those settings back to their previous state. 
+
+* `initialize()` customizes startup
+
+
+* `finallize()` customizes cleanup
+	* finalize is always a function with no arguments, defined in the public element of an R6 class.
+
+```R
+> thing_factory <- R6Class(
++     "Thing",
++     private = list(
++         ..a_field = 123
++     ),
++     public = list(
++         initialize = function(a_field) {
++             if(!missing(a_field)) {
++                 private$a_field = a_field
++             }
++         },
++         finalize = function() {
++             message("Finalizing the Thing")
++         }
++     )
++ )
+> 
+> a_thing <- thing_factory$new()
+# delete the thing, the finalize method isn't called immediately
+> rm(a_thing)
+# force delete by calling the gc function
+> gc()
+Finalizing the Thing
+          used (Mb) gc trigger  (Mb) limit (Mb) max used  (Mb)
+Ncells 1102306 58.9    2384221 127.4         NA  2384221 127.4
+Vcells 2004824 15.3    8388608  64.0      16384  3585319  27.4
+```
+
+```R
+> database_manager_factory <- R6Class(
++     "DatabaseManager",
++     private = list(
++         conn = NULL
++     ),
++     public = list(
++         initialize = function(a_field) {
++             private$conn <- dbConnect("some-database.sqlite")
++         },
++         finalize = function() {
++             dbDisconnect(private$conn)
++         }
++     )
++ )
+```
+
+* **Summary**
+
+	* `finalize()` cleans up after R6 objects
+	* It is useful when working with databases
+	* It gets called during garbage collection
+
+
 
 
