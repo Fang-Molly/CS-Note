@@ -11,7 +11,7 @@ Introduction to Data Visualization with ggplot2
 
 * `MASS::mammals`
 
-```
+```R
 > MASS::mammals
                               body   brain
 Arctic fox                   3.385   44.50
@@ -33,7 +33,7 @@ Red fox                      4.235   50.40
 
 * A scatter plot
 
-```
+```R
 > mammals <- MASS::mammals
 > ggplot(mammals, aes(x = body, y = brain)) +
 +     geom_point()
@@ -41,7 +41,7 @@ Red fox                      4.235   50.40
 
 * Explore with a linear model
 
-```
+```R
 ggplot(mammals, aes(x = body, y = brain)) +
 +     geom_point(alpha = 0.6) +
 +     stat_smooth(
@@ -53,7 +53,7 @@ ggplot(mammals, aes(x = body, y = brain)) +
 
 * Explore: fine-tuning
 
-```
+```R
 ggplot(mammals, aes(x = body, y = brain)) +
 +     geom_point(alpha = 0.6) +
 +     coord_fixed() +
@@ -104,7 +104,7 @@ ggplot(mammals, aes(x = body, y = brain)) +
 
 * Iris dataset
 
-```
+```R
 > iris
     Sepal.Length Sepal.Width Petal.Length Petal.Width    Species
 1            5.1         3.5          1.4         0.2     setosa
@@ -124,7 +124,7 @@ ggplot(mammals, aes(x = body, y = brain)) +
 150          5.9         3.0          5.1         1.8  virginica
 ```
 
-```
+```R
 > g <- ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width)) +
 +     geom_jitter()
 > g
@@ -141,7 +141,7 @@ ggplot(mammals, aes(x = body, y = brain)) +
 
 * Mapping onto the X and Y axes
 
-```
+```R
 > ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width)) +
 +     geom_point()
 ```
@@ -150,14 +150,14 @@ ggplot(mammals, aes(x = body, y = brain)) +
 
 > Species: a dataframe column, is mapped onto color, a visible aesthetic.
 
-```
+```R
 > ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
 +     geom_point()
 ```
 
 * Mapping onto the color aesthetic in geom
 
-```
+```R
 > ggplot(iris) + 
 +     geom_point(aes(x = Sepal.Length, y = Sepal.Width, col = Species))
 ```
@@ -178,7 +178,7 @@ ggplot(mammals, aes(x = body, y = brain)) +
 
 ## 2.2 Using attributes
 
-```
+```R
 > library(ggplot2)
 > ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width)) +
 +     geom_point(color = "red")
@@ -200,7 +200,7 @@ ggplot(mammals, aes(x = body, y = brain)) +
 
 * position = "identity" (default)
 
-```
+```R
 > ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
 +     geom_point()
 
@@ -210,7 +210,7 @@ ggplot(mammals, aes(x = body, y = brain)) +
 
 * position = "jitter"
 
-```
+```R
 > ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
 +     geom_point(position = "jitter")
 
@@ -234,7 +234,7 @@ ggplot(mammals, aes(x = body, y = brain)) +
     * `scale_linetype_*()`
     * `scale_size_*()`
 
-```
+```R
 ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
 +     geom_point(position = "jitter") +
 +     scale_x_continuous("Sepal Length") +
@@ -248,13 +248,43 @@ ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
 
 * labs()
 
-```
+```R
 > ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
 +     geom_point(position = "jitter") +
 +     labs(x = "Sepal Length", y = "Sepal Width", color = "Species")
 ```
 
 ## 2.4 Aesthetics best practices
+
+* **Which aesthetics?**
+
+	* Use your creative know-how, and follow some clear guidelines
+	* Jacques Bertin
+		* The Semiology of Graphics, 1967
+	* William Cleveland
+		* The Elements of Graphing Data, 1985
+		* Visualizing Data, 1993
+
+* **Form follows function**
+
+	* Function 
+		* Primary: Accurate and efficient representations
+		* Secondary: Visually appealing, beautiful plots
+
+	* Guiding principles
+		* Never : 
+			* Misrepresent or obscure data
+			* Confuse viewers with complexity
+
+		* Always :
+			* Consider the audience and purpose of every plot
+
+
+		
+
+
+
+
 
 
 
