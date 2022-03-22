@@ -279,33 +279,304 @@ ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
 		* Always :
 			* Consider the audience and purpose of every plot
 
+* **The best choices for aesthetics**
 
-		
+	* Efficient
+		* Provides a faster overview than numeric summaries
+	
+	* Accurate
+		* Minimizes information loss
 
+* **Aesthetics - continuous variables**
 
+The scatter plot maps data as position on a common scale.
 
+```R
+ggplot(iris, aes(x = Sepal.Length,
+				 y = Sepal.Width,
+				 color = Species)) +
+	geom_point()
+```
 
+```R
+ggplot(iris, aes(color = Sepal.Length,
+                 y = Sepal.Width,
+                 x = Species)) +
+  geom_point()
+```
 
+* **Aesthetics - categorical variables**
 
+Color is often used to good effect for a categorical variables.
 
+```R
+ggplot(iris, aes(x = Sepal.Length,
+                 y = Sepal.Width,
+                 col = Species)) +
+  geom_point()
+```
+
+```R
+ggplot(iris, aes(x = Sepal.Length,
+                 y = Sepal.Width,
+                 col = Species)) +
+  geom_point(position = "jitter",
+             alpha = 0.5)
+```
 
 # 3. Geometries
 
 ## 3.1 Scatter plots
 
+* **48 geometries**
+          
+
+* **Common plot types**
+
+|Plot type.   |Possible Geoms                       |
+|:-----------:|:-----------------------------------:|
+|Scatter plots|points, jitter, abline, smooth, count|
 
 
+* **Scatter plots**
+
+	* Each geom can accept specific aesthetic mappings, e.g. geom_point()
+	
+	|Essential|Optional                               |
+	|:-------:|:-------------------------------------:|
+	|x, y.    |alpha, color, fill, shape, size, stroke|
+
+```R
+# essential
+ggplot(iris, aes(x = Sepal.Length,
+                 y = Sepal.Width)) +
+  geom_point()
+
+# Optional
+ggplot(iris, aes(x = Sepal.Length,
+                 y = Sepal.Width,
+                 col = Species)) +
+  geom_point()
+```
+
+* **Geom-specific aesthetic mappings**
+
+```R
+ggplot(iris, aes(x = Sepal.Length,
+                 y = Sepal.Width,
+                 col = Species)) +
+  geom_point()
+  
+# specify both geom-specific data and aesthetics, control aesthetic mappings of each layer independently
+ggplot(iris, aes(x = Sepal.Length,
+                 y = Sepal.Width,)) +
+  geom_point(aes(col = Species))
+```
+
+```R
+head(iris, 3)
+>
+Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+1          5.1         3.5          1.4         0.2  setosa
+2          4.9         3.0          1.4         0.2  setosa
+3          4.7         3.2          1.3         0.2  setosa
+>
+library(dplyr)
+iris %>%
+  group_by(Species) %>%
+  summarise_all(mean) -> iris.summary
+iris.summary
+>
+# A tibble: 3 × 5
+  Species    Sepal.Length Sepal.Width Petal.Length Petal.Width
+  <fct>             <dbl>       <dbl>        <dbl>       <dbl>
+1 setosa             5.01        3.43         1.46       0.246
+2 versicolor         5.94        2.77         4.26       1.33 
+3 virginica          6.59        2.97         5.55       2.03 
+>
+ggplot(iris, aes(x = Sepal.Length,
+                 y = Sepal.Width,
+                 col = Species)) +
+  # Inherits both data and aes from ggplot()
+  geom_point() +
+  # Different data, but inherited aes
+  geom_point(data = iris.summary, shape = 15, size = 5)
+```
+
+* **Shape attribute values**
+
+```R
+ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, col = Species)) +
+  # Inherits both data and aes from ggplot()
+  geom_point() +
+  # Different data, but inherited aes
+  geom_point(data = iris.summary, shape = 21, size = 5, fill = "black", stroke = 2)
+```
+
+* **position = "jitter"**
+
+> `geom_jitter()` : short-cut to `geom_point(position = "jitter")
+
+```R
+ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, col = Species)) +
+  geom_point(position = "jitter")
+
+# the same result
+ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, col = Species)) +
+  geom_jitter()
+```
+
+* **alpha**
+
+```R
+# combine jittering with alpha-blending
+ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, col = Species)) +
+  geom_jitter(alpha = 0.6)
+```
+
+* **Hollow circles `shape = 1`**
+
+```R
+ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, col = Species)) +
+  geom_jitter(shape = 1)
+```
 
 ## 3.2 Histograms
 
+* **Common plot types**
 
+|Plot type    |Possible Geoms                       |
+|:-----------:|:-----------------------------------:|
+|Scatter plots|points, jitter, abline, smooth, count|
+|Bar plots    |histogram, bar, col, errorbar        |
+|Line plots   |line, path                           |
 
+* **Histograms**
+
+```R
+ggplot(iris, aes(x = Sepal.Width)) +
+  geom_histogram()
+```
+
+* A plot of binned values
+	* i.e. a statistical function
+
+* `stat_bin()` : a specific statistic
+	* The bin argument took the default value of 30
+	*  Pick better value with `binwidth`.
+
+* Default of 30 even bins
+
+```R
+# Default bin width:
+diff(range(iris$Sepal.Width)) / 30
+>
+[1] 0.08
+```
+
+* Intuitive and meaningful bin widths
+
+	* Always set a meaningful bin widths for your data
+	* No space between bars
+	
+```R
+ggplot(iris, aes(x = Sepal.Width)) +
+  geom_histogram(binwidth = 0.1)
+```
+
+* Re-position tick marks
+	* Always set a meaningful bin widths for your data
+	* No spaces between bars
+	* X axis labels are between bars
+
+```R
+ggplot(iris, aes(x = Sepal.Width)) +
+  geom_histogram(binwidth = 0.1, 
+                 center = 0.05)
+```
+
+* **Different Species**
+
+```R
+ggplot(iris, aes(x = Sepal.Width,
+                 fill = Species)) +
+  geom_histogram(binwidth = 0.1, 
+                 center = 0.05)
+```
+
+* **Default position is "stack"**
+
+```R
+ggplot(iris, aes(x = Sepal.Width,
+                 fill = Species)) +
+  geom_histogram(binwidth = 0.1, 
+                 center = 0.05,
+                 position = "stack")
+```
+
+* **position = "dodge"**
+
+```R
+ggplot(iris, aes(x = Sepal.Width,
+                 fill = Species)) +
+  geom_histogram(binwidth = 0.1, 
+                 center = 0.05,
+                 position = "dodge")
+```		
+
+* **position = "fill"**
+
+```R
+ggplot(iris, aes(x = Sepal.Width,
+                 fill = Species)) +
+  geom_histogram(binwidth = 0.1, 
+                 center = 0.05,
+                 position = "fill")
+```
 
 ## 3.3 Bar plots
 
+* **Bar Plots, with a categorical X-axis**
 
+	* Use `geom_bar()` or `geom_col()`
+
+	|Geom        |Stat      |Action                                       |
+	|:----------:|:--------:|:-------------------------------------------:|
+	|`geom_bar()`|"count"   |Counts the number of cases at each x position|
+	|`geom_col()`|"identity"|Plot actual values                           |
+
+	* All positions from before are available
+	* Two types
+		* Absolute counts
+		* Distributions
+
+* **Bar plot**
+
+```R
+str(sleep)
+>
+'data.frame':	20 obs. of  3 variables:
+ $ extra: num  0.7 -1.6 -0.2 -1.2 -0.1 3.4 3.7 0.8 0 2 ...
+ $ group: Factor w/ 2 levels "1","2": 1 1 1 1 1 1 1 1 1 1 ...
+ $ ID   : Factor w/ 10 levels "1","2","3","4",..: 1 2 3 4 5 6 7 8 9 10 ...
+>
+head(sleep)
+>
+extra group ID
+1   0.7     1  1
+2  -1.6     1  2
+3  -0.2     1  3
+4  -1.2     1  4
+5  -0.1     1  5
+6   3.4     1  6
+```
 
 ## 3.4 Line plots
+
+
+
+
+
 
 
 
