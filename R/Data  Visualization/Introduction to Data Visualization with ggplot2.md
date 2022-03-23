@@ -75,11 +75,11 @@ ggplot(mammals, aes(x = body, y = brain)) +
 
 * Grammar of graphics
 
-		* Plotting framework
-		* Leland Wilkinson, Grammar of Graphics, 1999
-		* 2 principles
-		    * Graphics = distinct layers of grammatical elements
-		    * Meaningful plots through aesthetic mappings
+	* Plotting framework
+	* Leland Wilkinson, Grammar of Graphics, 1999
+	* 2 principles
+		* Graphics = distinct layers of grammatical elements
+		* Meaningful plots through aesthetic mappings
 
 * Grammatical elements
 
@@ -97,10 +97,10 @@ ggplot(mammals, aes(x = body, y = brain)) +
 
 * ggplot2 package
 
-		* The grammar of graphics implemented in R
-		* Two key concepts :
-		    1. Layer grammatical elements
-		    2. Aesthetic mappings
+	* The grammar of graphics implemented in R
+	* Two key concepts :
+		1. Layer grammatical elements
+		2. Aesthetic mappings
 
 * Iris dataset
 
@@ -190,13 +190,13 @@ ggplot(mammals, aes(x = body, y = brain)) +
 ## 2.3 Modifying aesthetics
 
 * Positions : Adjustment for overlapping
-    * identity
-    * dodge
-    * stack
-    * fill
-    * jitter
-    * jitterdodge
-    * nudge
+	* identity
+  * dodge
+  * stack
+  * fill
+  * jitter
+  * jitterdodge
+  * nudge
 
 * position = "identity" (default)
 
@@ -226,13 +226,13 @@ ggplot(mammals, aes(x = body, y = brain)) +
 
 * Scale functions
 
-    * `scale_x_*()`, `scale_x_continuous()`
-    * `scale_y_*()`
-    * `scale_color_*()` or `scale_colour_*()`, `scale_color_discrete()`
-    * `scale_fill_*()`
-    * `scale_shape_*()`
-    * `scale_linetype_*()`
-    * `scale_size_*()`
+	* `scale_x_*()`, `scale_x_continuous()`
+  * `scale_y_*()`
+  * `scale_color_*()` or `scale_colour_*()`, `scale_color_discrete()`
+  * `scale_fill_*()`
+  * `scale_shape_*()`
+  * `scale_linetype_*()`
+  * `scale_size_*()`
 
 ```R
 ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
@@ -569,29 +569,311 @@ extra group ID
 4  -1.2     1  4
 5  -0.1     1  5
 6   3.4     1  6
+>
+ggplot(sleep, aes(vore)) +
+	geom_bar()
+```
+
+* **Plotting distributions instead of absolute counts**
+
+```R
+iris_summ_long <- iris %>%
+  select(Species, Sepal.Width) %>%
+  gather(key, value, -Species) %>%
+  group_by(Species) %>%
+  summarise(avg = mean(value),
+            stdev = sd(value))
+
+iris_summ_long
+>
+# A tibble: 3 × 3
+  Species      avg stdev
+  <fct>      <dbl> <dbl>
+1 setosa      3.43 0.379
+2 versicolor  2.77 0.314
+3 virginica   2.97 0.322
+>
+# plotting distributions
+ggplot(iris_summ_long, aes(x = Species, 
+                           y = avg)) +
+  geom_col() +
+  geom_errorbar(aes(ymin = avg - stdev, 
+                    ymax = avg + stdev),
+                width = 0.1)
 ```
 
 ## 3.4 Line plots
 
+* **Basic**
 
+```R
+ggplot(beaver, aes(x = time, 
+                   y = temp)) +
+  geom_line()
+```
 
+* **Color each segment**
 
+```R
+ggplot(beaver, aes(x = time, 
+                   y = temp, 
+                   color = factor(active)) +
+  geom_line()
+```
 
+* **Linetype aesthetic**
 
+```R
+ggplot(fish, aes(x = Year,
+                 y = Capture,
+                 linetype = Species)) +
+  geom_line()
+```
 
+* **Size aesthetic**
 
+```R
+ggplot(fish, aes(x = Year,
+                 y = Capture,
+                 size = Species)) +
+  geom_line()
+```
+
+* **Color aesthetic**
+
+```R
+ggplot(fish, aes(x = Year,
+                 y = Capture,
+                 color = Species)) +
+  geom_line()
+```
+
+* **Aesthetics for categorical variables**
+
+* **Fill aesthetic with geom_area()**
+
+```R
+ggplot(fish, aes(x = Year,
+                 y = Capture,
+                 fill = Species)) +
+  geom_area()
+```
+
+* **Using position = "fill"**
+
+```R
+ggplot(fish, aes(x = Year,
+                 y = Capture,
+                 fill = Species)) +
+  geom_area(position = "fill")
+```
+
+* **geom_ribbon()**
+
+```R
+ggplot(fish, aes(x = Year,
+                 y = Capture,
+                 fill = Species)) +
+  geom_ribbon(aes(ymax = Capture,
+                  ymin = 0),
+              alpha = 0.3)
+```
 
 # 4. Themes
 
-## 4.1 Themes from legend
+## 4.1 Themes from scratch
 
+* **The themes layer**
 
+	* All non-data ink
+	* Visual elements not part of the data
+
+* **Three types**
+
+|type     |modified using|
+|:-------:|:------------:|
+|text     |element_text()|
+|line     |element_line()|
+|rectangle|element_rect()|
+
+* **The text elements**
+
+```R
+theme(
+text,
+  axis.title,
+    axis.title.x,
+      axis.title.x.top,
+      axis.title.x.bottom,
+    axis.title.y,
+      axis.title.y.left,
+      axis.title.y.right,
+  title,
+    legend.title,
+    plot.title,
+    plot.subtitle,,
+    plot.caption,
+    plot.tag,
+  axis.text,
+    axis.text.x,
+      axis.text.x.top,
+      axis.text.x.bottom,
+    axis.text.y,
+      axis.text.y.left,
+      axis.text.y.right,
+  legend.text,
+  strip.text,
+    strip.text.x,
+    strip.text.y)
+```
+
+* **Adjusting theme elements**
+
+```R
+ggplot(iris, aes(x = Sepal.Length, 
+                 y = Sepal.Width,
+                 color = Species)) +
+  geom_jitter(alpha = 0.6) +
+  theme(axis.title = element_text(color = "blue"))
+```
+
+* **Line elements**
+
+```R
+theme(
+line,
+	axis.ticks,
+		axis.ticks.x,
+			axis.ticks.x.top,
+			axis.ticks.x.bottom,
+		axis.ticks.y,
+			axis.ticks.y.left,
+			axis.ticks.y.right,
+		axis.line,
+			axis.line.x,
+				axis.line.x.top,
+				axis.line.x.bottom,
+			axis.line.y,
+				axis.line.y.left,
+				axis.line.y.right,
+		panel.grid,
+			panel.grid.major,
+				panel.grid.major.x,
+				panel.grid.major.y,
+			panel.grid.minor,
+				panel.grid.minor.x,
+				panel.grid.minor.y)
+```
+
+* **Rect elements**
+
+```R
+theme(
+rect,
+	legend.background,
+	legend.key,
+	legend.box.background,
+	panel.background,
+	panel.border,
+	plot.background,
+	strip.background,
+		strip.background.x,
+		strip.background.y)
+```
+
+* **element_blank()**
+
+```R
+ggplot(iris, aes(x = Sepal.Length, 
+                 y = Sepal.Width,
+                 color = Species)) +
+  geom_jitter(alpha = 0.6) +
+  theme(line = element_blank(),
+        rect = element_blank(),
+        text = element_blank())
+```
 
 ## 4.2 Theme flexibility
 
+* **Ways to use themes**
 
+	* From scratch
+	* Theme layer object
+	* Built-in themes                       
+		* ggplot2 or ggthemes packages
+	* Built-in themes from other packages
+	* Update/Set default theme
+
+* **Defining theme objects**
+
+	* Useful when you have many plots
+	* Provides consistency in style
+	* Apply a specific theme everywhere
+
+```R
+z <- ggplot(iris, aes(x = Sepal.Length, 
+                      y = Sepal.Width, 
+                      color = Species)) +
+  geom_jitter(alpha = 0.6) +
+  scale_x_continuous("Sepal Length (cm)", 
+                     limits = c(4, 8), 
+                     expand = c(0, 0)) +
+  scale_y_continuous("Sepal Width (cm)", 
+                     limits = c(1.5, 5), 
+                     expand = c(0, 0)) +
+  scale_color_brewer("Species", 
+                     palette = "Dark2", 
+                     labels = c("Stetosa", "Versicolor", "Virginica"))
+
+z + theme(text = element_text(family = "serif", size = 14),
+          rect = element_blank(),
+          panel.grid = element_blank(),
+          title = element_text(color = "#8b0000"),
+          axis.line = element_line(color = "black"))
+```
+
+```R
+theme_iris <- theme(text = element_text(family = "serif", size = 14),
+                    rect = element_blank(),
+                    panel.grid = element_blank(),
+                    title = element_text(color = "#8b0000"),
+                    axis.line = element_line(color = "black"))
+z + theme_iris
+```
+
+* **Using built-in themes**
+
+	* `theme_gray()` : the default
+	* `theme_classic()` : more traditional
+	* `theme_bw()` : useful when you use transparency
+	* `theme_void()` : removes everything but the data
+
+
+* **The ggthemes package**
+
+```R
+install.packages("ggthemes")
+library(ggthemes)
+
+z + theme_tufte()
+```
+
+* **Updating themes**
+
+```R
+original <- theme_update(text = element_text(family = "serif", size = 14),
+                         rect = element_blank(),
+                         panel.grid = element_blank(),
+                         title = element_text(color = "#8b0000"),
+                         axis.line = element_line(color = "black"))
+
+theme_set(original)
+```
 
 ## 4.3 Effective explanatory plots
+
+
+
 
 
 
