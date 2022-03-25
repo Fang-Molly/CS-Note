@@ -178,17 +178,80 @@ ggplot(word_counts2, aes(x = word, y = n)) +
 
 ## 2.2 Improving word count plots
 
+* **Custom stop words**
+
+```R
+> install.packages("tidytext")
+> library(tidytext)
+> stop_words
+# A tibble: 1,149 × 2
+   word        lexicon
+   <chr>       <chr>  
+ 1 a           SMART  
+ 2 a's         SMART  
+ 3 able        SMART  
+ 4 about       SMART  
+ 5 above       SMART  
+ 6 according   SMART  
+ 7 accordingly SMART  
+ 8 across      SMART  
+ 9 actually    SMART  
+10 after       SMART  
+# … with 1,139 more rows
+```
+
+* **Using tribble()**
+
+```R
+tribble(
+  ~word,     ~lexicon,
+  "roomba",  "CUSTOM",
+  "2",       "CUSTOM"
+)
+
+# A tibble: 2 × 2
+  word   lexicon
+  <chr>  <chr>  
+1 roomba CUSTOM 
+2 2      CUSTOM 
+```
 
 
 
-1. Improving word count plots
-Now that we see how easy it is to visualize word counts using text in a tidy format with ggplot2, let’s consider how we can improve them.
-
-2. Custom stop words
-One problem we’ve seen is that even after removing the standard stop words, seen here in stop_words, we often have words in our data that we’d like to have removed because they aren’t incredibly informative. Put another way, we would like to add some custom stop words to this data frame.
-
-3. Using tribble()
 The easiest way to do this is to first create our own data frame, or tibble, composed of the custom stop words we would like to remove. To do this, we use the tribble() function. If you get the Star Trek reference, congratulations. The arguments in tribble() are simple: the column names, with the tilde in front of them, followed by the values on each row. We can even organize the inputs to look like the data frame itself. Here we want the columns to be a character type and so we put the values in quotes. Note the column names match the column names in the stop_words data frame and they don’t need to be in quotes because they aren’t values in the data frame. Our custom stop words include Roomba, the name of the brand for the two products, which appears frequently in the reviews and isn’t very informative. The number 2 also appears often, probably an artifact of scraping the reviews from the web. Voila! We’ve created our own data frame!
+
+* **Using bind_rows()**
+
+```R
+custom_stop_words <- tribble(
+  ~word,     ~lexicon,
+  "roomba",  "CUSTOM",
+  "2",       "CUSTOM"
+)
+
+stop_words2 <- stop_words %>%
+  bind_rows(custom_stop_words)
+
+stop_words2
+
+# A tibble: 1,151 × 2
+   word        lexicon
+   <chr>       <chr>  
+ 1 a           SMART  
+ 2 a's         SMART  
+ 3 able        SMART  
+ 4 about       SMART  
+ 5 above       SMART  
+ 6 according   SMART  
+ 7 accordingly SMART  
+ 8 across      SMART  
+ 9 actually    SMART  
+10 after       SMART  
+# … with 1,141 more rows
+```
+
+
+
 
 4. Using bind_rows()
 Let’s assign this new data frame to custom_stop_words. Now let’s combine the original stop_words and our custom_stop_words. We’ve briefly discussed joins, which are about joining columns with matching values based on a shared column. This is different because we want to bind rows together, not join columns. Here, we use a function called bind_rows(). To use it, the two data frames need to have matching columns with matching names.
