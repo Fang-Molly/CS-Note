@@ -200,7 +200,7 @@ ggplot(word_counts2, aes(x = word, y = n)) +
 # … with 1,139 more rows
 ```
 
-* **Using tribble()**
+* **Using `tribble()` function**
 
 ```R
 tribble(
@@ -215,10 +215,6 @@ tribble(
 1 roomba CUSTOM 
 2 2      CUSTOM 
 ```
-
-
-
-The easiest way to do this is to first create our own data frame, or tibble, composed of the custom stop words we would like to remove. To do this, we use the tribble() function. If you get the Star Trek reference, congratulations. The arguments in tribble() are simple: the column names, with the tilde in front of them, followed by the values on each row. We can even organize the inputs to look like the data frame itself. Here we want the columns to be a character type and so we put the values in quotes. Note the column names match the column names in the stop_words data frame and they don’t need to be in quotes because they aren’t values in the data frame. Our custom stop words include Roomba, the name of the brand for the two products, which appears frequently in the reviews and isn’t very informative. The number 2 also appears often, probably an artifact of scraping the reviews from the web. Voila! We’ve created our own data frame!
 
 * **Using bind_rows()**
 
@@ -248,37 +244,54 @@ stop_words2
  9 actually    SMART  
 10 after       SMART  
 # … with 1,141 more rows
+
+tidy_review <- review_data %>%
+	mutate(id = row_number()) %>%
+	select(id, date, product, stars, review) %>%
+  unnest_tokens(word, review) %>%
+  anti_join(stop_words2)
+tidy_review %>%
+	filter(word == "roomba")
 ```
 
+* **Factors**
+	* Usint `fct_reorder()`
+
+```
+word_counts <- tidy_review %>%
+  count(word) %>%
+  filter(n > 300) %>%
+  mutate(word2 = fct_reorder(word, n))
+
+ggplot(word_counts, aes(x = word2, y =n)) +
+  geom_col() +
+  coord_flip() +
+  ggtitle("Review Word Counts")
+```
+
+## 2.3 Faceting word count plots - compare two or more subsets of the data in the same plot
 
 
 
-4. Using bind_rows()
-Let’s assign this new data frame to custom_stop_words. Now let’s combine the original stop_words and our custom_stop_words. We’ve briefly discussed joins, which are about joining columns with matching values based on a shared column. This is different because we want to bind rows together, not join columns. Here, we use a function called bind_rows(). To use it, the two data frames need to have matching columns with matching names.
+```R
+word_counts <- tidy_review %>%
+  # counting by product
+  count(word, product) %>%
+  group_by(product) %>%
+  # using `top_n()`
+  top_n(10, n)
+  # using `ungroup()`
+  ungroup()
+  # using `fct_reorder()`
+  mutate(word2 = fct_reorder(word, n))
 
-5. Removing stop words again
-Here we are again tokenizing and cleaning the review_data. Instead of using the standard stop_words in our anti_join(), we use stop_words2, which now includes our custom stop words. To demonstrate that this worked, let’s filter for just the rows that contain “roomba.” That’s right: we have a data frame with zero rows -- Roomba has been removed!
-
-6. Factors
-Another problem we’ve seen is that the arrange() function doesn’t affect the plots, like this plot from the last video. To address this, we’re going to need to consider column types again. We’ve talked about categorical data being stored as the character type. However, there is another type used to store both categorical data in R: a factor. While in a character column, the words can be sorted alphabetically. However, a factor column can include information about the order in which the words should appear.
-
-7. Using fct_reorder()
-After counting and filtering for the words that occur more than 300 times, we use mutate() to create a new column. Within mutate() we use the function fct_reorder() and include two arguments: the column we want to reorder and the column we want to reorder it by. Here we are saying that we want our new column word2 to be composed of words ordered by the word count n.
-
-8. Using fct_reorder()
-Sure enough, we can see that this new column is of type <fct> or factor.
-
-9. Arranging the bar plot
-Now we can use this new, reordered factor column to create a bar plot that is arranged by word count and far easier to read.
-
-
-
-
-
-
-
-
-
+ggplot(word_counts, aes(x = word2, y = n, fill = product)) +
+  geom_col(show.legend = FALSE) +
+	# using `facet_wrap()`
+  facet_wrap(~ product, scales = "free_y") +
+  coord_flip() +
+  ggtitle("Review Word Counts")
+```
 
 
 
