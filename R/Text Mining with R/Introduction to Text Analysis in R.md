@@ -300,6 +300,7 @@ ggplot(word_counts, aes(x = word2, y = n, fill = product)) +
 ```R
 install.packages("wordcloud")
 library(wordcloud)
+
 word_counts <- tidy_review %>%
   count(word)
 wordcloud(
@@ -309,27 +310,179 @@ wordcloud(
 )
 ```
 
+* **Fixed size and random start points**
 
+	* Each time the function is called the location of each of the words changes
+	* The size of each of the words stays the same because the size in the cloud is based on the relative word count.
 
+* **Number of words in the cloud**
+	* What you set for the max.words depends on your specific application.
 
+```R
+# set a higher max.words, some words cut off
+wordcloud(
+  words = word_counts$word,
+  freq = word_counts$n,
+  max.words = 70
+)
+```
 
-1. Plotting word clouds
-A bar plot is probably the most effective way to visualize word counts. Sometimes you may need something a bit more evocative. Plus, if you’re doing text analysis, everyone probably assumes you know how to create word clouds.
+* **Using colors**
 
-2. Using wordcloud()
-The first thing we’ll need to do is load the wordcloud package. We do this by calling library(wordcloud). Note that the wordcloud package is not part of the tidyverse, nor does it adhere to the principle of tidy data. Fortunately, it’s inputs are simple enough. First, compute the word counts using our already-tokenized and cleaned tidy_review data. Remember that the output consists of a data frame with two columns: word and n. In the wordcloud function, the first argument is words. Because this function doesn’t adhere to tidy data, we have to use some syntax from base R: the dollar sign. Here we reference the data frame, dollar sign, and the column name for the words. That tells the words argument which column in our data has the words in it. The second argument is freq for frequency, or the word counts. We follow the same syntax and reference the data frame, dollar sign, and the column name for the word counts. We control how many words are plotted with the max.words argument. And with that, we have a word cloud!
+```R
+wordcloud(
+  words = word_counts$word,
+  freq = word_counts$n,
+  max.words = 30,
+  colors = "blue"
+)
+```
 
-3. Fixed size and random start points
-If we call that same code again we can see that the size of each of the words stays the same while the location of words in the cloud changes. This is because the size of each the words in the cloud is based on the relative word count, which is fixed. Meanwhile, where each word is located in the cloud is randomized each time the function is called.
+# 3. Sentiment Analysis
 
-4. Number of words in the cloud
-If we call that same code again with a higher max.words, we can see that we quickly run into problems while plotting, with some of the words cut off. What you set for the max.words depends on your specific application.
+## 3.1 Sentiment dictionaries
 
-5. Using colors
-We can also add a bit of color to the word cloud with another argument: colors. Here we can specify a color we’d like to use for the word cloud.
+* **Bing dictionary**
 
-6. Let's practice!
-We’ll build on this with some more advanced visualization topics as we move into sentiment analysis and topic modeling. For now, let’s practice making some word clouds!
+```R
+> library(tidytext)
+> get_sentiments("bing")
+# A tibble: 6,786 × 2
+   word        sentiment
+   <chr>       <chr>    
+ 1 2-faces     negative 
+ 2 abnormal    negative 
+ 3 abolish     negative 
+ 4 abominable  negative 
+ 5 abominably  negative 
+ 6 abominate   negative 
+ 7 abomination negative 
+ 8 abort       negative 
+ 9 aborted     negative 
+10 aborts      negative 
+# … with 6,776 more rows
+
+> get_sentiments("bing") %>%
++   count(sentiment)
+# A tibble: 2 × 2
+  sentiment     n
+  <chr>     <int>
+1 negative   4781
+2 positive   2005
+```
+
+* **Afinn dictionary**
+
+```R
+> library(textdata)
+> get_sentiments("afinn")
+# A tibble: 2,477 × 2                                                     
+   word       value
+    0s<chr>      <dbl>
+ 1 abandon       -2
+ 2 abandoned     -2
+ 3 abandons      -2
+ 4 abducted      -2
+ 5 abduction     -2
+ 6 abductions    -2
+ 7 abhor         -3
+ 8 abhorred      -3
+ 9 abhorrent     -3
+10 abhors        -3
+# … with 2,467 more rows
+
+> get_sentiments("afinn") %>%
++   summarize(
++     min = min(value),
++     max = max(value)
++   )
+# A tibble: 1 × 2
+    min   max
+  <dbl> <dbl>
+1    -5     5
+```
+
+* **Loughran dictionary**
+
+```R
+> get_sentiments("loughran")
+# A tibble: 4,150 × 2                                                                                          :  0s
+   word         sentiment
+   <chr>        <chr>    
+ 1 abandon      negative 
+ 2 abandoned    negative 
+ 3 abandoning   negative 
+ 4 abandonment  negative 
+ 5 abandonments negative 
+ 6 abandons     negative 
+ 7 abdicated    negative 
+ 8 abdicates    negative 
+ 9 abdicating   negative 
+10 abdication   negative 
+# … with 4,140 more rows
+
+sentiment_counts <- get_sentiments("loughran") %>%
+  count(sentiment) %>%
+  mutate(sentiment2 = fct_reorder(sentiment, n))
+
+ggplot(sentiment_counts, aes(x = sentiment2, y = n)) +
+  geom_col() +
+  coord_flip() +
+  labs(
+    title = "Sentiment Counts in Loughran",
+    x = "Counts",
+    y = "Sentiment"
+  )
+```
+
+## 3.2 Appending dictionaries
+
+* **Using inner_join()**
+
+```R
+tidy_review %>%
+	inner_join(get_sentiments("loughran"))
+```
+
+* **Counting sentiment**
+
+```R
+sentiment_review <- tidy_review %>%
+  inner_join(get_sentiments("loughran"))
+	
+sentiment_review %>%
+  count(sentiment)
+	
+sentiment_review %>%
+  count(word, sentiment) %>%
+  arrange(desc(n))
+```
+
+* **Visualizing sentiment**
+
+```R
+sentiment_review2 <- sentiment_review %>%
+  filter(sentiment %in% c("positive", "negative"))
+word_counts <- sentiment_review2 %>%
+  count(word, sentiment) %>%
+  group_by(sentiment) %>%
+  top_n(10, n) %>%
+  ungroup() %>%
+  mutate(word2 = fct_reorder(word, n))
+	
+ggplot(word_counts, aes(x = word2, y = n, fill = sentiment)) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~ sentiment, scales = "free") +
+  coord_flip() +
+  labs(
+    title = "Sentiment Word Counts",
+    x = "Words"
+  )
+```
+
+## 3.3 Improving sentiment analysis
+
+* 
 
 
 
