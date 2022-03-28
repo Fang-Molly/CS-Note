@@ -293,6 +293,44 @@ ggplot(word_counts, aes(x = word2, y = n, fill = product)) +
   ggtitle("Review Word Counts")
 ```
 
+## 2.4 Plotting word clouds
+
+* **Using `wordcloud()`**
+
+```R
+install.packages("wordcloud")
+library(wordcloud)
+word_counts <- tidy_review %>%
+  count(word)
+wordcloud(
+  words = word_counts$word,
+  freq = word_counts$n,
+  max.words = 30
+)
+```
+
+
+
+
+
+1. Plotting word clouds
+A bar plot is probably the most effective way to visualize word counts. Sometimes you may need something a bit more evocative. Plus, if you’re doing text analysis, everyone probably assumes you know how to create word clouds.
+
+2. Using wordcloud()
+The first thing we’ll need to do is load the wordcloud package. We do this by calling library(wordcloud). Note that the wordcloud package is not part of the tidyverse, nor does it adhere to the principle of tidy data. Fortunately, it’s inputs are simple enough. First, compute the word counts using our already-tokenized and cleaned tidy_review data. Remember that the output consists of a data frame with two columns: word and n. In the wordcloud function, the first argument is words. Because this function doesn’t adhere to tidy data, we have to use some syntax from base R: the dollar sign. Here we reference the data frame, dollar sign, and the column name for the words. That tells the words argument which column in our data has the words in it. The second argument is freq for frequency, or the word counts. We follow the same syntax and reference the data frame, dollar sign, and the column name for the word counts. We control how many words are plotted with the max.words argument. And with that, we have a word cloud!
+
+3. Fixed size and random start points
+If we call that same code again we can see that the size of each of the words stays the same while the location of words in the cloud changes. This is because the size of each the words in the cloud is based on the relative word count, which is fixed. Meanwhile, where each word is located in the cloud is randomized each time the function is called.
+
+4. Number of words in the cloud
+If we call that same code again with a higher max.words, we can see that we quickly run into problems while plotting, with some of the words cut off. What you set for the max.words depends on your specific application.
+
+5. Using colors
+We can also add a bit of color to the word cloud with another argument: colors. Here we can specify a color we’d like to use for the word cloud.
+
+6. Let's practice!
+We’ll build on this with some more advanced visualization topics as we move into sentiment analysis and topic modeling. For now, let’s practice making some word clouds!
+
 
 
 
