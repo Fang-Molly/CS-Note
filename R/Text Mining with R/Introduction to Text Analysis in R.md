@@ -482,7 +482,211 @@ ggplot(word_counts, aes(x = word2, y = n, fill = sentiment)) +
 
 ## 3.3 Improving sentiment analysis
 
-* 
+* **Count sentiment by rating**
+
+```R
+tidy_review %>%
+  inner_join(get_sentiments("bing")) %>%
+  count(stars, sentiment)
+```
+
+* **Using spread()**
+
+```R
+tidy_review %>%
+  inner_join(get_sentiments("bing")) %>%
+  count(stars, sentiment) %>%
+  spread(sentiment, n)
+```
+
+* **Computing overall sentiment**
+
+```R
+tidy_review %>%
+  inner_join(get_sentiments("bing")) %>%
+  count(stars, sentiment) %>%
+  spread(sentiment, n) %>%
+  mutate(overall_sentiment = positive - negative)
+```
+
+* **Visualize sentiment by rating**
+
+```R
+tidy_review %>%
+  inner_join(get_sentiments("bing")) %>%
+  count(stars, sentiment) %>%
+  spread(sentiment, n) %>%
+  mutate(
+    overall_sentiment = positive - negative,
+    stars = fct_reorder(stars, overall_sentiment)
+  )
+	
+ggplot(
+  sentiment_stars,
+  aes(x = stars, y = overall_sentiment, fill = as.factor((stars))) +
+  geom_col(show.legend = FALSE) +
+  coord_flip() +
+  labs(
+    title = "Overall Sentiment by Stars",
+    subtitle = "Reviews for Robotic Vacuums",
+    x = "Stars",
+    y = "Overall Sentiment"
+  )
+)
+```
+
+# 4. Topic Modeling
+
+## 4.1 Latent Dirichlet allocation
+
+* **Unsupervised learning**
+
+	* Some more natural language processing (NLP) vocabulary:
+		* Latent Dirichlet allocation (LDA) is a standard topic model
+		* A collection of documents is known as a corpus
+		* Bag-of-words is treating every word in a document separately
+		* Topic models find patterns of words appearing together
+		* Searching for patterns rather than predicting is known as unsupervised learning
+
+* **Clustering vs. topic modeling**
+
+	* Clustering
+		* Clusters are uncovered based on distance, which is continuous
+		* Every object is assigned to a single cluster
+
+	* Topic Modeling
+		* Topics are uncovered based on word frequency, which is discrete
+		* Every document is a mixture (i.e., partial member) of every topic.
+
+## 4.2 Document term matrices
+	
+* **Documents term matrices (DTM)**
+
+When you have a matrix that is composed mostly of zeros, this is referred to as sparsity or a sparse matrix.   
+
+* **Using cast_dtm()**
+
+```R
+tidy_review %>%
+  count(word, id) %>%
+  cast_dtm(id, word, n)
+```
+	
+* **Using as.matirx()**
+
+```R
+dtm_review <- tidy_review %>%
+	count(word, id) %>%
+	cast_dtm(id, word, n) %>%
+	as.matrix()
+dtm_review[1:4, 2000:2004]
+```
+
+## 4.3 Running topic models
+
+* **Using LDA()**
+
+```R
+install.packages("topicmodels")
+library(topicmodels)
+
+lda_out <- LDA(
+  dtm_review,
+  k = 2,
+  method = "Gibbs",
+  control = list(seed = 42)
+)
+```
+
+* **Using glimpse()**
+
+```R
+glimpse(lda_out)
+```
+
+* **Using tidy()**
+
+```R
+lda_topics <- lda_out %>%
+  tidy(matrix = "beta")
+lda_topics %>%
+  arrange(desc(beta))
+```
+
+## 4.4 Interpreting topics
+
+* **Two topics**
+
+```R
+lda_topics <- LDA(
+  dtm_review,
+  k = 2,
+  method = "Gibbs",
+  control = list(seed = 42)
+) %>%
+  tidy(matrix = "beta")
+
+word_probs <- lda_topics %>%
+  group_by(topic) %>%
+  top_n(15, beta) %>%
+  ungroup() %>%
+  mutate(term2 = fct_reorder(term, beta))
+	
+ggplot(
+  word_probs,
+  aes(term2, beta, fill = as.factor(topic))
+) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~ topic, scales = "free") +
+  coord_flip()
+```
+
+* **Three topics**
+
+```R
+lda_topics2 <- LDA(
+  dtm_review,
+  k = 3,
+  method = "Gibbs",
+  control = list(seed = 42)
+) %>%
+  tidy(matrix = "beta")
+
+word_probs2 <- lda_topics2 %>%
+  group_by(topic) %>%
+  top_n(15, beta) %>%
+  ungroup() %>%
+  mutate(term2 = fct_reorder(term, beta))
+
+ggplot(
+  word_probs2,
+  aes(term2, beta, fill = as.factor(topic))
+) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~ topic, scales = "free") +
+  coord_flip()
+```
+
+* **The art of model selection**
+
+	* Adding topics that are different is good
+	* If we start repeating topics, we've gone too far
+	* Name the topics based on the combination of high-probability words
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
