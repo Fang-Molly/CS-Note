@@ -3,20 +3,7 @@ Introduction to SQL
 
 # 1. Selecting columns
 
-## 1.1 Onboarding - Tables
-
-```SQL
-SELECT name FROM people
-```
-
-## 1.2 Onboarding - Multi-step Exercises
-
-```SQL
-SELECT 'SQL'
-AS result;
-```
-
-## 1.4 Beginning your SQL journey
+## 1.1 Beginning your SQL journey
 
 * SQL - Structured Query Language
 
@@ -26,17 +13,19 @@ AS result;
 
 * column/field
 
-## 1.5 SELECTing single columns
+## 1.2 SELECTing single columns
 
-* `SELECT` statement
-    * no case-sensitive
+* **`SELECT` statement**
+    * Key words: `SELECT`, `FROM`, 
+    * (Not necessary) No case-sensitive: make SQL keywords uppercase to distinguish them from other parts of your query
+    * (Not necessary) Include a semicolon at the end of your query to tell SQL where the end of your query is.
 
 ```SQL
 SELECT name
 FROM people;
 ```
 
-## 1.6 SELECTing multiple columns
+## 1.3 SELECTing multiple columns
 
 ```SQL
 SELECT name, birthdate
@@ -58,7 +47,7 @@ FROM people
 LIMIT 10;
 ```
 
-## 1.7 SELECT DISTINCT
+## 1.4 SELECT DISTINCT
 
 * select all the unique values from a column
 
@@ -67,7 +56,7 @@ SELECT DISTINCT language
 FROM films;
 ```
 
-## 1.8 Learning to COUNT
+## 1.5 Learning to COUNT
 
 * COUNT() function - return the number of rows in one or more columns
 
@@ -75,8 +64,6 @@ FROM films;
 SELECT COUNT(*)
 FROM people;
 ```
-
-## 1.9 Practice with COUNT
 
 * count the number of non-missing values in a particular column
 
