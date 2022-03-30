@@ -5,32 +5,28 @@ Introduction to SQL
 
 ## 1.1 Onboarding - Tables
 
-## 1.2 Onboarding - Query Result
-
 ```SQL
 SELECT name FROM people
 ```
 
-## 1.3 Onboarding - Errors
-
-## 1.4 Onboarding - Multi-step Exercises
+## 1.2 Onboarding - Multi-step Exercises
 
 ```SQL
 SELECT 'SQL'
-AS result
+AS result;
 ```
 
-## 1.5 Beginning your SQL journey
+## 1.4 Beginning your SQL journey
 
 * SQL - Structured Query Language
 
-    * a language for interacting with data stored in something called a relational database
+    * a language for interacting with data stored in something called a relational database (a collection of tables)
 
 * row/record
 
 * column/field
 
-## 1.6 SELECTing single columns
+## 1.5 SELECTing single columns
 
 * `SELECT` statement
     * no case-sensitive
@@ -40,7 +36,7 @@ SELECT name
 FROM people;
 ```
 
-## 1.7 SELECTing multiple columns
+## 1.6 SELECTing multiple columns
 
 ```SQL
 SELECT name, birthdate
@@ -62,7 +58,7 @@ FROM people
 LIMIT 10;
 ```
 
-## 1.8 SELECT DISTINCT
+## 1.7 SELECT DISTINCT
 
 * select all the unique values from a column
 
@@ -71,7 +67,7 @@ SELECT DISTINCT language
 FROM films;
 ```
 
-## 1.9 Learning to COUNT
+## 1.8 Learning to COUNT
 
 * COUNT() function - return the number of rows in one or more columns
 
@@ -80,7 +76,7 @@ SELECT COUNT(*)
 FROM people;
 ```
 
-## 1.10 Practice with COUNT
+## 1.9 Practice with COUNT
 
 * count the number of non-missing values in a particular column
 
