@@ -100,29 +100,76 @@ mv course.txt old-course.txt
 		* :p to go back to the previous one
 		* :q to quit.
 
+## 2.3 How can I look at the start of a file?
+
+* `head`: prints the first few lines of a file (where "a few" means 10)
+
+## 2.4 How can I type less?
+
+* tab completion
+	* If you start typing the name of a file and then press the tab key, the shell will do its best to auto-complete the path. 
+	* If the path is ambiguous, pressing tab a second time will display a list of possibilities. Typing another character or two to make your path more specific and then pressing tab will fill in the rest of the name.
+
+## 2.5 How can I control what commands do?
+
+* command-line flag (or just "flag" for short)
+
+`head -n 3 seasonal/summer.csv`: only display the first three lines of the file
+
+* A flag's name usually indicates its purpose
+
+	* `-n` is meant to signal "number of lines"
+
+* Command flags don't have to be a `-` followed by a single letter, but it's a widely-used convention.
+
+* `tail -n +7 file`: display all but the first six lines of the file
+
+## 2.6 How can I list everything below a directory?
+
+* `ls -R`: shows every file and directory in the current level, then everything in each sub-directory
+
+* `ls -R -F`: prints a / after the name of every directory and a * after the name of every runnable program. 
+	* The order of the flags doesn't matter, but the directory name must come last.
+
+## 2.7 How can I get help for a command?
+
+* `man`: short for "manual", `man head`
+	* `man` automatically invokes `less`, so you may need to press spacebar to page through the information and `:q` to quit.
+
+## 2.8 How can I select columns from a file?
+
+* `cut -f 2-5,8 -d , values.csv`: select columns 2 through 5 and columns 8, using comma as the separator
+	* flag order doesn't matter
+		* `-f`: meaning "fields", specify columns, `-f 1` is same as `-f1`
+		* `-d`: meaning "delimiter", specify the separator
+
+* `cut` is a simple-minded command. It doesn't understand quoted strings.
+
+## 2.9 How can I repeat commands?
+
+* `history`: print a list of commands you have run recently. Each one is preceded by a serial number to make it easy to re-run particular commands
+
+	* `!55`: re-run the 55th command in your history
+	* `!head`: re-run a command by typing an exclamation mark followed by the command's name
 
 
+## 2.10 How can I select lines containing specific values?
 
+* `grep`: selects lines according to what they contain
 
+	* `grep bicuspid seasonal/winter.csv`: prints lines from winter.csv that contain "bicuspid".
 
+* `grep`'s more common flags
+	* `-c`: print a count of matching lines rather than the lines themselves
+	* `-h`: do not print the names of files when searching multiple files
+	* `-i`: ignore case (e.g., treat "Regression" and "regression" as matches)
+	* `-l`: print the names of files that contain matches, not the matches
+	* `-n`: print line numbers for matching lines
+	* `-v`: invert the match, i.e., only show lines that don't match
 
+## 2.11 Why isn't it always safe to treat data as text?
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+* 
 
 
 
