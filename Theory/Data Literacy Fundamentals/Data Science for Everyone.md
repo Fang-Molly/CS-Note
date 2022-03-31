@@ -171,69 +171,129 @@ Data Science for Everyone
 
 # 3. Preparation, Exploration, and Visualization
 
+## 3.1 Data preparation
+
+* **Why prepare data?**
+	* Real-life data is messy  
+	* Preparation is done to prevent:  
+		* errors  
+		* incorrect results  
+		* biasing algorithms  
+		
+* **Cleaning data**
+	* Tidy data
+	* Remove duplicates
+	* Assign a unique ID
+	* Homogeneity
+	* Data types
+	* Missing values
+		* reasons:
+			* data entry
+			* error
+			* valid missing value
+		* solutions:
+			* impute
+			* drop
+			* keep
+		
+## 3.2 Exploratory Data Analysis
+
+* **What is Exploratory Data Analysis (EDA)?**
+
+	* Promoted by John Tukev, a respected statistician
+	* Consist in:
+		* Exploring the data
+		* Formulating hypotheses
+		* Assessing characteristics
+		* Visualizing
+
+## 3.3 Visualization
+
+* Use color purposefully
+* Colorblindness
+	* Red and green is the most common (but not the only one)
+	* Information and simulators online
+	* Existing color palettes accessible to everyone
+* Readable fonts
+	* sans-serif
+* Label
+	* title
+	* x axis label
+	* y axis label
+	* legend
+* Axes
+
+* Dashboard
+	* group all the relevant information in one place to make it easier to gather insights and act on them
+
+* Business Intelligence (BI) tools
+	* Let you clean, explore, visualize data and build dashboards, without requiring any programming knowledge
+	* Tableau, Looker, Power BI
+
+# 4. Experimentation and Prediction
+
+## 4.1 A/B Testing
+
+* **What are experiments in data science?**
+	* Form a question
+	* Form a hypothesis
+	* Collect data
+	* Test the hypothesis with a statistical test
+	* Interpret results
+
+* **What is A/B Testing?**
+
+	* AKA Champion/Challenger Testing, it's used to make a choice between two options
+
+* **A/B Testing Steps**
+
+	* Picking a metric to track
+	* Calculating sample size
+	* Running the experiment
+	* Checking for significance
+
+## 4.2 Time series forecasting
+
+* **Modeling in data science - What is a statistical model?**
+
+	* represent a real-world process with statistics
+	* mathematical relationships between variables, including random variables
+	* based on statistical assumptions and historical data
+ 
+* **Predictive modeling**
+
+	* enter new inputs and model predicts an outcome
+		* probability of an outcome
+	* Ranges in complexity, from a linear equation to a deep learning algorithm
+
+* **Time series data**
+
+* a series of data points sequenced by time. 
+* Examples: 
+	* stock prices 
+	* gas prices 
+	* unemployment rates
+	* heart rate
+	* CO2 levels
+	* height of tides
+
+* **Seasonality in time series**
+Often times when plotting time series, you can find patterns. For example, this plot graphs the average temperature in Boston over three years. Can you figure out the pattern here?
+
+* **Forecasting time series**
+
+
+## 4.3 Supervised machine learning
+
+
+
+## 4.4 Clustering
 
 
 
 
-# Chapter 3 Analysis and Visualization
-
-## 1. Dashboards
-
-### What is a dashboard?
-
-* A set of metrics, usually in the form of graphs, that update on a schedule.
-* update in realtime or daily or weekly
-
-### Tracking a value over time
-
-### Tracking composition over time
-
-### Categorical cpmparison
-
-### Highlighting a single number
-
-### Displaying text
-
-### Where can we build a dashboard?
-
-* Spreadsheets: Excel or Google Sheets
-* BI Tools: BI, Tableau, Looker
-* Customized tools: R Shiny or d3.js
-
-### Requesting a dashboard
-
-## 2. Ad hoc analysis
-
-### What is an ad hoc request?
-
-* Not repeated on a weekly or daily basis
-* Can come from many places
-    * Product
-    * Finance
-    * Engineering
     
 
-## 3. A/B Testing
-
-# Chapter 4 Prediction
-
-## 1. Supervised machine learning
-
-* What is supervised machine learning?
-
-    * Machine learning: Predictions from data
-    * Supervised machine learning: Predictions from data with labels and features
-        * Recommendation systems
-        * Email subject optimization
-        * Churn prediction
-
-
-
-## 2. Clustering
-
-## 3. Special topics in Machine Learning
-
-## 4. Deep Learning and Explainable AI
 
 
 
