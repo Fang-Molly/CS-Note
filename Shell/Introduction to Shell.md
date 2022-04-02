@@ -123,6 +123,7 @@ mv course.txt old-course.txt
 * Command flags don't have to be a `-` followed by a single letter, but it's a widely-used convention.
 
 * `tail -n +7 file`: display all but the first six lines of the file
+* `tail -n 5 file`: display the last 5 lines of the file
 
 ## 2.6 How can I list everything below a directory?
 
@@ -167,12 +168,51 @@ mv course.txt old-course.txt
 	* `-n`: print line numbers for matching lines
 	* `-v`: invert the match, i.e., only show lines that don't match
 
-## 2.11 Why isn't it always safe to treat data as text?
+# 3. Combining tools
 
-* 
+## 3.1 How can I store a command's output in a file?
+
+* `>`: the greater-than sign tells the shell to redirect to save the command's output anywhere you want. `head -n 5 seasonal/summer.csv > top.csv`
+
+## 3.2 How can I use a command's output as an input?
+
+* Using redirection to combine commands
+
+```
+# display lines 3-5 
+head -n 5 seasonal/winter.csv > top.csv
+tail -n 3 top.csv
+```
+
+* Two drawbacks:
+	* It leaves a lot of intermediate files lying around.
+	* The commands to produce your final result are scattered across several lines of history.
+
+
+## 3.3 What's a better way to combine commands?
+
+* `pipe`: using the vertical bar `|`
+
+`head -n 5 seasonal/summer.csv | tail -n 3`
+
+`cut -d , -f 2 seasonal/summer.csv | grep -v Tooth`
+
+`cut -d , -f 2 seasonal/summer.csv | grep -v Tooth | head -n 1`
+
+## 3.4 How can I count the records in a file?
 
 
 
+
+# 4. Batch processing
+
+
+
+
+
+
+
+# 5. Creating new tools
 
 
 
