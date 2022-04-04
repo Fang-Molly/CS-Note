@@ -201,10 +201,69 @@ tail -n 3 top.csv
 
 ## 3.4 How can I count the records in a file?
 
+* `wc`: short for "word count", prints the number of characters, words, and lines in a file.
 
+	* `-c`: for characters
+	* `-w`: for words
+	* `-l`: for lines
 
+`grep 2017-07 seasonal/spring.csv | wc -l`
+
+## 3.5 How can I specify many files at once?
+
+`cut -d , -f 1 seasonal/winter.csv seasonal/spring.csv seasonal/summer.csv seasonal/autumn.csv`
+
+* wildcards: specify a list of files with a single expression
+
+	* `*`: match zero or more characters, `cut -d , -f 1 seasonal/*` or `cut -d , -f 1 seasonal/*.csv`
+	* `?`: matches a single character
+		* `201?.txt` will match `2017.txt` or `2018.txt`, but not `2017-01.txt`
+	* `[...]`: matches any one of the characters inside the square brackets
+		* `201[78].txt` matches `2017.txt` or `2018.txt`, but not `2016.txt`.
+	* `{...}`: matches any of the comma-separated patterns inside the curly brackets
+		* `{*.txt, *.csv}` matches any file whose name ends with `.txt` or `.csv`, but not files whose names end with `.pdf`
+
+## 3.6 How can I sort lines of text?
+
+* `sort`: by default it does this in ascending alphabetical order
+	* `-n`: sort numerically
+	* `-r`: reverse the order of its output
+	* `-b`: ignore leading blanks
+	* `-f`: fold case (i.e., be case-insensitive) 
+	
+`cut -d , -f 2 seasonal/summer.csv | grep -v Tooth | sort -r`
+
+## 3.7 How can I remove duplicate lines?
+
+* `uniq`: remove duplicated lines
+
+	* `uniq -c`: display unique lines with a count of how often each occurs
+
+`cut -d , -f 2 seasonal/winter.csv | grep -v Tooth | sort | uniq -c`
+
+## 3.8 How can I save the output of a pipe?
+
+* put redirection at the front of a pipeline
+
+`> result.txt head -n 3 seasonal/winter.csv`
+
+## 3.9 How can I stop a running program?
+
+* `Ctrl` + `C`
+	* written `^C`
+	* `C` can be lowercase
 
 # 4. Batch processing
+
+## 4.1 How does the shell store information?
+
+
+
+
+
+
+
+
 
 
 
