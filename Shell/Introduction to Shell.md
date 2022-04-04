@@ -351,9 +351,80 @@ for filename in $datasets; do echo $filename; done
 
 ## 5.1 How can I edit a file?
 
+* `nano`: `nano filename`, it will open filename for editing (or create it if it doesn't already exist). 
 
+	* arrow keys: move around
+	* backspace: delete characters
+	* `Ctrl` + `K`: delete a line, cut the line
+	* `Ctrl` + `U`: un-delete a line, paste the line
+	* `Ctrl` + `O`: save the file ('O' stands for 'output'). You will also need to press Enter to confirm the filename!
+	* `Ctrl` + `X`: exit the editor
 
+## 5.2 How can I record what I just did?
 
+```
+$ cp seasonal/spring.csv seasonal/summer.csv ~
+$ > temp.csv grep -h -v Tooth spring.csv summer.csv
+# keep a record
+$ > steps.txt history | tail -n 3
+```
+
+## 5.3 How can I save commands to re-run later?
+
+* `.sh` file: put the command in a file
+	* `headers.sh`: `head -n 1 seasonal/*.csv`
+
+* Run the `.sh` file using `bash`
+	* `bash headers.sh`
+
+```
+# create a .sh file 
+$ nano dates.sh
+# use bash to run the file
+$ bash dates.sh
+```
+
+## 5.4 How can I re-use pipes?
+
+* shell script: a file full of shell commands, don't have to have names ending in `.sh`
+
+* all-dates.sh: `cut -d , -f 1 seasonal/*.csv | grep -v Date | sort | uniq`
+
+	* `bash all-dates.sh > dates.out`
+
+## 5.5 How can I pass filenames to scripts?
+
+* `$@`: dollar sign followed by at-sign, to mean "all of the command-line parameters given to the script".
+
+* unique-lines.sh: contains `sort $@ | uniq`
+
+```
+# the shell replaces $@ with seasonal/summer.csv and processes one or two files
+bash unique-lines.sh seasonal/summer.csv
+bash unique-lines.sh seasonal/summer.csv seasonal/autumn.csv
+```
+
+## 5.6 How can I process a single argument?
+
+* `$1`, `$2`: refer to specific command-line parameters
+
+* column.sh: `cut -d , -f $2 $1`
+	* `$1`: the first parameter, filename
+	* `$2`: the second parameter, column
+	* run: `bash column.sh seasonal/autumn.csv 1`
+
+## 5.7 How can I write loops in a shell script?
+
+```
+# Print the first and last data records of each file.
+# You can write them using semi-colons, or split them across lines without semi-colons to make them more readable
+
+for filename in $@
+do
+    head -n 2 $filename | tail -n 1
+    tail -n 1 $filename
+done
+```
 
 
 
