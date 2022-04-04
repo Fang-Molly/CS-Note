@@ -257,21 +257,101 @@ tail -n 3 top.csv
 
 ## 4.1 How does the shell store information?
 
+* shell stores information in variables
+
+	* environment variables: are available all the time. Their names are conventionally written in upper case.
+
+|Variable	|Purpose	                        |Value                |
+|:-------:|:-------------------------------:|:-------------------:|
+|`HOME`	  |User's home directory            |	`/home/repl`        |
+|`PWD`	  |Present working directory	      |Same as `pwd` command|
+|`SHELL`	|Which shell program is being used|`/bin/bash`          |
+|`USER`	  |User's ID                        |`repl`               |
+
+* `set`: get a complete list of environment variables
+
+`set | grep HISTFILESIZE`
+
+## 4.2 How can I print a variable's value?
+
+* `echo`: A simpler way to find a variable's value 
+* `echo $X`: get the value of a variable
+
+```
+# print its arguments
+$ echo hello DataCamphello DataCamp!
+hello DataCamp!
+# print the variable's name
+$ echo USER
+USER
+# print the variable's value
+$ echo $USER
+repl
+```
+
+## 4.3 How else does the shell store information?
+
+* shell variable: like a local variable in a programming language
+
+```
+# create a shell variable, assign a value to a name, without any spaces before or after the `=` sign
+training=seasonal/summer.csv
+
+# check the variable's value
+echo $training
+seasonal/summer.csv
+
+# get the first line 
+$ head -n 1 $training
+```
+
+## 4.4 How can I repeat a command many times?
+
+* loop: repeat commands many times
+
+	* The structure is `for` …variable… `in` …list… `; do` …body… `; done`
+
+```
+$ for filetype in gif jpg png; do echo $filetype; done
+
+gif
+jpg
+png
+```
+
+## 4.5 How can I repeat a command once for each file?
+
+```
+for filename in seasonal/*.csv; do echo $filename; done
+
+seasonal/autumn.csv
+seasonal/spring.csv
+seasonal/summer.csv
+seasonal/winter.csv
+```
+
+## 4.6 How can I record the names of a set of files?
+
+```
+datasets=seasonal/*.csv
+for filename in $datasets; do echo $filename; done
+```
+
+## 4.7 How can I run many commands in a single loop?
+
+`for file in seasonal/*.csv; do head -n 2 $file | tail -n 1; done`
 
 
+## 4.8 Why shouldn't I use spaces in filenames?
 
-
-
-
-
-
-
-
-
-
+`mv 'July 2017.csv' '2017 July data.csv'`
 
 
 # 5. Creating new tools
+
+## 5.1 How can I edit a file?
+
+
 
 
 
