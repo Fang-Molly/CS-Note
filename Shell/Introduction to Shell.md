@@ -168,6 +168,10 @@ mv course.txt old-course.txt
 	* `-n`: print line numbers for matching lines
 	* `-v`: invert the match, i.e., only show lines that don't match
 
+* square parentheses are a matching set such as `[eyfv]`
+	* `grep '[pc]' fruits.txt`
+
+
 # 3. Combining tools
 
 ## 3.1 How can I store a command's output in a file?
