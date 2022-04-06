@@ -24,7 +24,17 @@ Introduction to Bash Scripting
 
 
 
+# 3. Control Statements in Bash Scripting
 
+## 3.1 IF statements
+
+
+
+## 3.2 FOR loops & WHILE statements
+
+
+
+## 3.3 CASE statements
 
 
 
