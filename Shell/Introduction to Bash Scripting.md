@@ -282,9 +282,30 @@ echo "The average score is $(echo "($model1 + $model2) / 2" | bc)"
 	* R: `my_vector <- c(1, 3, 2, 4)`
 
 * Creating an array in Bash
+	* Declare without adding elements `declare -a my_first_array`
+	* Create and add elements at the same time `my_first_array=(1 2 3)
+		* No spaces around equals sign!
+		* Commas are not used to separate array elements in Bash
+
+* Important array properties
+
+	* `array[@]`: return all array elements. Bash requires curly brackets {} around the array name
+	
+	```
+	~ % my_array=(1 3 5 2)
+	~ % echo ${my_array[@]}
+	1 3 5 2
+	```
+	
+	* `#array[@]`: return the length of an array
+
+	```
+	~ % echo ${#my_array[@]}
+	4
+	```
+
+	* Accessing array elements using square brackets
 	* 
-
-
 
 
 
