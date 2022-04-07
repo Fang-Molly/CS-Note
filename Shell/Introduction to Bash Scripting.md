@@ -150,23 +150,142 @@ Hi there firstname lastname
 * **Single, double, backticks**
 
 	* Single quotes ('sometext') = Shell interprets what is between literally
+
+	```
+	~ % now_var='NOW'
+  ~ % now_var_singlequote='$now_var'
+	~ % echo $now_var_singlequote
+	$now_var
+	```
+
 	* Double quotes ("sometext") = Shell interprets literally except using `$` and backticks
+	
+	```
+	~ % now_var='NOW'
+  ~ % now_var_singlequote="$now_var"
+	~ % echo $now_var_singlequote
+	NOW
+	```
+	
 	* Backticks (`sometext`) = Shell runs the command and captures STDOUT back into a variable
 
+	```
+	~ % date
+	Thu Apr  7 11:07:39 EDT 2022
 
+	~ % rightnow_doublequote="The date is `date`."
+	~ % echo $rightnow_doublequote
+	The date is Thu Apr  7 11:08:10 EDT 2022.
+	```
 
+	* **Parentheses vs backticks**
 
-
-
-
-
-
-
-
+	```
+	~ % rightnow_parentheses="The date is $(date)."
+	~ % echo $rightnow_parentheses
+	The date is Thu Apr  7 11:09:58 EDT 2022.
+	```
+	
 ## 2.2 Numeric variables in Bash
 
+* Numbers are not natively supported in the shell
+
+```
+~ % 1 + 4
+zsh: command not found: 1
+```
+
+* `expr` is a useful utility program
+
+```
+~ % expr 1 + 4
+5
+```
+
+* `expr` cannot handle decimal places
+
+```
+~ % expr 1 + 2.5
+expr: not a decimal number: '2.5'
+```
+
+* `bc`: basic calculator, a useful command-line program
+	* type 'quit' to quit bc
+
+```
+~ % bc
+bc 1.06
+Copyright 1991-1994, 1997, 1998, 2000 Free Software Foundation, Inc.
+This is free software with ABSOLUTELY NO WARRANTY.
+For details type `warranty'. 
+5 + 7
+12
+1 + 2.5
+3.5
+quit
+~ %
+```
+
+* Using `bc` without opening the calculator by piping
+
+```
+~ % echo "5 + 7.5" | bc
+12.5
+```
+
+* `bc` has a `scale` argument for how many decimal places
+	* Note the use of `;` to separate 'lines' in terminal
+
+```
+~ % echo "10 / 3" | bc
+3
+~ % echo "scale=3; 10 / 3" | bc
+3.333
+```
+
+* Assign numeric variables like string variables, but there is no quotes around numeric variables
+
+```
+dog_name='Roger'
+dog_age=6
+echo "My dog's name is $dog_name and he is $dog_age years old"
+
+My dog's name is Roger and he is 6 years old
+```
+
+* Double bracket notation
+	* Beware this method uses `expr`, not `bc` (no decimals!)
+
+```
+~ % expr 5 + 7
+12
+~ % echo $((5 + 7))
+12
+```
+
+* Shell within a shell
+
+```
+model1=87.65
+model2=89.20
+echo "The total score is $(echo "$model1 + $model2" | bc)"
+echo "The average score is $(echo "($model1 + $model2) / 2" | bc)"
+```
 
 ## 2.3 Arrays in Bash
+
+* Two types of arrays in Bash
+	* `Normal` numerical-indexed structure
+
+* An array
+	* Python: `my_list = [1, 3, 2, 4]`
+	* R: `my_vector <- c(1, 3, 2, 4)`
+
+* Creating an array in Bash
+	* 
+
+
+
 
 
 
