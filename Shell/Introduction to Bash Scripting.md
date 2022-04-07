@@ -671,21 +671,46 @@ function print_filename {
     done
 }
 print_filename "LOTR.txt" "mod.txt" "A.py"
+
+The first file was LOTR.txt
+This file has name LOTR.txt
+This file has name mod.txt
+This file has name A.py
 ```
 
+* **Scope in programming**
 
-
-
-
-
-
+	* 'Global': something is accessible anywhere in the program, including inside FOR loops, IF statements, functions etc.
+	* 'Local': something is only accessible in a certain part of the program
 
 ## 4.3 Scheduling your scripts with Cron
 
+* **Why schedule scripts?**
+	* Regular tasks that need to be done.
+	* Optimal use of resources (running scripts in early hours of morning)
 
+* **What is cron?**
+	* Cron has been part of unix-like systems since the 70's
+	* The name comes from the Greek word for time, chronos.
+	* It's driven by something called a `crontab`, which is a file that contains `cronjobs`, which each tell `crontab` what code to run and when.
 
+* **Crontab and cronjob structure**
 
+ 	* There are 5 stars to set, one for each time unit, * means "every"
+		* 1st star: minute (0-59)
+		* 2nd star: hour (0-23)
+		* 3rd star: day of the month (1-31)
+		* 4th star: month (1-12)
+		* 5th star: day of the week (0-6, Sunday to Saturday), 7 is also Sunday on some system
 
+	* Cronjob example:
+		* `5 1 * * * bash myscript.sh`: run every day at 1:05 am
+		* `15 14 * * 7 bash myscript.sh`: run at 2:15pm every Sunday
+	
+	* Use a comma for specific intervals
+		* `15,30,45 * * * *`: run at the 15,30 and 45 minutes mark for whatever hours are specified by the second star
+	* Use a slash for "every x increment"
+		* `*/15 * * * *`: runs every 15 minutes
 
 
 
