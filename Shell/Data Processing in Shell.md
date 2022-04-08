@@ -141,6 +141,61 @@ Set a mandatory pause time (in seconds) between file downloads with `--wait`
 
 ## 2.1 Getting started with csvkit
 
+* **What is csvkit?**
+
+	* `csvkit` is a suite of command-line tools
+	* `csvkit` is developed in Python by Wireservice
+	* `csvkit` offers data processing and cleaning capabilities on CSV files
+	* `csvkit` has data capabilities that rival Python, R, and SQL
+
+* **csvkit installation**
+
+	* Install using Python package manager `pip`: `pip install csvkit`
+	* Upgrade to the latest version: `pip install --upgrade csvkit`
+
+* **Browsing the csvkit manual**
+
+Web-based documentation: https://csvkit.readthedocs.io/en/latest/tutorial.html
+
+* **in2csv: converting files to CSV**
+
+	* `in2csv`: converts tabular data files, like text or Excel, into CSV. 
+
+	* Syntax: `in2csv SpotifyData.xlsx > SpotifyData.csv`
+
+	* `--name` or `-n` option：print all sheet names
+	
+	```
+	in2csv -n SpotifyData.xlsx
+	
+	Worksheet1_Popularity
+	Worksheet2_MusicAttributes
+	```
+	
+	* `--sheet` option: select which sheet to convert
+
+	```
+	in2csv SpotifyData.xlsx --sheet "Worksheet1_Popularity" > Spotify_Popularity.csv
+	```
+
+	* `in2csv` does not print logs to console
+
+* **csvlook: data preview on the command line**
+
+	* `csvlook`: renders a CSV to the command line in a Markdown-compatible, fixed-width format
+	* Syntax: `csvlook Spotify_Popularity.csv`
+
+* **csvstat: descriptive stats on CSV data files**
+
+	* `csvstat`: prints descriptive summary statistics on all columns in CSV (e.g. mean, median, unique values counts)
+	* Syntax: `csvstat Spotify_Popularity.csv`
+
+## 2.2 Filtering data using csvkit
+
+
+
+
+## 2.3 Stacking data and chaining commands with csvkit
 
 
 
@@ -148,10 +203,23 @@ Set a mandatory pause time (in seconds) between file downloads with `--wait`
 
 # 3. Database Operations on the Command Line
 
+## 3.1 Pulling data from database
 
+## 3.2 Manipulating data using SQL syntax
 
-
+## 3.3 Pushing data back to database
 
 # 4. Data Pipeline on the Command Line
+
+## 4.1 Python on the command line
+
+
+
+## 4.2 Python package installation with pip
+
+
+
+## 4.3 Data job automation with cron
+
 
 
