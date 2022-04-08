@@ -689,10 +689,30 @@ This file has name A.py
 	* Regular tasks that need to be done.
 	* Optimal use of resources (running scripts in early hours of morning)
 
+* **What is a scheduler?**
+
+	* Scheduler runs jobs on a pre-determined schedule
+	* Commercial schedulers: Airflow, Luigi, Rundeck, etc.
+	* cron scheduler is 
+		* simple
+		* free
+		* customizable
+		* purely command-line
+		* native to MacOS and Linux
+
 * **What is cron?**
 	* Cron has been part of unix-like systems since the 70's
 	* The name comes from the Greek word for time, chronos.
 	* It's driven by something called a `crontab`, which is a file that contains `cronjobs`, which each tell `crontab` what code to run and when.
+	* Cron is a time-based job-scheduler
+	* Cron comes pre-installed in MacOS, Unix
+	* Cron can be installed in Windows via Cygwin or replaced with Windows Task Scheduler
+	* Cron is used to automate jobs like system maintenance, bash scripts, Python jobs, etc.
+
+* **What is crontab?**
+
+	* Crontab is a central file to keep track of cron jobs
+	* `crontab -l`: display all tasks currently scheduled via cron
 
 * **Crontab and cronjob structure**
 
@@ -712,11 +732,9 @@ This file has name A.py
 	* Use a slash for "every x increment"
 		* `*/15 * * * *`: runs every 15 minutes
 
+* **Add a job to crontab**
 
-
-
-
-
-
-
+	* Method 1: modify crontab using a text editor (e.g. nano, Vim, Emacs)
+	* Method 2: echo the scheduler command into crontab
+	`echo "* * * * * python create_model.py" | crontab`
 
