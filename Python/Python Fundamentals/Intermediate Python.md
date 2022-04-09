@@ -1,3 +1,6 @@
+Intermediate Python
+====================
+
 # 1 Matplotlib
 
 ## 1.1 Basic plots with Matplotlib
