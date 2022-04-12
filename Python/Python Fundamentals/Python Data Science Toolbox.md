@@ -180,12 +180,65 @@ print(result)
 
 ## 2.1 Scope and user-defined functions
 
+* **Scope in functions**
 
+	* Not all objects are accessible everywhere in a script
+	* Scope - part of the program where an object or name may be accessible
+		* Global scope - defined in the main body of a script
+		* Local scope - defined inside a function
+		* Built-in scope - names in the pre-defined built-ins module
 
+* **Global vs. local scope**
 
+```python
+>>> def square(value):
+...     """Returns the square of a number."""
+...     new_val = value ** 2
+...     return new_val
+... 
+>>> square(3)
+9
+```
 
+```python
+>>> new_val = 10
+>>> def square(value):
+...     """Returns the square of a number."""
+...     new_val = value ** 2
+...     return new_val
+... 
+>>> square(3)
+9
+>>> new_val
+10
+```
 
-
+```python
+>>> new_val = 10
+>>> def square(value):
+...     """Returns the square of a number."""
+...     new_value2 = new_val ** 2
+...     return new_value2
+... 
+>>> square(3)
+100
+>>> new_val = 20
+>>> square(new_val)
+400
+```
+```
+>>> new_val = 10
+>>> def square(value):
+...     """Returns the square of a number."""
+...     global new_val
+...     new_val = new_val ** 2
+...     return new_val
+... 
+>>> square(3)
+100
+>>> new_val
+100
+```
 
 ## 2.2 Nested functions
 
