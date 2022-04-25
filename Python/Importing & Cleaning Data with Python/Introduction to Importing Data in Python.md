@@ -1,1 +1,141 @@
+Introduction to Importing Data in Python
+=========================================
+
+# 1. Introduction and flat files
+
+## 1.1 Import data using Python's built-in open function
+
+* Import data from a large variety of import data sources:
+	* Flat files. e.g. .txts, .csvs
+	* Files from other software: Excel spreadsheets, Stata, SAS and MATLAB files
+	* Relational databases: SQLite & PostgreSQL
+
+* Plain text files 
+
+	* containing plain text, such as the opening of Mark Twain's novel The Adventures of Huckleberry Finn
+	* containing records, table data, such as titanic.csv, in which each
+
+
+* Reading a text file
+
+```python
+filename = 'example.txt'
+file = open(filename, mode='r') # 'r' is to read
+text = file.read()
+file.close()
+# check whether file is closed
+print(file.closed)
+
+# print a text file
+>>> print(text)
+1 shear 5 20.00
+2 compressional 10 2.00
+3 anisotropy 30 3.50
+4 perovskite 2 45.50
+5 olivine 25 33.19
+
+# writing to a file
+filename = 'example.txt'
+file = open(filename, mode='w') # 'w' is to write
+file.close()
+```
+
+* Context manager `with`
+
+```python
+>>> with open('example.txt', 'r') as file:
+...     print(file.read())
+... 
+1 shear 5 20.00
+2 compressional 10 2.00
+3 anisotropy 30 3.50
+4 perovskite 2 45.50
+5 olivine 25 33.19
+```
+
+* Importing text file line by line
+
+```python
+with open('moby_dick.txt') as file:
+    print(file.readline()) # print the first line
+    print(file.readline()) # print the second line
+    print(file.readline()) # print the third line
+```
+
+## 1.2 Importing flat files using NumPy
+
+* Why NumPy?
+	* NumPy arrays: standard for storing numerical data
+	* Essential for other packages: e.g. scikit-learn
+	* NumPy has a number of built-in functions
+		* loadtxt()
+		* genfromtxt()
+
+* Importing flat files using NumPy
+
+```python
+import numpy as np
+filename = 'MNIST.txt'
+data = np.loadtxt(filename, delimiter=',')
+
+# customize: skip the first row
+data = np.loadtxt(filename, delimiter=',', skiprows=1)
+
+# only the 1st and 3rd columns
+data = np.loadtxt(filename, delimiter=',', skiprows=1, usecols=[0,2])
+
+# import different datatypes
+data = np.loadtxt(filename, delimiter=',', dtype=str)
+
+# names tells us there is a header
+# dtype=None, it will figure out what types each column should be
+data = np.genfromtxt('titanic.csv', delimiter=',', names=True, dtype=None)
+
+# np.recfromcsv()
+data = np.genfromtxt('titanic.csv', delimiter=',', names=True)
+```
+
+## 1.3 Importing flat files using pandas
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
