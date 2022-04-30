@@ -97,6 +97,41 @@ data = np.genfromtxt('titanic.csv', delimiter=',', names=True)
 
 ## 1.3 Importing flat files using pandas
 
+* **What a data scientist needs**
+
+	* Two-dimensional labeled data structure(s)
+	* Columns of potentially different types
+	* Manipulate, slice, reshape, groupby, join, merge
+	* Perform statistics
+	* Work with time series data
+
+* **Pandas and the DataFrame**
+
+	* Wes McKinney developed the pandas library
+	* DataFrame = pythonic analog of R's data frame
+
+* **Manipulating pandas DataFrames**
+
+	* Exploratory data analysis
+	* Data wrangling
+	* Data preprocessing
+	* Building models
+	* Visualization 
+	* Standard and best practice to use pandas
+
+* **Importing using pandas**
+
+```python
+import pandas as pd
+filename = 'winequality-red.csv'
+data = pd.read_csv(filename)
+data1 = pd.read_csv(filename, nrows=5, header=None)
+data.head()
+data_array = data.values
+```
+
+# 2. Importing data from other file types
+
 
 
 
