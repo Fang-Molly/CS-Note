@@ -210,7 +210,9 @@ print(result)
 >>> square(3)
 9
 >>> new_val
-10
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+NameError: name 'new_val' is not defined
 ```
 
 ```python
@@ -242,7 +244,152 @@ print(result)
 
 ## 2.2 Nested functions
 
+```python
+def outer( ... ):
+	""" ... """
+	x = ...
+	
+	def inner( ... ):
+		""" ... """
+		y = x ** 2
+	return ...
+```
+
+```python
+def mod2plus5(x1, x2, x3):
+	"""Returns the remainder plus 5 of three values."""
+	
+	new_x1 = x1 % 2 + 5
+	new_x2 = x2 % 2 + 5
+	new_x3 = x3 % 2 + 5
+	
+	return (new_x1, new_x2, new_x3)
+```
+
+```python
+def mod2plus5(x1, x2, x3):
+	"""Returns the remainder plus 5 of three values."""
+
+	def inner(x):
+		"""Returns the remainder plus 5 of a value."""
+		return x % 2 + 5
+		
+	return (inner(x1), inner(x2), inner(x3))
+
+print(mod2plus5(1, 2, 3))
+(6, 5, 6)
+```
+
+```python
+def raise_val(n):
+	"""Return the inner function."""
+	
+	def inner(x):
+	"""Raise x to the power of n."""
+		raised = x ** n
+		return raised
+		
+	return inner
+
+square = raise_val(2)
+cube = raise_val(3)
+print(square(2), cube(4))
+
+4, 64
+```
+
+* **Using nonlocal**
+
+```python
+def outer():
+	"""prints the value of n."""
+	
+	def inner():
+		nonlocal n
+		n = 2
+		print(n)
+		
+	inner()
+	print(n)
+	
+outer()
+2
+2
+```
+
 ## 2.3 Default and flexible arguments
+
+* **Add a default argument**
+
+```python
+def power(number, pow=1):
+	"""Raise number to the power of pow."""
+	new_value = number ** pow
+	return new_value
+	
+power(9, 2)
+81
+
+power(9, 1)
+9
+
+power(9)
+9
+```
+
+```python
+def add_all(*args):
+	"""Sum all values in *args together."""
+	
+	# Initialize sum
+	sum_all = 0
+	
+	# Accumlate the sum
+	for num in args:
+		sum_all += num
+		
+	return sum_all
+
+add_all(1)
+1
+
+add_all(1, 2)
+3 
+
+add_all(5, 10, 15, 20)
+50
+```
+
+
+```python
+print_all(name="Hugo Bowne-Anderson", employer="DataCamp")
+```
+
+```python
+def print_all(**kwargs):
+	"""print out key-value pairs in **kwargs."""
+	
+	# print out the key-value pairs
+	for key, value in kwargs.items():
+		print(key + ": " + value)
+
+print_all(name="dumbledore", job="headmaster")
+
+job: headmaster
+name: dumbledore
+```
+
+
+
+
+
+
+
+
+
+
+
+
 
 # 3. Lambda functions and error-handling
 
