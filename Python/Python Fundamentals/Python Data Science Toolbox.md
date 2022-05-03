@@ -360,9 +360,13 @@ add_all(5, 10, 15, 20)
 50
 ```
 
+* **Flexible arguments: **kwargs**
 
 ```python
 print_all(name="Hugo Bowne-Anderson", employer="DataCamp")
+
+name: Hugo Bowne-Anderson
+employer: DataCamp
 ```
 
 ```python
@@ -379,21 +383,52 @@ job: headmaster
 name: dumbledore
 ```
 
-
-
-
-
-
-
-
-
-
-
-
-
 # 3. Lambda functions and error-handling
 
 ## 3.1 Lambda functions
+
+* **Lambda functions**
+
+```python
+>>> raise_to_power = lambda x, y: x ** y
+>>> raise_to_power(2, 3)
+8
+```
+
+* **Anonymous functions**
+
+	* Function map takes two arguments: `map(func, seq)`
+	* `map()` applies the function to ALL elements in the sequence
+
+```python
+nums = [48, 6, 9, 21, 1]
+square_all = map(lambda num: num ** 2, nums)
+print(square_all)
+
+<map object at 0x1273536a0>
+
+print(list(square_all))
+
+[2304, 36, 81, 441, 1]
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ## 3.2 Introduction to error handling
 
