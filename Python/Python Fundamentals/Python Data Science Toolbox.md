@@ -412,28 +412,452 @@ print(list(square_all))
 [2304, 36, 81, 441, 1]
 ```
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ## 3.2 Introduction to error handling
 
-# 4. Lambda functions and error-handling
+* **Passing valid arguments**
+
+```python
+>>> def sqrt(x):
+...     """Returns the square root of a number."""
+...     return x ** (0.5)
+... 
+>>> sqrt(4)
+2.0
+>>> sqrt(10)
+3.1622776601683795
+>>> sqrt('hello')
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "<stdin>", line 3, in sqrt
+TypeError: unsupported operand type(s) for ** or pow(): 'str' and 'float'
+```
+
+* **Errors and exceptions**
+
+	* Exceptions - caught during execution
+	* catch exceptions with try-except clause
+		* Runs the code following try
+		* If there's an exception, run the code following except
+
+```python
+def sqrt(x):
+    """Returns the square root of a number."""
+    try: 
+        return x ** 0.5
+    except:
+        print('x must be an int or float')
+
+>>> sqrt(4)
+2.0
+>>> sqrt(10)
+3.1622776601683795
+>>> sqrt('hi')
+x must be an int or float
+```
+
+
+```python
+def sqrt(x):
+    """Returns the square root of a number."""
+    try: 
+        return x ** 0.5
+    except TypeError:
+        print('x must be an int or float')
+
+>>> sqrt(-9)
+(1.8369701987210297e-16+3j)
+>>> sqrt(9)
+3.0
+>>> sqrt('hi')
+x must be an int or float
+```
+
+```python
+def sqrt(x):
+    """Returns the square root of a number."""
+    if x < 0:
+        raise ValueError('x must be non-negative')
+    try: 
+        return x ** 0.5
+    except TypeError:
+        print('x must be an int or float')
+
+>>> sqrt(-9)
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "<stdin>", line 4, in sqrt
+ValueError: x must be non-negative
+```
+
+
+# 4. Using iterators in PythonLand
+
+## 4.1 Introduction to iterators
+
+* **Iterating with a for loop**
+
+```python
+# iterate over a list
+employees = ['Nick', 'Lore', 'Hugo']
+for employee in employees:
+    print(employee)
+
+Nick
+Lore
+Hugo
+
+# iterate over a string
+for letter in 'DataCamp':
+    print(letter)
+	
+D
+a
+t
+a
+C
+a
+m
+p
+
+# iterate over a range object
+for i in range(4):
+    print(i)
+	
+0
+1
+2
+3
+```
+
+* **Iterators vs. iterables**
+
+	* Iterable
+		* Examples: lists, strings, dictionaries, file connections
+		* An object with an associated `iter()` method
+		* Applying `iter()` to an iterable creates an iterator
+
+	* Iterator
+		* Produces next value with `next()`
+
+* **Iterating over iterables : `next()`**
+
+```python
+>>> word = 'Da'
+>>> it = iter(word)
+>>> next(it)
+'D'
+>>> next(it)
+'a'
+>>> next(it)
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+StopIteration
+```
+
+* **Iterating at once with `*`**
+
+```python
+>>> word = 'Data'
+>>> it = iter(word)
+>>> print(*it)
+D a t a
+```
+
+* **Iterating over dictionaries**
+
+```python
+pythonistas = {'hugo':'bowne-anderson', 'francis':'castro'}
+for key, value in pythonistas.items():
+    print(key, value)
+	
+hugo bowne-anderson
+francis castro
+```
+
+* **Iterating over file connections**
+
+```python
+file = open('file.txt')
+it = iter(file)
+print(next(it))
+
+This is the first line.
+
+print(next(it))
+
+This is the second line.
+```
+
+## 4.2 Playing with iterators
+
+* **Using enumerate()**
+
+```python
+avengers = ['hawkeye', 'iron man', 'thor', 'quicksilver']
+e = enumerate(avengers)
+
+>>> e
+<enumerate object at 0x1421c7200>
+>>> print(type(e))
+<class 'enumerate'>
+
+>>> e_list = list(e)
+>>> print(e_list)
+[(0, 'hawkeye'), (1, 'iron man'), (2, 'thor'), (3, 'quicksilver')]
+
+>>> for index, value in enumerate(avengers):
+...     print(index, value)
+... 
+0 hawkeye
+1 iron man
+2 thor
+3 quicksilver
+
+>>> for index, value in enumerate(avengers, start=10):
+...     print(index, value)
+... 
+10 hawkeye
+11 iron man
+12 thor
+13 quicksilver
+```
+
+* **Using zip()**
+
+```python
+>>> avengers = ['hawkeye', 'iron man', 'thor', 'quicksilver']
+>>> names = ['barton', 'stark', 'odinson', 'maximoff']
+>>> z = zip(avengers, names)
+>>> print(type(z))
+<class 'zip'>
+
+>>> print(z)
+<zip object at 0x1421c7480>
+>>> print(*z)
+('hawkeye', 'barton') ('iron man', 'stark') ('thor', 'odinson') ('quicksilver', 'maximoff')
+
+>>> z_list = list(z)
+>>> z_list
+[('hawkeye', 'barton'), ('iron man', 'stark'), ('thor', 'odinson'), ('quicksilver', 'maximoff')]
+
+>>> for z1, z2 in zip(avengers, names):
+...     print(z1, z2)
+... 
+hawkeye barton
+iron man stark
+thor odinson
+quicksilver maximoff
+```
+
+## 4.3 Using iterators to load large files into memory
+
+* **Loading data in chunks**
+
+	* There can be too much data to hold in memory
+	* Solution: load data in chunks!
+	* `pandas` function: `read_csv()`
+		* Specify the chunk: `chunksize`
+
+* **Iterating over data**
+
+```python
+import pandas as pd
+result = []
+for chunk in pd.read_csv('data.csv', chunksize=1000):
+	result.append(sum(chunk['x']))
+total = sum(result)
+print(total)
+
+4252532
+```
+
+```python
+import pandas as pd
+total = 0
+for chunk in pd.read_csv('data.csv', chunksize=1000):
+	total += sum(chunk['x'])
+print(total)
+
+4252532
+```
+
 
 # 5. List comprehensions and generators
 
-# 6. 
+## 5.1 List comprehensions
+
+* **Populate a list with a for loop**
+
+```python
+>>> nums = [12, 8, 21, 3, 16]
+>>> new_nums = []
+>>> for num in nums:
+...     new_nums.append(num + 1)
+... 
+>>> print(new_nums)
+[13, 9, 22, 4, 17]
+```
+
+* **A list comprehension**
+
+```pyhton
+>>> nums = [12, 8, 21, 3, 16]
+>>> new_nums = [num + 1 for num in nums]
+>>> print(new_nums)
+[13, 9, 22, 4, 17]
+```
+
+* **List comprehension with range()**
+
+```python
+>>> result = [num for num in range(11)]
+>>> print(result)
+[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+```
+
+* **List comprehesions**
+
+	* Collapse for loops for building lists into a single line
+	* Components
+		* Iterable
+		* Iterator variable (represent members of iterable)
+		* Output expression
+
+* **Nested loops**
+
+```python
+pairs_1 = []
+for num1 in range(0, 2):
+    for num2 in range(6, 8):
+        pairs_1.append((num1, num2))
+		
+>>> print(pairs_1)
+[(0, 6), (0, 7), (1, 6), (1, 7)]
+
+pairs_2 = [(num1, num2) for num1 in range(0, 2) for num2 in range(6, 8)]
+>>> print(pairs_2)
+[(0, 6), (0, 7), (1, 6), (1, 7)]
+```
+
+## 5.2 Advanced comprehensions
+
+* **Conditionals in comprehensions**
+
+	* Conditionals on the iterable
+
+	```python
+	>>> [num ** 2 for num in range(10) if num % 2 == 0]
+	[0, 4, 16, 36, 64]
+	```
+	
+	* Conditionals on the output expression
+
+	```python
+	>>> [num ** 2 if num % 2 == 0 else 0 for num in range(10)]
+	[0, 0, 4, 0, 16, 0, 36, 0, 64, 0]
+	```
+
+* **Dict comprehensions**
+
+	* Create dictionaries
+	* Use curly braces `{}` instead of brackets `[]`
+
+	```python
+	>>> pos_neg = {num: -num for num in range(9)}
+	>>> print(pos_neg)
+	{0: 0, 1: -1, 2: -2, 3: -3, 4: -4, 5: -5, 6: -6, 7: -7, 8: -8}
+	>>> print(type(pos_neg))
+	<class 'dict'>
+	```
+
+## 5.3 Introduction to generator expressions
+
+```python
+>>> [2 * num for num in range(10)]
+[0, 2, 4, 6, 8, 10, 12, 14, 16, 18]
+
+>>> (2 * num for num in range(10))
+<generator object <genexpr> at 0x1421a9c10>
+```
+
+* **List comprehensions vs. generators**
+
+	* List comprehension - returns a list
+	* Generators - returns a generator object
+	* Both can be iterated over
+
+* **Printing values from generators**
+
+```python
+>>> result = (num for num in range(6))
+>>> for num in result:
+...     print(num)
+... 
+0
+1
+2
+3
+4
+5
+
+>>> result = (num for num in range(6))
+>>> print(list(result))
+[0, 1, 2, 3, 4, 5]
+```
+
+* **Lazy evaluation
+
+```
+>>> result = (num for num in range(6))
+>>> print(next(result))
+0
+>>> print(next(result))
+1
+>>> print(next(result))
+2
+>>> print(next(result))
+3
+>>> print(next(result))
+4
+```
+
+* **Conditionals in generator expressions**
+
+```python
+>>> even_nums = (num for num in range(10) if num % 2 == 0)
+>>> print(list(even_nums))
+[0, 2, 4, 6, 8]
+```
+
+* **Generator functions**
+
+	* Produces generator objects when called
+	* Defined like a regular function - `def`
+	* Yields a sequence of values instead of returning a single value
+	* Generates a value with `yield` keyword
+
+* **Build a generator function**
+
+	* sequence.py
+	
+	```python
+	def num_sequence(n):
+    """Generate values from 0 to n."""
+    i = 0
+    while i < n:
+        yield i
+        i += 1
+		
+	>>> result = num_sequence(5)
+	>>> print(type(result))
+	<class 'generator'>
+	>>> for item in result:
+	...     print(item)
+	... 
+	0
+	1
+	2
+	3
+	4
+	```
+	
