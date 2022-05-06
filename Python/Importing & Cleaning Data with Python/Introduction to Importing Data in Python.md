@@ -282,22 +282,74 @@ print(type(mat['x']))
 
 # 3. Working with relational databases in Python
 
-Introduction to relational databases
+## 3.1 Introduction to relational databases
+
+* **What is a relational database?**
+
+	* Based on relational model of data
+	* First described by Edgar "Ted" Codd
+
+* **Relational model**
+
+	* Widely adopted
+	* Codd's 12 Rules/Commandments
+		* Consists of 13 rules (zero-indexed!)
+		* Describes what a Relational Database Management System should adhere to to be considered ralational
+
+* **Relational Database Management Systems**
+
+	* PostgreSQL
+	* MySQL
+	* SQLite
+	* SQL = Structured Query Language
+
+## 3.2 Creating a database engine in Python
+
+* Creating a database engine
+
+	* SQLite database
+		* Fast and simple
+	* SQLAlchemy
+		* Works with many Relational Database Management Systems
+
+```python
+from sqlalchemy import create_engine
+engine = create_engine('sqlite:///Northwind.sqlite')
+
+table_names = engine.table_names()
+print(table_names)
+```
+
+## 3.3 Querying relational databases in Python
+
+* **Basic SQL query**
+
+```
+SELECT * FROM Table_Name
+```
+
+* Returns all columns of all rows of the table
+
+```
+SELECT * FROM Orders
+```
+
+* We'll use SQLAlchemy and pandas
 
 
-Creating a database engine in Python
-
-
-
-Querying relational databases in Python
-
-
-Querying relational databases directly with pandas
 
 
 
 
-Advanced querying: exploiting table relationships
+
+
+
+## 3.4 Querying relational databases directly with pandas
+
+
+
+
+## 3.5 Advanced querying: exploiting table relationships
 
 
 
