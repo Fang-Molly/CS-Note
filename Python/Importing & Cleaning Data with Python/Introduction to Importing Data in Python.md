@@ -227,7 +227,7 @@ print(type(data))
 * **The structure of HDF5 files**
 
 ```python
-for key in data.key():
+for key in data.keys():
 	print(key)
 	
 meta
@@ -236,18 +236,68 @@ strian
 
 print(type(data['meta']))
 <class 'h5py._hl.group.Group'>
+
+for key in data['meta'].keys():
+	print(key)
+
+print(np.array(data['meta']['Description']), np.array(data['meta']['Detector']))
 ```
 
+* **The HDF Project**
+
+	* Actively maintained by the HDF Group
+	* Based in Champaign, Illinois
+
+## 2.4 Importing MATLAB files
+
+* **MATLAB**
+
+	* Matrix Laboratory
+	* Industry standard in engineering and science
+	* Data saved as .mat files
+
+* **SciPy to the rescue!**
+
+	* scipy.io.loadmat() - read .mat files
+	* scipy.io.savemat() - write .mat files
+
+* **Importing a .mat file**
+
+```python
+import scipy.io
+filename = 'workspace.mat'
+mat = scipy.io.loadmat(filename)
+print(type(mat))
+
+<class 'dict'>
+```
+
+* keys = MATLAB variable names
+* values = objects assigned to variables
+
+```python
+print(type(mat['x']))
+<class 'numpy.ndarray'>
+```
+
+# 3. Working with relational databases in Python
+
+Introduction to relational databases
+
+
+Creating a database engine in Python
+
+
+
+Querying relational databases in Python
+
+
+Querying relational databases directly with pandas
 
 
 
 
-
-
-
-
-
-
+Advanced querying: exploiting table relationships
 
 
 
