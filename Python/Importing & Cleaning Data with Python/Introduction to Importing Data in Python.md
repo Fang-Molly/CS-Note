@@ -336,20 +336,66 @@ SELECT * FROM Orders
 
 * We'll use SQLAlchemy and pandas
 
+* **Workflow of SQL querying**
 
+	* Import packages and functions
+	* Create the database engine
+	* Connect to the engine
+	* Query the database
+	* Save query results to a DataFrame
+	* Close the connection
 
+```python
+from sqlalchemy import create_engine
+import pandas as pd
+engine = create_engine('sqlite:///Northwind.sqlite')
+con = engine.connect()
+rs = con.execute("SELECT * FROM Orders")
+df = pd.DataFrame(rs.fetchall())
+# set column names
+df.columns = rs.keys()
+con.close()
+```
 
+* **Using the context manager**
 
+```
+from sqlalchemy import create_engine
+import pandas as pd
+engine = create_engine('sqlite:///Northwind.sqlite')
 
-
-
+with engine.connect() as con:
+	rs = con.execute("SELECT OrderID, orderDate, ShipName From Orders")
+	df = pd.DataFrame(rs.fetchmany(size=5))
+	df.columns = rs.keys()
+```
 
 ## 3.4 Querying relational databases directly with pandas
 
+```
+from sqlalchemy import create_engine
+import pandas as pd
+engine = create_engine('sqlite:///Northwind.sqlite')
 
+with engine.connect() as con:
+	rs = con.execute("SELECT * FROM Orders")
+	df = pd.DataFrame(rs.fetchmany())
+	df.columns = rs.keys()
 
+df = pd.read_sql_query("SELECT * FROM Orders", engine)
+```
 
 ## 3.5 Advanced querying: exploiting table relationships
+
+* **INNER JOIN in Python (pandas)**
+
+```
+from sqlalchemy import create_engine
+import pandas as pd
+engine = create_engine('sqlite:///Northwind.sqlite')
+df = pd.read_sql_query("SELECT OrderID, CompanayName FROM Orders INNER JOIN Customers on Orders.CustomerID = Customers.CustomerID", engine)
+print(df.head())
+```
 
 
 
