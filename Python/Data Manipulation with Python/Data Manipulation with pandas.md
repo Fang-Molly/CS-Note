@@ -131,12 +131,42 @@ dogs["weight_kg"].cumsum()
 
 ```python
 vet_visits.drop_duplicates(subset="name")
+
+# drop duplicate pairs
+unique_dogs = vet_visits.drop_duplicates(subset=["name", "breed"])
+
+unique_dogs["breed"].value_counts()
+
+# sort
+unique_dogs["breed"].value_counts(sort=True)
+
+# proportions
+unique_dogs["breed"].value_counts(normalize=True)
 ```
 
+## 2.3 Grouped summary statistics
 
+* **Summaries by group**
 
+```python
+dogs[dogs["color"] == "Black"]["weight_kg"].mean()
+dogs[dogs["color"] == "Brown"]["weight_kg"].mean()
+dogs[dogs["color"] == "White"]["weight_kg"].mean()
+dogs[dogs["color"] == "Gray"]["weight_kg"].mean()
+dogs[dogs["color"] == "Tan"]["weight_kg"].mean()
 
+# Grouped summaries
+dogs.groupby("color")["weight_kg"].mean()
 
+# multiple grouped summaries
+dogs.groupby("color")["weight_kg"].agg([min, max, sum])
+
+# group by multiple variables
+dogs.groupby(["color", "breed"])["weight_kg"].mean()
+
+# many groups, many summaries
+dogs.groupby(["color", "breed"])[["weight_kg", "height_cm"]].mean()
+```
 
 
 
