@@ -168,6 +168,103 @@ dogs.groupby(["color", "breed"])["weight_kg"].mean()
 dogs.groupby(["color", "breed"])[["weight_kg", "height_cm"]].mean()
 ```
 
+## 2.4 Pivot tables
+
+* **Group by to pivot table**
+
+```python
+dogs.groupby("color")["weight_kg"].mean()
+
+dogs.pivot_table(values="weight_kg", index="color")
+```
+
+* **Different statistics**
+
+```python
+import numpy as np
+dogs.pivot_table(values="weight_kg", index="color", aggfunc=np.median)
+
+# multiple statistics
+dogs.pivot_table(values="weight_kg", index="color", aggfunc=[np.mean, np.median])
+```
+
+* **Pivot on two variables**
+
+```python
+dogs.groupby(["color", "breed"])["weight_kg"].mean()
+
+dogs.pivot_table(values="weight_kg", index="color", columns="breed")
+
+# fill missing values in pivot tables
+dogs.pivot_table(values="weight_kg", index="color", columns="breed", fill_value=0)
+
+# sum with pivot tables
+dogs.pivot_table(values="weight_kg", index="color", columns="breed", fill_value=0, margins=True)
+```
+
+# 3. Slicing and Indexing DataFrames
+
+## 3.1 Explicit indexes
+
+* **`.columns` and `.index`**
+
+```python
+dogs.columns
+
+dogs.index
+```
+
+* **Setting a column as the index**
+
+```python
+dogs_ind = dogs.set_index("name")
+print(dogs_ind)
+# Index values don't need to be unique
+```
+
+* **Removing an index**
+
+```python
+# reset the index, keep its contents
+dogs_ind.reset_index()
+
+# reset the index, drop its contents
+dogs_ind.reset_index(drop=True)
+```
+
+* **Indexes make subsetting simpler**
+
+```python
+dogs[dogs["name"].isin(["Bella", "Stella"])]
+
+dogs_ind.loc[["Bella", "Stella"]]
+```
+
+* **Subsetting on duplicated index values**
+
+```python
+dogs_ind2 = dogs.set_index("breed")
+
+dogs_ind2.loc["Labrador"]
+```
+
+* **Multi-level indexes a.k.a. hierarchical indexes**
+
+```python
+dogs_ind3 = dogs.set_index(["breed", "color"])
+
+# subset the outer level with a list
+dogs_ind3.loc[["Labrador", "Chihuahua"]]
+
+# subset inner levels with a list of tuples
+dogs_ind3.loc[[("Labrador", "Brown"), ("Chihuahua", "Tan")]]
+
+# sort by index values
+dogs_ind3.sort_index()
+
+# control sort_index
+dogs_ind3.sort_index(level=["color", "breed"], ascending=[True, False])
+```
 
 
 
@@ -192,13 +289,4 @@ dogs.groupby(["color", "breed"])[["weight_kg", "height_cm"]].mean()
 
 
 
-
-
-
-
-
-
-
-
-
-
+# 4. Creating and Visualizing DataFrames
