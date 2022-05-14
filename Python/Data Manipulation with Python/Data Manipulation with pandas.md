@@ -266,6 +266,8 @@ dogs_ind3.sort_index()
 dogs_ind3.sort_index(level=["color", "breed"], ascending=[True, False])
 ```
 
+## 3.2 Slicing and subsetting with .loc and .iloc
+
 
 
 
