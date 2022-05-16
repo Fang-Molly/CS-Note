@@ -268,27 +268,278 @@ dogs_ind3.sort_index(level=["color", "breed"], ascending=[True, False])
 
 ## 3.2 Slicing and subsetting with .loc and .iloc
 
+* **Slicing lists**
 
+```python
+breeds = ["Labrador", "Poodle", "Chow Chow", "Schnauzer", "Labrador", "Chihuahua", "St. Bernard"]
 
+>>> breeds[2:5]
+['Chow Chow', 'Schnauzer', 'Labrador']
 
+>>> breeds[:3]
+['Labrador', 'Poodle', 'Chow Chow']
 
+>>> breeds[:]
+['Labrador', 'Poodle', 'Chow Chow', 'Schnauzer', 'Labrador', 'Chihuahua', 'St. Bernard']
+```
 
+* **Sort the index before you slice
 
+```python
+dogs_srt = dogs.set_index(["breed", "color"]).sort_index()
+print(dogs_srt)
 
+# slice the outer index level
+dogs_srt.loc["Chow Chow":"Poodle"]
 
+# slice the inner index levels badly
+dogs_srt.loc["Tan":"Grey"]
 
+# slice the inner index levels correctly
+dogs_srt.loc[("Labrador", "Brown"):("Schnauzer", "Grey")]
+```
 
+* **Slicing columns**
 
+```python
+dogs_srt.loc[:, "name":"height_cm"]
 
+# slice twice
+dogs_srt.loc[("Labrador", "Brown"):("Schnauzer", "Grey"), "name":"height_cm"]
+```
 
+```python
+dogs = dogs.set_index("date_of_birth").sort_index()
+print(dogs)
 
+# slice by date
+dogs.loc["2014-08-25":"2016-09-16"]
 
+# slice by partial dates
+dogs.loc["2014":"2016"]
 
+# subset by row/column number
+print(dogs.iloc[2:5, 1:4])
+```
 
+## 3.3 Working with pivot tables
 
+* **Pivoting the dog pack**
 
+```python
+dogs_height_by_bread_vs_color = dog_pack.pivot_table("height_cm", index="breed", columns="color")
 
+print(dogs_height_by_breed_vs_color)
 
+# .loc + slicing is a power combo
+dogs_height_by_breed_vs_color.loc["Chow Chow":"Poodle"]
 
+# The axis argument
+dogs_height_by_breed_vs_color.mean(axis="index")
+
+dogs_height_by_breed_vs_color.mean(axis="columns")
+```
+
+```python
+# Add a year column to temperatures
+temperatures["year"] = temperatures["date"].dt.year
+
+# Pivot avg_temp_c by country and city vs year
+temp_by_country_city_vs_year = temperatures.pivot_table("avg_temp_c", index = ["country", "city"], columns = "year")
+```
 
 # 4. Creating and Visualizing DataFrames
+
+## 4.1 Visualizing your data
+
+* **Histograms**
+
+```python
+import matplotlib.pyplot as plt
+
+dog_pack["height_cm"].hist()
+plt.show()
+
+dog_pack["height_cm"].hist(bins=20)
+plt.show()
+
+dog_pack["height_cm"].hist(bins=5)
+plt.show()
+```
+
+* **Bar plots**
+
+```python
+avg_weight_by_breed = dog_pack.groupby("breed")["weight_kg"].mean()
+avg_weight_by_breed.plot(kind="bar")
+plt.show()
+
+avg_weight_by_breed.plot(kind="bar", title="Mean Weight by Dog Breed")
+plt.show()
+```
+
+* **Line plots**
+
+```python
+sully.plot(x="date", y="weight_kg", kind="line")
+plt.show()
+
+sully.plot(x="date", y="weight_kg", kind="line", rot=45)
+plt.show()
+```
+
+* **Scatter plots**
+
+```python
+dog_pack.plot(x="height_cm", y="weight_kg", kind="scatter")
+plt.show()
+```
+
+* **Layering plots**
+
+```python
+dog_pack[dog_pack["sex"]=="F"]["height_cm"].hist()
+dog_pack[dog_pack["sex"]=="M"]["height_cm"].hist()
+
+# add a legend
+plt.legend(["F", "M"])
+
+plt.show()
+
+# transparency
+dog_pack[dog_pack["sex"]=="F"]["height_cm"].hist(alpha=0.7)
+dog_pack[dog_pack["sex"]=="M"]["height_cm"].hist(alpha=0.7)
+plt.legend(["F", "M"])
+plt.show()
+```
+
+## 4.2 Missing values
+
+* **Detecting missing values**
+
+```python
+dogs.isna()
+
+# Detecting any missing values
+dogs.isna().any()
+
+# count missing values
+dogs.isna().sum()
+
+# plot missing values
+import matplotlib.pyplot as plt
+dogs.isna().sum().plot(kind="bar")
+plt.show()
+
+# remove missing values
+dogs.dropna()
+
+# replace missing values
+dogs.fillna(0)
+```
+
+## 4.3 Creating DataFrames
+
+* **Dictionaries**
+
+```python
+my_dict = {
+	"key1": value1,
+	"key2": value2,
+	"key3": value3
+}
+
+my_dict["key1"]
+value1
+```
+
+```python
+my_dict = {
+	"title": "Charlotte's Web",
+	"author": "E.B. White",
+	"published": 1952
+}
+
+>>> my_dict["title"]
+"Charlotte's Web"
+```
+
+* **Creating DataFrames**
+
+	* From a list of dictionaries
+		* Constructed row by row
+
+	* From a dictionary of lists
+		* Constructed column by column
+		* key: column name
+		* value: list of column values
+
+```python
+# List of dictionaries - by row
+list_of_dicts = [
+	{"name": "Ginger", "breed": "Dachshund", "height_cm": 22, "weight_kg": 10, "date_of_birth": "2019-03-14"},
+	{"name": "Scout", "breed": "Dalmatian", "height_cm": 59, "weight_kg": 25, "date_of_birth": "2019-05-09"}
+]
+
+new_dogs = pd.DataFrame(list_of_dicts)
+print(new_dogs)
+
+    name      breed  height_cm  weight_kg date_of_birth
+0  Ginger  Dachshund         22         10    2019-03-14
+1   Scout  Dalmatian         59         25    2019-05-09
+```
+
+```python
+# Dictionary of lists - by column
+
+dict_of_lists = {
+	"name": ["Ginger", "Scout"],
+	"breed": ["Dachshund", "Dalmatian"],
+	"height_cm": [22, 59],
+	"weight_kg": [10, 25],
+	"date_of_birth": ["2019-03-14", "2019-05-09"]
+}
+
+new_dogs = pd.DataFrame(dict_of_lists)
+print(new_dogs)
+```
+
+## 4.4 Reading and writing CSVs
+
+* **CSV to DataFrame**
+
+```python
+import pandas as pd
+new_dogs = pd.read_csv("new_dogs.csv")
+print(new_dogs)
+```
+
+* **DataFrame manipulation**
+
+```python
+new_dogs["bmi"] = new_dogs["weight_kg"] / (new_dogs["height_cm"] / 100) ** 2
+
+print(new_dogs)
+```
+
+* **DataFrame to CSV**
+
+```python
+new_dogs.to_csv("new_dogs_with_bmi.csv")
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
