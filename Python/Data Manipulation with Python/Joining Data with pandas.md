@@ -117,35 +117,113 @@ top_genres = genres[genres['gid'].isin(genres_tracks['gid'])]
 	* Returns only columns from the left table and not the right
 
 ```python
+genres_tracks = genres.merge(top_tracks, on='gid', how='left', indicator=True)
 
+gid_list = genres_tracks.loc[genres_tracks['_merge'] == 'left_only', 'gid']
 
+non_top_genres = genres[genres['gid'].isin(gid_list)]
+```
 
+## 3.2 Concatenate DataFrames together vertically
 
+* **Concatenate two tables vertically**
 
+	* pandas `.concat()` method can concatenate both vertical and horizontal.
+		* `axis=0`, vertical
 
+* **Basic concatenation**
 
+	* 3 different tables with same column names
+	
+```python
+pd.concat([inv_jan, inv_feb, inv_mar])
+	
+# ignore the index
+pd.concat([inv_jan, inv_feb, inv_mar], ignore_index=True)
+	
+# set labels to original tables
+pd.concat([inv_jan, inv_feb, inv_mar], ignore_index=False, keys=['jan', 'feb', 'mar'])
+```
+	
+* **Concatenate tables with different column names**
 
+```python
+pd.concat([inv_jan, inv_feb], sort=True)
 
+pd.concat([inv_jan, inv_feb], join='inner')
+```
 
+* **Using append method**
 
+	* `.append()`
+		* Simplified version of the `.concat()` method
+		* Supports: `ignore_index`, and `sort`
+		* Does Not Support: `key` and `join`
+			* Always `join = outer`
 
+```python
+inv_jan.append([inv_feb, inv_mar], ignore_index=True, sort=True)
+```
 
+## 3.3 Verifying integrity
 
+* **Validating merges**
 
+	* `.merge(validate=None)
 
+		* Checks if merge is of specified type
+		* 'one_to_one'
+		* 'one_to_many'
+		* 'many_to_one'
+		* 'many_to_many'
 
+```python
+albums.merge(tracks, on='aid', validate='one_to_many')
+```
 
+* **Verifying concatenations**
 
+	* `.concat(verify_integrity=False)`:
+		* Check whether the new concatenated index contains duplicates
+		* Default value is `False`
 
+* **Why verify integrity and what to do**
 
+	* **Why:**
 
+		* Real world data is often not clean
 
+	* **What to do:*
 
+		* Fix incorrect data
+		* Drop duplicate rows
 
 
 # 4. Merging Ordered and Time-Series Data
 
+## 4.1 Using `merge_ordered()`
 
+* **Method comparison**
+
+|                  | `.merge()` method | `merge_ordered()` method   |
+|:----------------:|:-----------------:|:--------------------------:|
+|join type         | default inner     | default outer              |
+|calling the method| `df.merge(df2)`   |`pd.merge_ordered(df1, df2)`|
+
+```python
+import pandas as pd
+pd.merge_ordered(appl, mcd, on='date', suffixes=('_aapl', '_mcd'))
+```
+
+* **Forward fill**
+
+	* Fill missing with previous value
+	
+```python
+pd.merge_ordered(appl, mcd, on='date', suffixes=('_aapl', '_mcd'), fill_method='ffill')
+```
+
+## 4.2 Using `merge_asof()`
 
 
 
