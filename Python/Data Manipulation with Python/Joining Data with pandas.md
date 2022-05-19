@@ -225,6 +225,18 @@ pd.merge_ordered(appl, mcd, on='date', suffixes=('_aapl', '_mcd'), fill_method='
 
 ## 4.2 Using `merge_asof()`
 
+* **`merge_asof()`
+
+	* match on the nearest key column and not exact matches (less than or equal)
+	* merged "on" columns must be sorted
+
+```python
+pd.merge_asof(visa, ibm, on='date_time', suffixes=('_visa', '_ibm'))
+
+# with direction, default is backward (less than), forward is great than
+pd.merge_asof(visa, ibm, on=['date_time'], suffixes=('_visa', '_ibm'), direction='forward')
+```
+
 
 
 
