@@ -241,21 +241,37 @@ pd.merge_asof(visa, ibm, on=['date_time'], suffixes=('_visa', '_ibm'), direction
 
 ## 4.3 Selecting data with .query()
 
+* **The `.query()` method: `.query(`SOME SELECTION STATEMENT')**
 
+	* Accepts an input string
 
+		* Input string used to determine what rows are returned
+		* Input string similar to statement after WHERE clause in SQL statement
+			* Prior knowledge of SQL is not necessary
 
+```python
+# single condition
+stocks.query('nike >= 90')
 
+# multiple conditions
+stocks.query('nike > 90 and disney < 140')
+stocks.query('nike > 96 or disney < 98')
 
+# select text
+stocks_long.query('stock=="disney" or (stock=="nike" and close < 90)')
+```
 
+## 4.4 Reshaping data with `.melt()`
 
+```python
+social_fin_tall = social_fin.melt(id_vars=['financial', 'company'])
 
+# melt with value_vars
+social_fin_tall = social_fin.melt(id_vars=['financial', 'company'], value_vars=['2018', '2017'])
 
-
-
-
-
-
-## 4.4 Reshaping data with .melt()
+# melt with column names
+social_fin_tall = social_fin.melt(id_vars=['financial', 'company'], value_vars=['2018', '2017'], var_name=['year'], value_name='dollars')
+```
 
 
 
