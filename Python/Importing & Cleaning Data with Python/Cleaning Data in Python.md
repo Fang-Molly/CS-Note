@@ -38,18 +38,103 @@ sales['Revenue'] = sales['Revenue'].astype('int')
 assert sales['Revenue'].dtype == 'int'
 ```
 
+* **The assert statement**
 
+```python
+# this will pass
+assert 1+1 == 2
 
+# this will not pass
+assert 1+1 == 3
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+AssertionError
+```
 
+* **Numeric or categorical?**
 
+```python
+# convert to categorical
+df["marriage_status"] = df["marriage_status"].astype('category')
+df.describe()
+```
 
 ## 1.2 Data range constraints
 
+* **How to deal with out of range data?**
 
+	* Dropping data
+	* Setting custom minimums and maximums
+	* Treat as missing and impute
+	* Setting custom value depending on business assumptions
 
+```python
+import pandas as pd
 
+# Output Movies with rating > 5
+movies[movies['avg_rating'] > 5]
+
+# Drop values using filtering
+movies = movies[movies['avg_rating'] <= 5]
+
+# Drop values using .drop()
+movies.drop(movies[movies['avg_rating'] > 5].index, inplace = True)
+
+# Assert results
+assert movies['avg_rating'].max() <= 5
+
+# Convert avg_rating > 5 to 5
+movies.loc[movies['avg_rating'] > 5, 'avg_rating'] = 5
+
+# Assert statement
+assert movies['avg_rating'].max() <= 5
+```
+
+```python
+import datetime as dt
+import pandas as pd
+
+today_date = dt.date.today()
+user_signups[user_signups['subscription_date'] > dt.date.today()]
+
+user_signups.dtypes
+
+# convert to date
+user_signups['subscription_date'] = pd.to_datetime(user_signups['subscription_date']).dt.date
+
+# Drop values using filtering
+user_signups = user_signups[user_signups['subscription_date'] < today_date]
+
+# Drop values using .drop()
+user_signups.drop(user_signups[user_signups['subscription_date'] > today_date].index, inplace = True)
+
+# Drop values using filtering
+user_signups.loc[user_signups['subscription_date'] > today_date, 'subscription_date'] = today_date
+
+# Assert is true
+assert user_signups.subscription_date.max().date() <= today_date
+```
 
 ## 1.3 Uniqueness constraints
+
+* **How to find duplicate values?**
+
+```python
+# print the header
+height_weight.head()
+
+# get duplicates across all columns
+duplicates = height_weight.duplicated()
+print(duplicates)
+
+# get duplicate rows
+height_weight[duplicates]
+
+```
+
+
+
+
 
 
 
