@@ -151,26 +151,61 @@ for key, value in json_data.items():
 	print(key + ':', value)
 ```
 
-
-
-
-
-
-
-
 ## 2.2 APIs and interacting with the world wide web
 
+* **What is an API?**
 
+	* Set of protocols and routines
 
+	* Bunch of code
 
+		* Allows two software programs to communicate with each other
 
+* **Connecting to an API in Python**
 
+```python
+# Import requests package
+import requests
+
+# Assign URL to variable: url
+url = 'http://www.omdbapi.com/?t=hackers'
+
+# Package the request, send the request and catch the response: r
+r = requests.get(url)
+json_data = r.json()
+for key, value in json_data.items():
+	print(key + ':', value)
+```
+
+* **What was that URL?**
+
+	* http - making an HTTP request
+	* www.omdbapi.com - querying the OMDB API
+	* `?t=hackers`
+		* Query string
+		* Return data for a movie with title (t) 'Hackers'
+		* `http://www.omdbapi.com/?t=hackers`
 
 
 # 3. Diving deep into the Twitter API
 
 ## 3.1 The Twitter API and Authentication
 
+* **tweets.py**
+
+```python
+import tweepy, json
+access_token = "..."
+access_token_secret = "..."
+consumer_key = "..."
+consumer_secret = "..."
+
+# Create streaming object
+stream = tweepy.Stream(consumer_key, consumer_secret, access_token, access_token_secret)
+
+# This line filters Twitter Streams to capture data by keywords:
+stream.filter(track=['apples', 'oranges'])
+```
 
 
 
