@@ -129,21 +129,77 @@ print(duplicates)
 
 # get duplicate rows
 height_weight[duplicates]
-
 ```
 
+* **How to find duplicate rows?**
 
+> The `.duplicated()` method
+> * `subset`: list of column names to check for duplication
+> * `keep`: whether to keep first, last, or all duplicate values
 
+```python
+column_names = ['first_name', 'last_name', 'address']
+duplicates = height_weight.duplicated(subset = column_names, keep = False)
+height_weight[duplicates]
 
+height_weight[duplicates].sort_values(by = 'first_name')
+```
 
+* **How to treat duplicate values?**
 
+> The `.drop_duplicates()` method
+> * `subset`: list of column names to check for duplication
+> * `keep`: whether to keep first, last, or all duplicate values
+> * `inplace`: Drop duplicated rows directly inside DataFrame without creating new object (True)
 
+```python
+height_weight.drop_duplicates(inplace = True)
+```
+
+> The `.groupby()` and `.agg()` methods
+
+```python
+# group by column names and produce statistical summaries
+column_names = ['first_name', 'last_name', 'address']
+summaries = {'height': 'max', 'weight': 'mean'}
+height_weight = height_weight.groupby(by = column_names).agg(summaries).reset_index()
+
+# make sure aggregation is done
+duplicates = height_weight.duplicated(subset = column_names, keep = False)
+height_weight[duplicates].sort_values(by = 'first_name')d
+```
 
 # 2. Text and categorical data problems
 
 ## 2.1 Membership constraints
 
+* **Categorical data**
+
+```python
+# read study data
+study_data = pd.read_csv('study.csv')
+
+# find inconsistent categories
+inconsistent_categories = set(study_data['blood_type']).difference(categories['blood_type'])
+
+# get the rows with inconsistent categories
+inconsistent_rows = study_data['blood_type'].isin(inconsistent_categories)
+study_data[inconsistent_rows]
+
+# drop inconsistent categories and get consistent data only
+consistent_data = study_data[~inconsistent_rows]
+```
+
 ## 2.2 Categorical variables
+
+* **What type of errors could we have?**
+
+
+
+
+
+
+
 
 
 ## 2.3 Cleaning text data
