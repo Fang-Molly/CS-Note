@@ -194,10 +194,50 @@ consistent_data = study_data[~inconsistent_rows]
 
 * **What type of errors could we have?**
 
+	* I) Value inconsistency
+		* Inconsistent fields: `'married'`, `'Maried'`, `'UNMARRIED'`, `'not married'`..
+		* _Trailing white spaces: _`'married'`, `' married '`..
 
+	* II) Collapsing too many categories to few
+		* Creating new groups: `0-20K`, `20-40K` categories ... from continuous household income data
+		* Mapping groups to new ones: Mapping household income categories to 2 `'rich'`, `'poor'`
 
+	* III) Making sure data is of type `category`
 
+* **Value consistency**
 
+> Capitalization: `'married'`, `'Married'`, `'UNMARRIED'`, `'unmarried'` ..
+
+```python
+# Get marriage status column
+marriage_status = demographics['marriage_status']
+marriage_status.value_counts()
+
+# Get value counts on DataFrame
+marriage_status.groupby('marriage_status').count()
+
+# Capitalize
+marriage_status['marriage_status'] = marriage_status['marriage_status'].str.upper()
+marriage_status['marriage_status'].value_counts()
+
+# Lowercase
+marriage_status['marriage_status'] = marriage_status['marriage_status'].str.lower()
+marriage_status['marriage_status'].value_counts()
+```
+
+> Trailing spaces: `'married '`, `'married'`, `'unmarried'`, `' unmarried'` ..
+
+```python
+# get marriage status column
+marriage_status = demographics['marriage_status']
+marriage_status.value_counts()
+
+# strip all spaces
+demographics = demographics['marriage_status'].str.strip()
+demographics['marriage_status'].value_counts()
+```
+
+* **
 
 
 
