@@ -237,16 +237,123 @@ demographics = demographics['marriage_status'].str.strip()
 demographics['marriage_status'].value_counts()
 ```
 
-* **
+* **Collapsing data into categories**
 
+```python
+# using qcut()
+import pandas as pd
+group_names = ['0-200k', '200k-500k', '500k+']
+demographics['income_group'] = pd.qcut(demographics['household_income'], q = 3, labels = group_names)
 
+# print income_group column
+demographics[['income_group', 'household_income']]
 
+# using cut() - create category ranges and names
+ranges = [0, 200000, 500000, np.inf]
+group_names = ['0-200k', '200k-500k', '500k+']
+
+# create income group column
+demographics['income_group'] = pd.cut(demographics['household_income'], bins=ranges, labels=group_names)
+demographics[['income_group', 'household_income']]
+```
+
+```python
+# create mapping dictionary and replace
+mapping = {'Microsoft':'DesktopOS', 'MacOS':'DesktopOS', 'Linux':'DesktopOS', 'IOS':'MobileOS', 'Android':'MobileOS'}
+devices['operating_system'] = devices['operating_system'].replace(mapping)
+devices['operating_system'].unique()
+```
 
 ## 2.3 Cleaning text data
+
+* **Common text data problems**
+
+	* Data inconsistency: `+96171679912` or `0096171679912`
+	* Fixed length violations: passwords needs to be at least 8 characters
+	* Typos: `+961.71.679912`
+
+```python
+phones = pd.read_csv('phones.csv')
+
+# replace "+" with "00"
+phones["Phone number"] = phones["Phone number"].str.replace("+", "00")
+
+# replace "-" with nothing
+phones["Phone number"] = phones["Phone number"].str.replace("-", "")
+
+# replace phone numbers with lower than 10 digits to NaN
+digits = phones['Phone number'].str.len()
+phones.loc[digits < 10, "Phone number"] = np.nan
+```
+
+* **Fixing the phone number column**
+
+```python
+# find length of each row in Phone number column
+sanity_check = phone['Phone number'].str.len()
+
+# assert minmum phone number length is 10
+assert sanity_check.min() >= 10
+
+# assert all numbers do not have "+" or "-"
+assert phone['Phone number'].str.contains("+|-").any() == False
+```
+
+* **Regular expressions in action**
+
+	* `r'\D+'`
+		* `\d`: ANY ONE digit/non-digit character. Digits are [0-9]
+		* `\d+`: one or more (at least one digit) digit eg 1 or 34 or 983434 etc.
+
+```python
+# replace letters with nothing
+phones['Phone number'] = phones['Phone number'].str.replace(r'\D+', '')
+```
+
+
 
 # 3. Advanced data problems
 
 ## 3.1 Uniformity
+
+```python
+temperatures = pd.read_csv('temperature.csv')
+
+# import matplotlib
+import matplotlib.pyplot as plt
+# create scatter plot
+plt.scatter(x = 'Date', y = 'Temperature', data = temperatures)
+# create title, xlabel and ylabel
+plt.title('Temperature in Celsius March 2019 - NYC')
+plt.xlabel('Dates')
+plt.ylabel('Temperature in Celsius')
+# show plot
+plt.show()
+
+# treat temperature data
+temp_fah = temperatures.loc[temperatures['Temperature'] > 40, 'Temperature']
+temp_cels = (temp_fah - 32) * (5/9)
+temperatures.loc[temperatures['Temperature'] > 40, 'Temperature'] = temp_cels
+
+# assert conversion is correct
+assert temperatures['Temperature'].max() < 40
+```
+
+* **Datetime formatting**
+
+> `pandas.to_datetime()`
+> * Can recognize most formats automatically
+> * Sometimes fails with erroneous or unrecognizable formats
+
+```python
+# converts to datetime
+birthdays['Birthday'] = pd.to_datetime(birthdays['Birthday'],
+					    # attempt to infer format of each date
+					    infer_datetime_format=True,
+					 	# return NA for rows where conversation failed
+						errors = 'coerce')
+# birthdays['Birthday'] = birthdays['Birthday'].dt.strftime("%d-%m-%Y")
+```
 
 
 
