@@ -355,12 +355,42 @@ birthdays['Birthday'] = pd.to_datetime(birthdays['Birthday'],
 # birthdays['Birthday'] = birthdays['Birthday'].dt.strftime("%d-%m-%Y")
 ```
 
-
-
 ## 3.2 Cross field validation
 
+* **Motivation**
 
+```python
+import pandas as pd
 
+flights = pd.read_csv('flights.csv')
+flights.head()
+
+sum_classes = flights[['economy_class', 'business_class', 'first_class']].sum(axis = 1)
+passenger_equ = sum_classes == flights['total_passengers']
+
+# find and filter out rows with inconsistent passenger totals
+inconsistent_pass = flights[~passenger_equ]
+consistent_pass = flights[passenger_equ]
+```
+
+```python
+import pandas as pd
+import datetime as dt
+
+# convert to datetime and get today's date
+users['Birthday'] = pd.to_datetime(users['Birthday'])
+today = dt.date.today()
+
+# for each row in the Birthday column, calculate year difference
+age_manual = today.year - users['Birthday'].dt.year
+
+# find instances where ages match
+age_equ = age_manual == users['Age']
+
+# find and filter out rows with inconsistent age
+inconsistent_age = users[~age_equ]
+consistent_age = users[age_equ]
+```
 ## 3.3 Completeness
 
 
