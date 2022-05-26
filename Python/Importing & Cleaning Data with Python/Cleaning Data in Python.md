@@ -393,15 +393,161 @@ consistent_age = users[age_equ]
 ```
 ## 3.3 Completeness
 
+* **What is missing data?**
 
+	* Occurs when no data value is stored for a variable in an observation
+	* Can be represented as `NA`, `nan`, `0`, `.` ...
+	* Technical error
+	* Human error
 
+```python
+# return missing values
+airquality.isna()
+
+# get summary of missingness
+airquality.isna().sum()
+```
+
+* **Missingno**
+
+	* Useful package for visualizing and understanding missing data
+
+```python
+import missingno as msno
+import matplotlib.pyplot as plt
+
+# visualize missingness
+msno.matrix(airquality)
+plt.show()
+
+# isolate missing and complete values aside
+missing = airquality[airquality['CO2'].isna()]
+complete = airquality[~airquality['CO2'].isna()]
+
+# describe complete DataFrame
+complete.describe()
+
+# describe missing DataFrame
+missing.describe()
+
+sorted_airquality = airquality.sort_values(by = 'Temperature')
+msno.matrix(sorted_airquality)
+plt.show()
+```
+
+* **Missingness types**
+
+	* Missing Completely at Random (MCAR)
+		* No systematic relationship between missing data and other values
+		* Data entry errors when inputting data
+	
+	* Missing at Random (MAR)
+		* Systematic relationship between missing data and other observed values
+		* Missing ozone data for high temperatures
+	
+	* Missing Not at Random (MNAR)
+		* Systematic relationship between missing data and unobserved values
+		* Missing temperature values for high temperatures
+
+* **How to deal with missing data?**
+
+	* Simple approaches
+		1. Drop missing data
+		2. Impute with statistical measures (mean, median, mode ..)
+	
+	* More complex approaches
+		1. Imputing using an algorithmic approach
+		2. Imputing with machine learning models
+
+```python
+# Drop missing values
+airquality_dropped = airquality.dropna(subset = ['CO2']
+
+# Replace with statistical measures
+co2_mean = airquality['CO2'].mean()
+airquality_imputed = airquality.fillna({'CO2': co2_mean})
+```
 
 # 4. Record linkage
 
 ## 4.1 Comparing strings
 
+* **Minimum edit distance**
 
+	* Insertion +
+	* Deletion -
+	* Substitution 
+ 	* Transposition <->
 
+* **Minimum edit distance algorithms**
+
+|Algorithm          |Operations                                      |
+|:-----------------:|:----------------------------------------------:|
+|Damerau-Levenshtein|insertion, substitution, deletion, transposition|
+|Levenshtein        |insertion, substitution, deletion               |
+|Hamming            |substitution only                               |
+|Jaro distance      |transposition only                              |
+|...                |...                                             |
+
+* Possible packages: `nltk`, `fuzzywuzzy`, `textdistance` ..
+   
+* **Simple string comparison**
+
+```python
+# Import fuzz
+from fuzzywuzzy import fuzz
+
+# Compare reeding vs reading
+fuzz.WRatio('Reeding', 'Reading')
+86
+# output is a score from 0 to 100 with 0 being not similar at all, 100 being an exact match
+```
+
+* **Partial strings and different orderings**
+
+```python
+# partial string comparsion
+fuzz.WRatio('Houston Rockets', 'Rockets')
+90
+
+# partial string comparison with different order
+fuzz.WRatio('Houston Rockets vs Los Angeles Lakers', 'Lakers vs Rockets')
+86
+```
+
+* **Comparison with arrays**
+
+```python
+# Import package
+from fuzzywuzzy import process
+import pandas as pd
+ 
+# Define string and array of possible matches
+string = "Houston Rockets vs Los Angeles Lakers"
+choices = pd.Series(['Rockets vs Lakers', 'Lakers vs Rockets', 
+					'Houson vs Los Angeles', 'Heat vs Bulls'])
+process.extract(string, choices, limit = 2)
+
+[('Rockets vs Lakers', 86, 0), ('Lakers vs Rockets', 86, 1)]
+# the first one: the matching string
+# the second one: similarity score
+# the third one: its index in the array
+```
+
+* **Collapsing categories with string matching**
+
+```python
+# For each correct category
+for state in categories['state']:
+	# Find potential matches in states with types
+	matches = process.extract(state, survey['state'], limit = survey.shape[0])
+	# For each potential match match
+	for potential_match in matches:
+		# If high similarity score
+		if potential_match[1] >= 80:
+			# Replace typo with correct category
+			survey.loc[survey['state'] == potential_match[0], 'state'] = state
+```
 
 ## 4.2 Generating pairs
 
