@@ -137,21 +137,66 @@ books.melt(id_vars="title", value_vars=['language_code', 'isbn'], var_name="feat
 
 ## 2.2 Wide to long function
 
+* **Wide to long function**
 
+```python
+pd.wide_to_long(df, stubnames=["age", "weight"], i="name", j="year")
 
+pd.wide_to_long(books, stubnames=["ratings", "sold"], i="title", j="year")
 
+pd.wide_to_long(books_with_index, stubnames=["ratings", "sold"], i="author", j="year")
+```
 
+* **DataFrame with index**
 
+```python
+books_with_index.reset_index(drop=False, inplace=True)
+pd.wide_to_long(books_with_index, stubnames=['ratings', 'sold'], i=['author', 'title'], j='year')
+
+# sep argument
+pd.wide_to_long(books_with_index, stubnames=['ratings', 'sold'], i=['author', 'title'], j='year', sep='_')
+
+# suffix argument
+pd.wide_to_long(books_with_index, stubnames=['ratings', 'sold'], i=['author', 'title'], j='year', sep='_', suffix='\w+')
+```
 
 ## 2.3 Working with string columns
 
+* **String methods**
 
+	* `pandas` Series string processing methods
+	* Access easily by `str` attribute
 
+```python
+# split into two columns
+books['title'].str.split(':')
+# select first part as one column
+books['title'].str.split(':').str.get(0)
+# return two columns
+books['title'].str.split(':', expand=True)
 
+books[['main_title', 'subtitle']] = books['title'].str.split(":", expand=True)
 
+books.drop('title', axis=1, inplace=True)
+pd.wide_to_long(books, stubnames=['rating', 'sold'], i=['main_title', 'subtitle'], j='year')
 
+# concatenate two columns
+books_new['name_author'].str.cat(books_new['lastname_author'], sep=' ')
 
+books_new['author'] = books_new['name_author'].str.cat(books_new['lastname_author'], sep=' ')
 
+books_new.melt(id_vars='author', value_vars=['nationality', 'number_books'], var_name='feature', value_name='value')
+
+# concatenate index
+comics_marvel.index = comics_marvel.index.str.cat(comics_marvel['subtitle'], sep='-')
+
+# split index
+comics_marvel.index = comics_marvel.index.str.split('-', expand=True)
+
+# concatenate series
+new_list = ['Wolf', 'Atwood', 'Lee']
+books_new['name_author'].str.cat(new_list, sep=' ')
+```
 
 # 3. Stacking and Unstacking DataFrames
 
