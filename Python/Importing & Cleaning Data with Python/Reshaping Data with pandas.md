@@ -91,20 +91,49 @@ another_fifa.pivot(index="name", columns="variable")
 
 ## 1.3 Pivot tables
 
+* **Pivot method limitations**
 
+	* General purpose pivoting
+	* Index/column pair must be unique
+	* Cannot aggregate values
 
+* **Pivot table**
 
+```python
+df.pivot_table(index="Year", columns="Name", values="Weight", aggfunc="mean")
 
+# set variable
+another_fifa.pivot_table(index="name", columns="variable", aggfunc="mean")
+
+# Hierarchical indexes
+fifa_players.pivot_table(index=["first", "last"], columns="movement", values=["overall", "attacking"], aggfunc="max")
+
+# margins
+fifa_players.pivot_table(index=["first", "last"], columns="movement", aggfunc="count", margins=True)
+```
 
 # 2. Converting Between Wide and Long Format
 
 ## 2.1 Reshaping with melt
 
+* **Wide to long transformation**
 
+	* Perform analytics
+	* Plot different variables in the same graph
 
+* **Melt**
 
+```python
+df.melt(id_vars=["first", "last"])
 
+# values and variables
+df.melt(id_vars=["first", "last"], value_vars=["age", "height"], var_name="feature", value_name="amount")
 
+# specify values
+books.melt(id_vars="title", value_vars=['language_code', 'num_pages'])
+
+books.melt(id_vars="title", value_vars=['language_code', 'isbn'], var_name="feature", value_name="code")
+```
 
 ## 2.2 Wide to long function
 
