@@ -28,21 +28,53 @@ plt.show()
 
 ```python
 # circle marker: lower-case letter "o"
-ax.plot(seattle_weather["MONTH"], seattle_weather["MLY-TAVG-NORMAL"], marker="o")
+ax.plot(seattle_weather["MONTH"], 
+		seattle_weather["MLY-TAVG-NORMAL"], 
+		marker="o")
 
 # triangles pointing downwards marker: lower-case letter "v"
-ax.plot(seattle_weather["MONTH"], seattle_weather["MLY-TAVG-NORMAL"], marker="v")
+ax.plot(seattle_weather["MONTH"], 
+		seattle_weather["MLY-TAVG-NORMAL"], 
+		marker="v")
 ```
 
 * **Setting the linestyle**
 
 ```python
-ax.plot(seattle_weather["MONTH"], seattle_weather["MLY-TAVG-NORMAL"], marker="v", linestyle="--")
+# dashed line
+ax.plot(seattle_weather["MONTH"], 
+		seattle_weather["MLY-TAVG-NORMAL"], 
+		marker="v", linestyle="--")
+
+# eliminate the lines
+ax.plot(seattle_weather["MONTH"], 
+		seattle_weather["MLY-TAVG-NORMAL"], 
+		marker="v", linestyle="None")
 ```
 
+* **Choosing color**
 
+```python
+# in red color
+ax.plot(seattle_weather["MONTH"], 
+		seattle_weather["MLY-TAVG-NORMAL"], 
+		marker="v", linestyle="--", color="r")
+```
 
+* **Customizing the axes labels**
 
+```python
+ax.set_xlabel("Time (months)")
+ax.set_ylabel("Average temperature (Fahrenheit degrees)")
+plt.show()
+```
+
+* **Adding a title**
+
+```python
+ax.set_title("Weather in Seattle")
+plt.show()
+```
 
 
 
