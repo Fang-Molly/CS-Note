@@ -28,13 +28,11 @@ plt.show()
 
 ```python
 # circle marker: lower-case letter "o"
-ax.plot(seattle_weather["MONTH"], 
-		seattle_weather["MLY-TAVG-NORMAL"], 
+ax.plot(seattle_weather["MONTH"], seattle_weather["MLY-TAVG-NORMAL"], 
 		marker="o")
 
 # triangles pointing downwards marker: lower-case letter "v"
-ax.plot(seattle_weather["MONTH"], 
-		seattle_weather["MLY-TAVG-NORMAL"], 
+ax.plot(seattle_weather["MONTH"], seattle_weather["MLY-TAVG-NORMAL"], 
 		marker="v")
 ```
 
@@ -42,13 +40,11 @@ ax.plot(seattle_weather["MONTH"],
 
 ```python
 # dashed line
-ax.plot(seattle_weather["MONTH"], 
-		seattle_weather["MLY-TAVG-NORMAL"], 
+ax.plot(seattle_weather["MONTH"], seattle_weather["MLY-TAVG-NORMAL"], 
 		marker="v", linestyle="--")
 
 # eliminate the lines
-ax.plot(seattle_weather["MONTH"], 
-		seattle_weather["MLY-TAVG-NORMAL"], 
+ax.plot(seattle_weather["MONTH"], seattle_weather["MLY-TAVG-NORMAL"], 
 		marker="v", linestyle="None")
 ```
 
@@ -56,8 +52,7 @@ ax.plot(seattle_weather["MONTH"],
 
 ```python
 # in red color
-ax.plot(seattle_weather["MONTH"], 
-		seattle_weather["MLY-TAVG-NORMAL"], 
+ax.plot(seattle_weather["MONTH"], seattle_weather["MLY-TAVG-NORMAL"], 
 		marker="v", linestyle="--", color="r")
 ```
 
@@ -76,6 +71,107 @@ ax.set_title("Weather in Seattle")
 plt.show()
 ```
 
+## 1.3 Small multiples
+
+* **Adding data**
+
+```python
+ax.plot(seattle_weather["MONTH"], seattle_weather["MLY-PRCP-NORMAL"], 
+		color="b")
+ax.set_xlabel("Time (months)")
+ax.set_ylabel("Precipitation (inches)")
+plt.show()
+
+# add more data
+ax.plot(seattle_weather["MONTH"], seattle_weather["MLY-PRCP-25PCTL"], 
+		linestyle="--", color="b")
+ax.plot(seattle_weather["MONTH"], seattle_weather["MLY-PRCP-75PCTL"], 
+		linestyle="--", color="b")
+plt.show()
+
+# add more data
+ax.plot(austin_weather["MONTH"], austin_weather["MLY-PRCP-NORMAL"], 
+		color="r")
+ax.plot(austin_weather["MONTH"], austin_weather["MLY-PRCP-25PCTL"], 
+		linestyle="--", color="r")
+ax.plot(austin_weather["MONTH"], austin_weather["MLY-PRCP-75PCTL"], 
+		linestyle="--", color="r")
+plt.show()
+```
+
+* **Small multiples with plt.subplots**
+
+```python
+fig, ax = plt.subplots(3, 2)
+plt.show()
+
+ax.shape
+(3, 2)
+
+ax[0, 0].plot(seattle_weather["MONTH"], seattle_weather["MLY-PRCP-NORMAL"], color="b"
+plt.show()
+```
+
+```python
+fig, ax = plt.subplots(2, 1)
+
+ax[0].plot(seattle_weather["MONTH"], seattle_weather["MLY-PRCP-NORMAL"], 
+		   color="b")
+ax[0].plot(seattle_weather["MONTH"], seattle_weather["MLY-PRCP-25PCTL"], 
+		   linestyle="--", color="b")
+ax[0].plot(seattle_weather["MONTH"], seattle_weather["MLY-PRCP-75PCTL"], 
+		   linestyle="--", color="b")
+		
+ax[1].plot(austin_weather["MONTH"], austin_weather["MLY-PRCP-NORMAL"], 
+		   color="r")
+ax[1].plot(austin_weather["MONTH"], austin_weather["MLY-PRCP-25PCTL"], 
+		   linestyle="--", color="r")
+ax[1].plot(austin_weather["MONTH"], austin_weather["MLY-PRCP-75PCTL"], 
+		   linestyle="--", color="r")
+		
+ax[0].set_ylabel("Precipitation (inches)")
+ax[1].set_ylabel("Precipitation (inches)")
+ax[1].set_xlabel("Time (months)")
+
+plt.show()
+
+# set the same range of y-axis values
+fig, ax = plt.subplots(2, 1, sharey=True)
+```
+
+# 2. Plotting time-series
+
+## 2.1 Plotting time-series data
+
+```python
+import pandas as pd
+
+climate_change = pd.read_csv('climate_change.csv', parse_dates=["date"], index_col="date")
+
+import matplotlib.pyplot as plt
+fig, ax = plt.subplots()
+
+ax.plot(climate_change.index, climate_change['co2'])
+ax.set_xlabel('Time')
+ax.set_ylabel('CO2 (ppm)')
+plt.show()
+
+# Zooming in on a decade
+sixties = climate_changes["1960-01-01":"1969-12-31"]
+fig, ax = plt.subplots()
+ax.plot(sixties.index, sixties['co2'])
+ax.set_xlabel('Time')
+ax.set_ylabel('CO2 (ppm)')
+plt.show()
+
+# Zooming in on one year
+sixty_nine = climate_change["1969-01-01":"1969-12-31"]
+fig, ax = plt.subplots()
+ax.plot(sixty_nine.index, sixty_nine['co2'])
+ax.set_xlabel('Time')
+ax.set_ylabel('CO2 (ppm)')
+plt.show()
+```
 
 
 
@@ -84,11 +180,15 @@ plt.show()
 
 
 
+ 
+
+# 3. Quantitative comparisons and statistical visualizations
 
 
 
 
 
+# 4. Sharing visualizations with others
 
 
 
