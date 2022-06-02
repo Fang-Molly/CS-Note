@@ -250,7 +250,18 @@ plot_timeseries(ax2, climate_change.index, climate_change['relative_temp'], 'red
 plt.show()
 ```
 
+## 2.3 Annotating time-series data
 
+* **Annotation**
+
+```python
+fig, ax = plt.subplots()1q2
+plot_timeseries(ax, climate_change.index, climate_change['co2'], 'blue', 'Time', 'CO2 (ppm)')
+
+ax2 = ax.twinx()
+plot_timeseries(ax2, climate_change.index, climate_change['relative_temp'], 'red', 'Time', 'Relative temperature (Celsius)')
+ax2.annot
+plt.show()
 
 
 # 3. Quantitative comparisons and statistical visualizations
