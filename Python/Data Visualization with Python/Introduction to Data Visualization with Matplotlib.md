@@ -252,19 +252,223 @@ plt.show()
 
 ## 2.3 Annotating time-series data
 
-* **Annotation**
+* **Annotation** https://matplotlib.org/2.0.2/users/annotations.html
 
 ```python
 fig, ax = plt.subplots()1q2
 plot_timeseries(ax, climate_change.index, climate_change['co2'], 'blue', 'Time', 'CO2 (ppm)')
-
 ax2 = ax.twinx()
 plot_timeseries(ax2, climate_change.index, climate_change['relative_temp'], 'red', 'Time', 'Relative temperature (Celsius)')
-ax2.annot
-plt.show()
 
+ax2.annotate(">1 degree", xy=(pd.Timestamp("2015-10-06"), 1))
+plt.show()
+```
+
+* **Positioning the text**
+
+```python
+ax2.annotate(">1 degree", 
+			 xy=(pd.Timestamp('2015-10-06'), 1), 
+			 xytext=(pd.Timestamp('2008-10-06'), -0.2))
+```
+
+* **Adding arrows to annotation**
+
+```python
+ax2.annotate(">1 degree", 
+			 xy=(pd.Timestamp('2015-10-06'), 1), 
+			 xytext=(pd.Timestamp('2008-10-06'), -0.2), 
+			 arrowprops={})
+
+# customize arrow properties
+ax2.annotate(">1 degree", 
+			 xy=(pd.Timestamp('2015-10-06'), 1), 
+			 xytext=(pd.Timestamp('2008-10-06'), -0.2), 
+			 arrowprops={"arrowstyle":"->", "color":"gray"})
+```
 
 # 3. Quantitative comparisons and statistical visualizations
+
+## 3.1 Quantitative comparisons: bar-charts
+
+* **Bar charts**
+
+```python
+medals = pd.read_csv('medals_by_country_2016.csv', index_col=0)
+fig, ax = plt.subplots()
+ax.bar(medals.index, medals["Gold"])
+plt.show()
+```
+
+* **Interlude: rotate the tick labels**
+
+```python
+fig, ax = plt.subplots()
+ax.bar(medals.index, medals["Gold"])
+ax.set_xticklabels(medals.index, rotation=90)
+ax.set_ylabel("Number of medals")
+plt.show()
+```
+
+* **Stacked bar chart**
+
+```python
+fig, ax = plt.subplots()
+ax.bar(medals.index, medals["Gold"])
+ax.bar(medals.index, medals["Silver"], bottom=medals["Gold"])
+ax.set_xticklabels(medals.index, rotation=90)
+ax.set_ylabel("Number of medals")
+plt.show()
+```
+
+```python
+fig, ax = plt.subplots()
+ax.bar(medals.index, medals["Gold"])
+ax.bar(medals.index, medals["Silver"], bottom=medals["Gold"])
+ax.bar(medals.index, medals["Bronze"], bottom=medals["Gold"] + medals["Silver"])
+ax.set_xticklabels(medals.index, rotation=90)
+ax.set_ylabel("Number of medals")
+plt.show()
+```
+
+* **Adding a legend**
+
+	* add label key-word argument to each call
+	* add a call to ax.legend()
+
+```python
+fig, ax = plt.subplots()
+ax.bar(medals.index, medals["Gold"], label="Gold")
+ax.bar(medals.index, medals["Silver"], bottom=medals["Gold"], label="Silver")
+ax.bar(medals.index, medals["Bronze"], bottom=medals["Gold"] + medals["Silver"], label="Bronze")
+
+ax.set_xticklabels(medals.index, rotation=90)
+ax.set_ylabel("Number of medals")
+ax,legend()
+plt.show()
+```
+
+## 3.2 Quantitative comparisons: histograms
+
+* **Bar chart**
+
+```python
+fig, ax = plt.subplots()
+ax.bar("Rowing", mens_rowing["Height"].mean())
+ax.bar("Gymnastics", mens_gymnastics["Height"].mean())
+ax.set_ylabel("Height (cm)")
+plt.show()
+```
+
+* **Histograms**
+
+```python
+fig, ax = plt.subplots()
+ax.hist(mens_rowing["Height"])
+ax.hist(mens_gymnastic["Height"])
+ax.set_xlabel("Height (cm)")
+ax.set_ylabel("# of observations")
+plt.show()
+```
+
+* **Add labels**
+
+```python
+fig, ax = plt.subplots()
+ax.hist(mens_rowing["Height"], label="Rowing")
+ax.hist(mens_gymnastic["Height"], label="Gymnastics")
+ax.set_xlabel("Height (cm)")
+ax.set_ylabel("# of observations")
+ax.legend()
+plt.show()
+```
+
+* **Customize histograms: setting the number of bins**
+
+```python
+fig, ax = plt.subplots()
+ax.hist(mens_rowing["Height"], label="Rowing", bins=5)
+ax.hist(mens_gymnastic["Height"], label="Gymnastics", bins=5)
+ax.set_xlabel("Height (cm)")
+ax.set_ylabel("# of observations")
+ax.legend()
+plt.show()
+```
+
+* **Customize histograms: setting bin boundaries**
+
+```python
+fig, ax = plt.subplots()
+ax.hist(mens_rowing["Height"], label="Rowing", bins=[150, 160, 170, 180, 190, 200, 210])
+ax.hist(mens_gymnastic["Height"], label="Gymnastics", bins=[150, 160, 170, 180, 190, 200, 210])
+ax.set_xlabel("Height (cm)")
+ax.set_ylabel("# of observations")
+ax.legend()
+plt.show()
+```
+
+* **Customize histograms: transparency**
+
+```python
+fig, ax = plt.subplots()
+ax.hist(mens_rowing["Height"], label="Rowing", bins=[150, 160, 170, 180, 190, 200, 210], histtype = "step")
+ax.hist(mens_gymnastic["Height"], label="Gymnastics", bins=[150, 160, 170, 180, 190, 200, 210], histtype = "step")
+ax.set_xlabel("Height (cm)")
+ax.set_ylabel("# of observations")
+ax.legend()
+plt.show()
+```
+
+## 3.3 Statistical plotting
+
+* **Adding error bars to bar charts**
+
+```python
+fig, ax = plt.subplots()
+ax.bar("Rowing", mens_rowing["Height"].mean(), yerr=mens_rowing["Height"].std())
+ax.bar("Gymnastics", mens_gymnastics["Height"].mean(), yerr=mens_gymnastic["Height"].std())
+ax.set_ylabel("Height (cm)")
+plt.show()
+```
+
+* **Adding error bars to plots**
+
+```python
+fig, ax = plt.subplots()
+
+ax.errorbar(seattle_weather["MONTH"], seattle_weather["MLY-TAVG-NORMAL"], yerr=seattle_weather["MLY-TAVG-STDDEV"])
+
+ax.errorbar(austin_weather["MONTH"], austin_weather["MLY-TAVG-NORMAL"], yerr=austin_weather["MLY-TAVG-STDDEV"])
+
+ax.set_ylabel("Temperature (Fahrenheit)")
+
+plt.show()
+```
+
+* **Adding boxplots**
+
+```python
+fig, ax = plt.subplots()
+ax.boxplot([mens_rowing["Height"], mens_gymnastics["Height"]])
+ax.set_xticklabels(["Rowing", "Gymnastics"])
+ax.set_ylabel("Height (cm)")
+plt.show()
+```
+
+## 3.4 Quantitative comparisons: scatter plots
+
+```python
+fig, ax = plt.subplots()
+ax.scatter(climate_change["co2"], climate_change["relative_temp"])
+ax.set_xlabel("CO2 (ppm)")
+ax.set_ylabel("Relative temperature (Celsius)")
+plt.show()
+```
+
+* **Customize scatter plots**
+
+
+
 
 
 
