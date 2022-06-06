@@ -467,7 +467,15 @@ plt.show()
 
 * **Customize scatter plots**
 
-
+```python
+eighties = climate_change["1980-01-01":"1989-12-31"]
+nineties = climate_change["1990-01-01":"1999-12-31"]
+fig, ax = plt.subplots()
+ax.scatter(climate_change["co2"], climate_change["relative_temp"])
+ax.set_xlabel("CO2 (ppm)")
+ax.set_ylabel("Relative temperature (Celsius)")
+plt.show()
+```
 
 
 
