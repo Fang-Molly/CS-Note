@@ -471,37 +471,128 @@ plt.show()
 eighties = climate_change["1980-01-01":"1989-12-31"]
 nineties = climate_change["1990-01-01":"1999-12-31"]
 fig, ax = plt.subplots()
-ax.scatter(climate_change["co2"], climate_change["relative_temp"])
+ax.scatter(eighties["co2"], eighties["relative_temp"], color="red", label="eighties")
+ax.scatter(nineties["co2"], nineties["relative_temp"], color="blue", label="nineties")
+ax.legend()
 ax.set_xlabel("CO2 (ppm)")
 ax.set_ylabel("Relative temperature (Celsius)")
 plt.show()
 ```
 
+* **Encoding a third variable by color**
 
-
-
-
+```python
+fig, ax = plt.subplots()
+ax.scatter(climate_change["co2"], climate_change["relative_temp"], c=climate_change.index)
+ax.set_xlabel("CO2 (ppm)")
+ax.set_ylabel("Relative temperature (Celsius)")
+plt.show()
+```
 
 # 4. Sharing visualizations with others
 
+## 4.1 Preparing your figures to share with others
 
+* **Changing plot style**
 
+```python
+import matplotlib.pyplot as plt
+fig, ax = plt.subplots()
+ax.plot(seattle_weather["MONTH"], seattle_weather["MLY-TAVG-NORMAL"])
+ax.plot(austin_weather["MONTH"], austin_weather["MLY-TAVG-NORMAL"])
+ax.set_xlabel("Time (months)")
+ax.set_ylabel("Average temperature (Fahrenheit degrees)")
+plt.show()
+```
 
+* **Choosing a style**
 
+```python
+import matplotlib.pyplot as plt
+plt.style.use("ggplot")
+fig, ax = plt.subplots()
+ax.plot(seattle_weather["MONTH"], seattle_weather["MLY-TAVG-NORMAL"])
+ax.plot(austin_weather["MONTH"], austin_weather["MLY-TAVG-NORMAL"])
+ax.set_xlabel("Time (months)")
+ax.set_ylabel("Average temperature (Fahrenheit degrees)")
+plt.show()
+```
 
+* **Back to the default**
 
+```python
+plt.style.use("default")
+```
 
+* **The available styles**
 
+https://matplotlib.org/stable/gallery/style_sheets/style_sheets_reference.html
 
+* **Guidelines for choosing plotting style
 
+	* Dark backgrounds are usually less visible
+	* If color is important, consider choosing colorblind-friendly options
+		* "seaborn-colorblind" or "tableau-colorblind10"
+	* If you think that someone will want to print your figure, use less ink
+	* If it will be printed in black-and-white, use the "grayscale" style
 
+## 4.2 Saving your visualizations
 
+```python
+fig, ax = plt.subplots()
 
+ax.bar(medals.index, medals["Gold"])
+ax.set_xticklabels(medals.index, rotation=90)
+ax.set_ylabel("Number of medals")
 
+plt.show()
+```
 
+* **Saving the figure to file**
 
+```python
+fig, ax = plt.subplots()
 
+ax.bar(medals.index, medals["Gold"])
+ax.set_xticklabels(medals.index, rotation=90)
+ax.set_ylabel("Number of medals")
 
+fig.savefig("gold_medals.png")
+```
 
+* **Different file formats**
+
+```python
+fig.savefig("gold_medals.png")
+
+fig.savefig("gold_medals.png", quality=50)
+
+fig.savefig("gold_medals.svg")
+
+# resolution
+fig.savefig("gold_medals.png", dpi=300)
+
+# size
+fig.set_size_inches([5, 3])
+```
+
+## 4.3 Automating figures from data
+
+* **Bar-chart of heights for all sports**
+
+```python
+sports = summer_2016_medals["Sport"].unique()
+
+fig, ax = plt.subplots()
+
+for sport in sports:
+	sport_df = summer_2016_medals[summer_2016_medals[Sport"] == sport]
+	ax.bar(sport, sport_df["Height"].mean(), yerr=sport_df["Height"].std())
+	
+ax.set_ylabel("Height (cm)")
+ax.set_xticklabels(sports, rotation=90)
+
+plt.show()
+```
 
 
