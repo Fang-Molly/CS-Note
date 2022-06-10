@@ -248,12 +248,39 @@ patients.stack(level='year')
 
 ## 3.2 Unstacking DataFrames
 
+* **The `.unstack()` method**
 
+	* Rearrange a level of the row index into the columns to obtain a reshaped DataFrame with a new inner-most level column index
 
+```python
+# unstack a dataframe
+churn.unstack()
+
+# unstack a level
+churn.unstack(level=1)
+churn.unstack(level='First')
+
+# sort index
+churn.unstack().sort_index(ascending=False)
+
+# rearrange levels
+churn.unstack(level=1).stack(level=0)
+```
 
 ## 3.3 Working with multiple levels
 
+* **Swap levels**
 
+```python
+df.swaplevel(0, 2, axis=1)
+```
+
+* **Unstacking multiple levels**
+
+```python
+cars.unstack(level=[0,1])
+cars.unstack(level=['brand', 'model'])
+```
 
 ## 3.4 Handling missing data
 
