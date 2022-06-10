@@ -202,7 +202,49 @@ books_new['name_author'].str.cat(new_list, sep=' ')
 
 ## 3.1 Stacking DataFrames
 
+* **Setting the index**
 
+```python
+churn.set_index(["country", "age"], inplace=True)
+```
+
+* **MultiIndex from array**
+
+```python
+new_array = [['yes', 'no', 'yes'], ['no', 'yes', 'yes']]
+churn.index = pd.MultiIndex.from_arrays(new_array, names=['member', 'credit_card'])
+```
+
+* **MultiIndex DataFrames**
+
+```python
+index = pd.MultiIndex.from_arrays([['Wick', 'Wick', 'Shelley', 'Shelley'], 
+								  ['John', 'Julien', 'Mary', 'Frank']], 
+								  names=['last', 'first'])
+columns = pd.MultiIndex.from_arrays([['2019', '2019', '2020', '2020'], 
+									 ['age', 'weight', 'age', 'weight']], 
+									 names=['year', 'feature'])
+patients = pd.DataFrame(data, index=index, columns=columns)
+```
+
+* **The `.stack()` method`**
+
+	* Rearrange a level of the columns to obtain a reshaped DataFrame with a new inner-most level row index
+
+```python
+churned_stacked = churn.stack()
+patients_stacked = patients.stack()
+```
+
+* **Stack a level**
+
+```python
+# stack a level by number
+patients.stack(level=0)
+
+# stack a level by name
+patients.stack(level='year')
+```
 
 ## 3.2 Unstacking DataFrames
 
