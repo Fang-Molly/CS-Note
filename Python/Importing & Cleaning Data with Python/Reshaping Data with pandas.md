@@ -311,11 +311,43 @@ flowers.stack(dropna=False).fillna(0)
 		* Median: `.median()`
 		* Difference: `.diff()`
 
-```python
-sales.stack
+* **Stacking and stats**
 
+```python
+sales.stack().sum(axis=1)
+
+sales.stack().sum(axis=1).unstack()
+```
+
+* **Unstacking and stats**
+
+```python
+sales.unstack(level=0).mean(axis=1)
+
+sales["office supply"].unstack(level='country').diff(axis=1, periods=2)
+```
+
+* **Reshaping and grouping**
+
+```python
+sales.stack().head(4)
+
+sales.stack().groupby(level='shop').sum()
+
+sales.groupby(level='year').median()
+
+sales.groupby(level=1).median().stack(level=[0, 1]).unstack(level='year')
+```
 
 ## 4.2 Transforming a list-like column
+
+* **The `.explode()` method**
+
+```python
+cities_explode = cities['zip_code'].explode()
+
+cities[['city', 'country']].merge(cities_explode, left_index=True, right_index=True)
+```
 
 
 
