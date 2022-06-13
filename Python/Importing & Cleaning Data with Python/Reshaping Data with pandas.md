@@ -284,15 +284,35 @@ cars.unstack(level=['brand', 'model'])
 
 ## 3.4 Handling missing data
 
+* **Handling NaN with unstack**
 
+```python
+animals.unstack(level='class', fill_value='No').sort_index(level=['order', 'name'], ascending=[True, False])
+```
 
+* **Stack and missing values**
 
+```python
+flowers.stack(dropna=True)
+flowers.stack(dropna=False)
+flowers.stack(dropna=False).fillna(0)
+```
 
 # 4. Advanced Reshaping
 
 ## 4.1 Reshaping and combining data
 
+* **Reshaping and statistical functions**
 
+	* **Statistical functions**
+
+		* Sum: `.sum()`
+		* Mean: `.mean()`
+		* Median: `.median()`
+		* Difference: `.diff()`
+
+```python
+sales.stack
 
 
 ## 4.2 Transforming a list-like column
