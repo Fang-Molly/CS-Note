@@ -347,19 +347,138 @@ sales.groupby(level=1).median().stack(level=[0, 1]).unstack(level='year')
 cities_explode = cities['zip_code'].explode()
 
 cities[['city', 'country']].merge(cities_explode, left_index=True, right_index=True)
+
+cities_explode = cities.explode('zip_code')
+# got unique indexes
+cities_explode.reset_index(drop=True, inplace=True)
+
+# replace the empty list with a NaN value
+```
+
+* **Chaining operations**
+
+```python
+cities['zip_code'].str.split(',', expand=True)
+
+cities.assign(zip_code=cities['zip_code'].str.split(',')).explode('zip_code')
+```
+
+## 4.3 Reading nested data into a DataFrame
+
+* **JSON format**
+
+	* JavaScript Object Notation
+	* Data-interchange format
+	* Easy for humans to read and write
+	* Easy for machines to parse and generate
+
+```python
+# my_writer
+{
+	"first" : "Mary",
+	"last" : "Shelley",
+	"country" : "England",
+	"books" : 12
+}
+
+# nested JSON
+writers = [
+			{
+				"first": "Mary",
+				"last": "Shelley",
+				"books": {"title": "Frankenstein", "year":1818}
+			},
+			{
+				"first": "Ernest",
+				"last": "Hemingway",
+				"books": {"title": "The Old Man and the Sea", "year":1951}
+			}
+		  ]
+```
+			
+* **Data normalization**
+
+```python
+from pandas import json_normalize
+json_normalize(writers)
+
+writers_norm = json_normalize(writers, sep='_')
+
+pd.wide_to_long(writer_norm, stubnames=['books'], i=['first', 'last'], j='feature', sep='_', suffix='\w+')
+```
+
+* **Complex JSON**
+
+```python
+# writers
+[
+	{"name": "Mary",
+	 "last": "Shelley",
+	 "books": [{"title": "Frankenstein", "year":1818},
+	 		   {"title": "Mathilda", "year": 1819},
+			   {"title": "The Last Man", "year": 1826}]},
+	{"name": "Ernest",
+	 "last": "Hemingway",
+	 "books": {"title": "The Old Man and the Sea", "year":1951},
+	   	  	  {"title": "The Sun Also Rises", "year": 1927}]}
+]
+
+json_normalize(writers)
+
+# Record path
+json_normalize(writers, record_path='books')
+json_normalize(writers, record_path='books', meta=['name', 'last'])
+```
+
+## 4.4 Dealing with nested data columns
+
+* **Nested data in columns**
+
+```python
+writers = ["Mary Shelley", "Ernest Hemingway"]
+books = ['{"title": "Frankenstein", "year":1818}',
+		 '{"title": "The Old Man and the Sea", "year":1951}']
+collection = pd.DataFrame(dict(writers=writers, books=books))
+>>> collection
+            writers                                              books
+0      Mary Shelley             {"title": "Frankenstein", "year":1818}
+1  Ernest Hemingway  {"title": "The Old Man and the Sea", "year":1951}
+
+>>> import json
+>>> books = collection['books'].apply(json.loads).apply(pd.Series)
+>>> books
+                     title  year
+0             Frankenstein  1818
+1  The Old Man and the Sea  1951
+
+# concatenate back
+>>> collection = collection.drop(columns='books')
+>>> pd.concat([collection, books], axis=1)
+            writers                    title  year
+0      Mary Shelley             Frankenstein  1818
+1  Ernest Hemingway  The Old Man and the Sea  1951
+
+# dumping nested data
+>>> import json
+>>> books = collection['books'].apply(json.loads).to_list()
+>>> books_dump = json.dumps(books)
+>>> new_books = pd.read_json(books_dump)
+>>> new_books
+                     title  year
+0             Frankenstein  1818
+1  The Old Man and the Sea  1951
+>>> pd.concat([collection['writers'], new_books], axis=1)
+            writers                    title  year
+0      Mary Shelley             Frankenstein  1818
+1  Ernest Hemingway  The Old Man and the Sea  1951
+
 ```
 
 
 
 
 
-## 4.3 Reading nested data into a DataFrame
 
-
-
-
-
-## 4.4 Dealing with nested data columns
 
 
 
