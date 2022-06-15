@@ -211,23 +211,47 @@ array([[1, 2, 3, 4, 5]])
 
 * **NumPy vs. Python data types**
 
-	* 
-NumPy data types are more specific than Python data types in that NumPy data types include both the type of data - such as integer or string - and the amount of memory available in bits. For example, the np-dot-int64 data type holds 64 bits, and np-dot-int32 holds 32 bits. NumPy data types can be optimized for memory by reducing the data type's bitsize when our data doesn't require a large bitsize.
+	* Sample Python data types:
+		* `int`
+		* `float`
+	* Sample NumPy data types:
+		* `np.int64`
+		* `np.int32`
+		* `np.float64`
+		* `np.float32`
 
-3. Bits and bytes
-Bit is short for binary digit. A bit can hold only values of zero or one; it is the smallest unit of memory data available on a computer. A byte is a sequence of eight bits. NumPy's 32-bit integer can store two to the 32nd power numbers since this is the number of possible combinations of zeros and ones available in 32 bits. This means that np-dot-int32 can hold over four billion integers,
+* **Bits and bytes**
 
-4. Bits and bytes
-from around negative 2-point-1 billion to around positive 2-point-1 billion. Numbers outside these bounds require a larger bitsize, such as np-dot-int64.
+	* Bit is short for binary digit. A bit can hold only values of zero or one; it is the smallest unit of memory data available on a computer.
+	
+	* A byte is a sequence of eight bits.
 
-5. The .dtype attribute
-We can find the data type of elements in an array using the dot-dtype array attribute. float64 is the default for an array made of Python floats.
+	* `np.int32`: can store two to the 32nd power integers: 2^32 = 4,294,967,296, from -2,147,483,648 to 2,147,483,648.
 
-6. Default data types
-NumPy chooses data type based on the data in the array at creation. Here, NumPy detects integers in a Python list. The default bitsize is 64.
+* **The `.dtype` attribute**: find the data type of elements in an array
 
-7. String data
-Strings work a little differently. NumPy selects a string data type with capacity large enough for the longest string. Here, "<U12" indicates that the data type is a Unicode string with maximum length 12.
+```python
+# `float64` is the default for an array made of Python floats
+>>> np.array([1.32, 5.78, 175.55]).dtype
+dtype('float64')
+
+# `int64` is the default for an array made of Python integers
+>>> np.array([[1, 2, 3], [4, 5, 6]]).dtype
+dtype('int64')
+
+# "<U12" indicates that the data type is a Unicode string with maximum length 12
+>>> np.array(["Introduction", "to", "NumPy"]).dtype
+dtype('<U12')
+```
+
+* **dtype as an argument**
+
+```python
+>>> float32_array = np.array([1.32, 5.78, 175.55], dtype=np.float32)
+>>> float32_array.dtype
+dtype('float32')
+```
+
 
 8. dtype as an argument
 Rather than changing an array's data type after creation, it's possible to declare a data type when you create the array using the optional dtype keyword argument. A keyword argument is an argument preceded by an identifying word in a function or method call. The dtype keyword argument exists in many NumPy functions, including np-dot-zeros, np-dot-random-dot-random, and np-dot-arange.
