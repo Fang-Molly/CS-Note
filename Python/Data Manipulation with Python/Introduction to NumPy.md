@@ -92,24 +92,154 @@ array([[3, 2, 5],
 
 ## 1.2 Array dimensionality
 
+* **3D arrays**
 
+```python
+array_1_2D = np.array([[1, 2], [5, 7]])
+array_2_2D = np.array([[8, 9], [5, 7]])
+array_3_2D = np.array([[1, 2], [5, 7]])
+array_3D = np.array([array_1_2D, array_2_2D, array_3_2D])
 
+>>> array_1_2D
+array([[1, 2],
+       [5, 7]])
+	   
+>>> array_3D
+array([[[1, 2],
+        [5, 7]],
 
+       [[8, 9],
+        [5, 7]],
 
+       [[1, 2],
+        [5, 7]]])
+```
 
+* **4D arrays**
 
+```python
+array_4D = [array_A_3D, array_B_3D, array_C_3D, array_D_3D, array_E_3D, array_F_3D, array_G_3D, array_H_3D, array_I_3D]
+```
 
+* **Types of arrays**
 
+	* **Vector arrays**
+		* 1D arrays, one-dimensional array
+		* There is no difference between row and column (or horizontal and vertical) vectors in NumPy since no second axis is specified. 
 
+	* **Matrix arrays**
+		* 2D arrays, two-dimensional array
+		* Rows are the first dimension; Columns are the second dimension
 
+	* **Tensor arrays**
+		* three or more dimensions
 
+```python
+>>> array_1D_1 = np.array([1, 2, 3, 4, 5])
+>>> array_1D_1
+array([1, 2, 3, 4, 5])
+>>> array_1D_1.shape
+(5,)
 
+>>> array_1D_2 = np.array([1,
+...                        2,
+...                        3,
+...                        4,
+...                        5])
+>>> array_1D_2
+array([1, 2, 3, 4, 5])
+>>> array_1D_2.shape
+(5,)
 
+>>> array_2D_1 = np.array([[1], [2], [3], [4], [5]])
+>>> array_2D_1
+array([[1],
+       [2],
+       [3],
+       [4],
+       [5]])
+>>> array_2D_1.shape
+(5, 1)
 
+>>> array_2D_2 = np.array([[1, 2, 3, 4, 5]])
+>>> array_2D_2
+array([[1, 2, 3, 4, 5]])
+>>> array_2D_2.shape
+(1, 5)
+```
+
+* **Shapeshifting**
+
+	* **Array attribute**
+	
+		* `.shape`
+
+		```python
+		>>> array = np.zeros((3, 5))
+		>>> array
+		array([[0., 0., 0., 0., 0.],
+		       [0., 0., 0., 0., 0.],
+		       [0., 0., 0., 0., 0.]])
+		>>> array.shape
+		(3, 5)
+		```
+	
+	* **Array methods**
+
+		* `.flatten()`
+		
+		```python
+		>>> array = np.array([[1, 2], [5, 7], [6, 6]])
+		>>> array
+		array([[1, 2],
+      		   [5, 7],
+      		   [6, 6]])
+		>>> array.flatten()
+		array([1, 2, 5, 7, 6, 6])
+		```
+		
+		* `.reshape()`
+	
+		```python
+		>>> array = np.array([[1, 2], [5, 7], [6, 6]])
+		>>> array.reshape((2, 3))
+		array([[1, 2, 5],
+		       [7, 6, 6]])
+		```
 
 ## 1.3 NumPy data types
 
+* **NumPy vs. Python data types**
 
+	* 
+NumPy data types are more specific than Python data types in that NumPy data types include both the type of data - such as integer or string - and the amount of memory available in bits. For example, the np-dot-int64 data type holds 64 bits, and np-dot-int32 holds 32 bits. NumPy data types can be optimized for memory by reducing the data type's bitsize when our data doesn't require a large bitsize.
+
+3. Bits and bytes
+Bit is short for binary digit. A bit can hold only values of zero or one; it is the smallest unit of memory data available on a computer. A byte is a sequence of eight bits. NumPy's 32-bit integer can store two to the 32nd power numbers since this is the number of possible combinations of zeros and ones available in 32 bits. This means that np-dot-int32 can hold over four billion integers,
+
+4. Bits and bytes
+from around negative 2-point-1 billion to around positive 2-point-1 billion. Numbers outside these bounds require a larger bitsize, such as np-dot-int64.
+
+5. The .dtype attribute
+We can find the data type of elements in an array using the dot-dtype array attribute. float64 is the default for an array made of Python floats.
+
+6. Default data types
+NumPy chooses data type based on the data in the array at creation. Here, NumPy detects integers in a Python list. The default bitsize is 64.
+
+7. String data
+Strings work a little differently. NumPy selects a string data type with capacity large enough for the longest string. Here, "<U12" indicates that the data type is a Unicode string with maximum length 12.
+
+8. dtype as an argument
+Rather than changing an array's data type after creation, it's possible to declare a data type when you create the array using the optional dtype keyword argument. A keyword argument is an argument preceded by an identifying word in a function or method call. The dtype keyword argument exists in many NumPy functions, including np-dot-zeros, np-dot-random-dot-random, and np-dot-arange.
+
+9. Type conversion
+Type conversion occurs when we explicitly tell NumPy to convert the data type of elements within an array. This is done with the dot-astype method. For example, to convert a Boolean array to zero and one values, we could change the data type of the array to an integer type. Notice that the np-dot-bool_ data type has no bitsize because booleans do not vary in size.
+
+10. Type coercion
+What happens if we try to make an array out of a Python list with several data types? All the data changes to one data type: in this case, a string! Since NumPy did this without us telling it to, this is called type coercion. NumPy did this because while numbers are easily cast into strings, strings are not easily cast into numbers while still preserving the original data.
+
+11. Type coercion hierarchy
+We just saw that adding a single string to an array means that NumPy will cast all elements into strings. Similarly, adding a single float to an array of integers will change all integers into floats, and adding a single integer to an array of Booleans will change all Booleans into integers. As we know, using one data type is one reason that NumPy has a lower memory consumption, but pay attention to the data type of the elements in your array as they can change without notice. 
 
 
 
