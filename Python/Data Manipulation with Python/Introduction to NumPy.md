@@ -90,11 +90,77 @@ array([[3, 2, 5],
 >>> plt.show()
 ```
 
+## 1.2 Array dimensionality
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## 1.3 NumPy data types
+
+
+
+
+
+
+
+
+
 
 # 2. Selecting and Updating Data
+
+## 2.1 Indexing and slicing arrays
+
+
+
+
+## 2.2 Filtering arrays
+
+
+
+## 2.3 Adding and removing data
+
 
 
 # 3. Array Mathematics!
 
+## 3.1 Summarizing data
+
+
+## 3.2 Vectorized operations
+
+
+
+## 3.3 Broadcasting
+
+
+
 
 # 4. Array Transformations
+
+## 4.1 Saving and loading arrays
+
+
+## 4.2 Array acrobatics
+
+
+
+## 4.3 Stacking and splitting
+
+
+
+
+
+
+
