@@ -34,9 +34,7 @@ array([3, 2, 5, 8, 4, 9, 7, 6, 1])
 * **Creating 2D arrays from lists**
 
 ```python
->>> python_list_of_lists = [[3, 2, 5], 
-							[9, 7, 1], 
-							[4, 3, 6]]
+>>> python_list_of_lists = [[3, 2, 5], [9, 7, 1], [4, 3, 6]]
 >>> np.array(python_list_of_lists)
 array([[3, 2, 5],
        [9, 7, 1],
@@ -252,32 +250,104 @@ dtype('<U12')
 dtype('float32')
 ```
 
+* **Type conversion**
 
-8. dtype as an argument
-Rather than changing an array's data type after creation, it's possible to declare a data type when you create the array using the optional dtype keyword argument. A keyword argument is an argument preceded by an identifying word in a function or method call. The dtype keyword argument exists in many NumPy functions, including np-dot-zeros, np-dot-random-dot-random, and np-dot-arange.
+```python
+>>> boolean_array = np.array([[True, False], [False, False]], dtype=np.bool_)
+>>> boolean_array.astype(np.int32)
+array([[1, 0],
+       [0, 0]], dtype=int32)
+```
 
-9. Type conversion
-Type conversion occurs when we explicitly tell NumPy to convert the data type of elements within an array. This is done with the dot-astype method. For example, to convert a Boolean array to zero and one values, we could change the data type of the array to an integer type. Notice that the np-dot-bool_ data type has no bitsize because booleans do not vary in size.
+* **Type coercion**
 
-10. Type coercion
-What happens if we try to make an array out of a Python list with several data types? All the data changes to one data type: in this case, a string! Since NumPy did this without us telling it to, this is called type coercion. NumPy did this because while numbers are easily cast into strings, strings are not easily cast into numbers while still preserving the original data.
+	* When we try to make an array out of a Python list with several data types all the data changes to one data type.
 
-11. Type coercion hierarchy
-We just saw that adding a single string to an array means that NumPy will cast all elements into strings. Similarly, adding a single float to an array of integers will change all integers into floats, and adding a single integer to an array of Booleans will change all Booleans into integers. As we know, using one data type is one reason that NumPy has a lower memory consumption, but pay attention to the data type of the elements in your array as they can change without notice. 
+```python
+# change numbers into strings
+>>> np.array([True, "Boop", 42, 42.42])
+array(['True', 'Boop', '42', '42.42'], dtype='<U32')
 
+# change integers into floats
+>>> np.array([0, 42, 42.42]).dtype
+dtype('float64')
 
-
-
-
-
-
+# change booleans into integers
+>>> np.array([True, False, 42]).dtype
+dtype('int64')
+```
 
 # 2. Selecting and Updating Data
 
 ## 2.1 Indexing and slicing arrays
 
+* **NumPy indexing**
+	* Zero-based
+	* Square brackets
 
+* **Indexing 1D arrays**
 
+```python
+>>> array = np.array([2, 4, 6, 8, 10])
+>>> array[3]
+8
+```
+
+* **Indexing 2D arrays**
+
+```python
+# Indexing elements
+>>> array_2D = np.array([[1, 2, 3, 4], [5, 6, 7, 8], [9, 10, 11, 12], [13, 14, 15, 16]])
+>>> array_2D
+array([[ 1,  2,  3,  4],
+       [ 5,  6,  7,  8],
+       [ 9, 10, 11, 12],
+       [13, 14, 15, 16]])
+>>> array_2D[2, 2]
+11
+
+# Indexing rows
+>>> array_2D[0]
+array([1, 2, 3, 4])
+
+# Indexing columns
+>>> array_2D[:, 0]
+array([ 1,  5,  9, 13])
+```
+
+* **Slicing 1D arrays**
+
+```python
+>>> array = np.array([2, 4, 6, 8, 10])
+>>> array[2:4]
+array([6, 8])
+```
+
+* **Slicing 2D arrays**
+
+```python
+>>> array_2D
+array([[ 1,  2,  3,  4],
+       [ 5,  6,  7,  8],
+       [ 9, 10, 11, 12],
+       [13, 14, 15, 16]])
+>>> array_2D[1:3, 1:3]
+array([[ 6,  7],
+       [10, 11]])
+
+# Slicing with steps: start value, stop value, step value
+>>> array_2D[0:3:2, 0:3:2] 
+array([[ 1,  3],
+       [ 9, 11]])
+```
+
+* **Sorting arrays**
+
+	* Axis order
+		* axis 0: refer to row
+		* axis 1: refer to column
+	* `np.sort()`: sort the array along the columns, with the highest number from each row in the far right
+	* `np.sort(sudoku_game, axis=0)`: To sort the array by row, so that the highest numbers in each column are at the bottom of the array
 
 ## 2.2 Filtering arrays
 
