@@ -351,6 +351,22 @@ array([[ 1,  3],
 
 ## 2.2 Filtering arrays
 
+* **Boolean masks**
+
+```python
+>>> import numpy as np
+>>> one_to_five = np.arange(1, 6)
+>>> one_to_five
+array([1, 2, 3, 4, 5])
+>>> mask = one_to_five % 2 == 0
+>>> mask
+array([False,  True, False,  True, False])
+```
+
+
+
+
+
 
 
 ## 2.3 Adding and removing data
