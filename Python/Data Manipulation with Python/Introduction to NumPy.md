@@ -351,36 +351,244 @@ array([[ 1,  3],
 
 ## 2.2 Filtering arrays
 
+* **Two ways to filter**
+
+	* Masks and fancy indexing: 
+		* returns array of elements
+	* `np.where()`: 
+		* returns array of indices
+		* Can create an array based on whether elements do or don't meet condition
+
 * **Boolean masks**
 
 ```python
+# import numpy
 >>> import numpy as np
+
+# create an array
 >>> one_to_five = np.arange(1, 6)
 >>> one_to_five
 array([1, 2, 3, 4, 5])
+
+# create a Boolean mask
 >>> mask = one_to_five % 2 == 0
 >>> mask
 array([False,  True, False,  True, False])
+
+# filter with fancy indexing
+>>> one_to_five[mask]
+array([2, 4])
 ```
 
+* **2D fancy indexing**
 
+```python
+>>> classroom_ids_and_sizes = np.array([[1, 22], [2, 21], [3, 27], [4, 26]])
+>>> classroom_ids_and_sizes
+array([[ 1, 22],
+       [ 2, 21],
+       [ 3, 27],
+       [ 4, 26]])
+>>> classroom_ids_and_sizes[:, 1] % 2 == 0
+array([ True, False, False,  True])
+>>> classroom_ids_and_sizes[:, 0][classroom_ids_and_sizes[:, 1] % 2 == 0]
+array([1, 4])
+```
 
+* Filtering with `np.where()`
 
-
-
+```python
+>>> classroom_ids_and_sizes
+array([[ 1, 22],
+       [ 2, 21],
+       [ 3, 27],
+       [ 4, 26]])
+>>> np.where(classroom_ids_and_sizes[:, 1] % 2 == 0)
+(array([0, 3]),)
+```
 
 ## 2.3 Adding and removing data
 
+* **Concatenating rows with `np.concatenate()`**
 
+```python
+>>> classroom_ids_and_sizes = np.array([[1, 22], [2, 21], [3, 27], [4, 26]])
+>>> new_classrooms = np.array([[5, 30], [5, 17]])
+>>> np.concatenate((classroom_ids_and_sizes, new_classrooms))
+array([[ 1, 22],
+       [ 2, 21],
+       [ 3, 27],
+       [ 4, 26],
+       [ 5, 30],
+       [ 5, 17]])
+```
+
+* **Concatenating columns**
+
+```python
+>>> classroom_ids_and_sizes = np.array([[1, 22], [2, 21], [3, 27], [4, 26]])
+>>> grade_levels_and_teachers = np.array([[1, "James"], [1, "George"], [3, "Amy"], [3, "Meehir"]])
+>>> np.concatenate((classroom_ids_and_sizes, grade_levels_and_teachers), axis=1)
+array([['1', '22', '1', 'James'],
+       ['2', '21', '1', 'George'],
+       ['3', '27', '3', 'Amy'],
+       ['4', '26', '3', 'Meehir']], dtype='<U21')
+```
+
+* **Shape compatibility**
+
+```python
+>>> array_1D = np.array([1, 2, 3])
+>>> column_array_2D = array_1D.reshape((3, 1))
+>>> column_array_2D
+array([[1],
+       [2],
+       [3]])
+>>> row_array_2D = array_1D.reshape((1, 3))
+>>> row_array_2D
+array([[1, 2, 3]])
+```
+
+* **Deleting rows with `np.delete()`**
+
+```python
+>>> classroom_data
+array([['1', '22', '1', 'James'],
+       ['2', '21', '1', 'George'],
+       ['3', '27', '3', 'Amy'],
+       ['4', '26', '3', 'Meehir']],)
+>>> np.delete(classroom_data, 1, axis=0)
+array([['1', '22', '1', 'James'],
+       ['3', '27', '3', 'Amy'],
+       ['4', '26', '3', 'Meehir']])
+```
+
+* **Deleting columns**
+
+```python
+>>> np.delete(classroom_data, 1, axis=1)
+array([['1', '1', 'James'],
+       ['2', '1', 'George'],
+       ['3', '3', 'Amy'],
+       ['4', '3', 'Meehir']])
+
+# delete without an axis
+>>> np.delete(classroom_data, 1)
+array(['1', '1', 'James', '2', '21', '1', 'George', '3', '27', '3', 'Amy',
+       '4', '26', '3', 'Meehir'])
+```
 
 # 3. Array Mathematics!
 
 ## 3.1 Summarizing data
 
+* **Aggregating methods**
+
+	* `.sum()`
+	* `.min()`
+	* `.max()`
+	* `.mean()`
+	* `.cumsum()`
+
+```python
+>>> security_breathes
+array([[0, 5, 1],
+       [0, 2, 0],
+       [1, 1, 2],
+       [2, 2, 1],
+       [0, 0, 0]])
+	   
+>>> security_breathes.sum()
+17
+
+# axis equals to zero sums the values of all rows in each column
+>>> security_breathes.sum(axis=0)
+array([ 3, 10,  4])
+
+# axis equals to one sums the values of all columns in each row
+>>> security_breathes.sum(axis=1)
+array([6, 2, 4, 5, 0])
+
+# keepdims argument
+>>> security_breathes.sum(axis=1, keepdims=True)
+array([[6],
+       [2],
+       [4],
+       [5],
+       [0]])
+	   
+>>> security_breathes.min()
+0
+
+>>> security_breathes.min(axis=1)
+array([0, 0, 1, 1, 0])
+
+>>> security_breathes.max()
+5
+
+>>> security_breathes.mean()
+1.1333333333333333
+
+>>> security_breathes.mean(axis=1)
+array([2.        , 0.66666667, 1.33333333, 1.66666667, 0.        ])
+
+# cumulative sum
+>>> security_breathes.cumsum(axis=0)
+array([[ 0,  5,  1],
+       [ 0,  7,  1],
+       [ 1,  8,  3],
+       [ 3, 10,  4],
+       [ 3, 10,  4]])
+```
 
 ## 3.2 Vectorized operations
 
+* **Vectorized operations**
 
+```python
+>>> np.arange(1000000).sum()
+499999500000
+```
+
+* **Numpy syntax**
+
+```python
+>>> array = np.array([[1, 2, 3], [4, 5, 6]])
+
+>>> array
+array([[1, 2, 3],
+       [4, 5, 6]])
+	   
+>>> array + 3
+array([[4, 5, 6],
+       [7, 8, 9]])
+	   
+>>> array * 3
+array([[ 3,  6,  9],
+       [12, 15, 18]])
+	   
+>>> array_a = np.array([[1, 2, 3], [4, 5, 6]])
+>>> array_b = np.array([[0, 1, 0], [1, 0, 1]])
+>>> array_a + array_b
+array([[1, 3, 3],
+       [5, 5, 7]])
+>>> array_a * array_b
+array([[0, 2, 0],
+       [4, 0, 6]])	   
+
+>>> array = np.array([[1, 2, 3], [4, 5, 6]])
+>>> array > 2
+array([[False, False,  True],
+       [ True,  True,  True]])	   
+	   
+>>> array = np.array(["NumPy", "is", "awesome"])
+>>> len(array) > 2
+True
+
+>>> vectorized_len = np.vectorize(len)
+>>> vectorized_len(array) > 2
+array([ True, False,  True])
+```
 
 ## 3.3 Broadcasting
 
