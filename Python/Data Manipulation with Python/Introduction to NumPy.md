@@ -592,15 +592,98 @@ array([ True, False,  True])
 
 ## 3.3 Broadcasting
 
+* **Compatibility rules**
 
+	* NumPy compares sets of array dimensions from right to left
+	* Two dimensions are compatible when ...
+		* One of them has a length of one or
+		* They are of equal lengths
+	* All dimension sets must be compatible
 
+```python
+# Brodadcasting rows
+>>> array = np.arange(10).reshape((2, 5))
+>>> array + np.array([0, 1, 2, 3, 4])
+array([[ 0,  2,  4,  6,  8],
+       [ 5,  7,  9, 11, 13]])
+
+# Broadcasting columns
+>>> array = np.arange(10).reshape((2, 5))
+>>> array + np.array([0, 1]).reshape((2, 1))
+array([[ 0,  1,  2,  3,  4],
+       [ 6,  7,  8,  9, 10]])
+```
 
 # 4. Array Transformations
 
 ## 4.1 Saving and loading arrays
 
+```python
+import numpy a np
+rgb = np.array([[[255, 0, 0], [255, 0, 0], [255, 0, 0]],
+ 	            [[0, 255, 0], [0, 255, 0], [0, 255, 0]],
+				[[0, 0, 255], [0, 0, 255], [0, 0, 255]]])
+				
+import matplotlib.pyplot as plt
+plt.imshow(rgb)
+plt.show()
+
+rgb1 = np.array([[[255, 0, 0], [255, 255, 0], [255, 255, 255]],
+				 [[255, 0, 255], [0, 255, 0], [0, 255, 255]],
+				 [[0, 0 ,0], [0, 255, 255], [0, 0, 255]]])
+plt.imshow(rgb1)
+plt.show()
+```
+
+* **Loading .npy files**
+
+	* Save arrays in many formats:
+		* `.cvs`
+		* `.txt`
+		* `.pkl`
+		* `.npy`: the best for speed and storage efficiency
+
+```python
+# rb: read binary
+with open("logo.npy", "rb") as f:
+	logo_rgb_array = np.load(f)
+plt.imshow(logo_rgb_array)
+plt.show()
+```
+
+* **Updating RGB data**
+
+```python
+dark_logo_array = np.where(logo_rgb_array == 250, 50, logo_rgb_array)
+plt.imshow(dark_logo_array)
+plt.show()
+```
+
+* **Saving arrays as .npy files**
+
+```python
+# wb: write binary
+with open("dark_logo.npy", "wb") as f:
+	np.save(f, dark_logo_array)
+```
+
+* **If we need help()**
+
+```python
+help(np.unique)
+# display the documentation for methods
+help(np.ndarray.flatten)
+```
 
 ## 4.2 Array acrobatics
+
+
+
+
+
+
+
+
 
 
 
