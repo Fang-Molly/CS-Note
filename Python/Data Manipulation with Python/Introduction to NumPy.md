@@ -677,21 +677,121 @@ help(np.ndarray.flatten)
 
 ## 4.2 Array acrobatics
 
+* **Flipping an array**
 
+```
+flipped_logo = np.flip(logo_rgb_array)
+plt.imshow(flipped_logo)
+plt.show()
 
+# flip along the first axis: index zero, row
+flipped_rows_logo = np.flip(logo_rgb_array, axis=0)
+plt.imshow(flipped_rows_logo)
+plt.show()
 
+# flip along the third axis: index two, color
+flipped_colors_logo = np.flip(logo_rgb_array, axis=2)
+plt.imshow(flipped_colors_logo)
+plt.show()
 
+# flip multiple axes
+flipped_except_colors_logo = np.flip(logo_rgb_array, axis=(0, 1))
+plt.imshow(flipped_except_colors_logo)
+plt.show()
+```
 
+* **Transposing an array**
 
+```python
+>>> array = np.array([[1.1, 1.2, 1.3],
+...                   [2.1, 2.2, 2.3],
+...                   [3.1, 3.2, 3.3],
+...                   [4.1, 4.2, 4.3]])
+>>> np.flip(array)
+array([[4.3, 4.2, 4.1],
+       [3.3, 3.2, 3.1],
+       [2.3, 2.2, 2.1],
+       [1.3, 1.2, 1.1]])
+	   
+>>> np.transpose(array)
+array([[1.1, 2.1, 3.1, 4.1],
+       [1.2, 2.2, 3.2, 4.2],
+       [1.3, 2.3, 3.3, 4.3]])
+```
 
+* **Setting transposed axis order**
 
-
+```python
+transposed_logo = np.transpose(logo_rgb_array, axes=(1, 0, 2))
+plt.imshow(transposed_logo)
+plt.show()
+```
 
 ## 4.3 Stacking and splitting
 
+* **Slicing dimensions**
 
+```python
+import numpy a np
+rgb = np.array([[[255, 0, 0], [255, 255, 0], [255, 255, 255]],
+ 	            [[255, 0, 255], [0, 255, 0], [0, 255, 255]],
+				[[0, 0, 0], [0, 255, 255], [0, 0, 255]]])
+red_array = rgb[:, :, 0]
+blue_array = rgb[:, :, 1]
+green_array = rgb[:, :, 2]
+red_array
 
+array([[255, 255, 255],
+       [255,   0,   0],
+       [  0,   0,   0]])
+	   
+# split arrays
+red_array, green_array, blue_array = np.split(rgb, 3, axis=2)
+red_array
 
+array([[[255],
+        [255],
+        [255]],
 
+       [[255],
+        [  0],
+        [  0]],
+
+       [[  0],
+        [  0],
+        [  0]]])
+		
+>>> red_array.shape
+(3, 3, 1)
+```
+
+* **Trailing dimensions**
+
+```python
+>>> red_array_2D = red_array.reshape((3, 3))
+>>> red_array_2D
+array([[255, 255, 255],
+       [255,   0,   0],
+       [  0,   0,   0]])
+>>> red_array_2D.shape
+(3, 3)
+```
+
+* **Stacking arrays**
+
+```python
+red_array, green_array, blue_array = np.split(logo_rgb_array, 3, axis=2)
+plt.imshow(red_array)
+plt.show()
+
+# stacking 2D arrays
+red_array = np.zeros((1001, 1001)).astype(np.int32)
+green_array = green_array.reshape((1001, 1001))
+blue_array = blue_array.reshape((1001, 1001))
+
+stacked_rgb = np.stack([red_array, green_array, blue_array], axis=2)
+plt.imshow(stacked_rgb)
+plt.show()
+```
 
 
