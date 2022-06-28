@@ -46,9 +46,64 @@ diabetes, boston, iris = (Path(f).read_text() for f in filenames)
 
 ## 1.2 Modularity
 
+* **What is modularity?**
 
+	* Independent, reusable objects
+	* Each object only has one job
+	* Separate code into modules and scripts
+	* Python code files
+	* `.py` extensions
 
+* **Modules**
+	* Are imported
+	* Provide tools
+	* Define functions
 
+```python
+# the `say` module
+def hello():
+	print("Hello World!")
+```
+
+* **Scripts**
+	* Are run
+	* Perform actions
+	* Call functions
+
+```python
+import say
+
+say.hello()
+```
+
+* **Function definition and calls**
+
+```python
+def hello():
+	print("Hello World!")
+
+hello()
+
+Hello World!
+```
+
+```python
+import say
+say.hello()
+
+Hello World!
+Hello World!
+
+from say import hello
+hello()
+
+Hello World!
+Hello World!
+```
+
+* **Module-script hybrid**
+
+```python
 
 
 
