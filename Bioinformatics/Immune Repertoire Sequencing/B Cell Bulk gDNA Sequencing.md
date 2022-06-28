@@ -57,7 +57,6 @@ cp $DATA/fastq_qc/*missing-pass.fastq $DATA/immunedb_share/input
 docker run -v $DATA/immunedb_share:/share \
  -p 8080:8080 \
  -it arosenfeld/immunedb
- --cpuset-cpus 4
 ```
 
 
