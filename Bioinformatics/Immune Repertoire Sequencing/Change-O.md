@@ -46,8 +46,8 @@ AssignGenes.py igblast \
 ```bash
 # Download and extract IgBLAST
 VERSION="1.19.0"
-wget ftp://ftp.ncbi.nih.gov/blast/executables/igblast/release/${VERSION}/ncbi-igblast-${VERSION}-x64-macosx.tar.gz
-tar -zxf ncbi-igblast-${VERSION}-x64-macosx.tar.gz
+wget ftp://ftp.ncbi.nih.gov/blast/executables/igblast/release/${VERSION}/ncbi-igblast-${VERSION}-x64-linux.tar.gz
+tar -zxf ncbi-igblast-${VERSION}-x64-linux.tar.gz
 cp ncbi-igblast-${VERSION}/bin/* ~/bin
 
 # Download reference databases and setup IGDATA directory
