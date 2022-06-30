@@ -118,20 +118,25 @@ bash run_igblast.sh \
 ```
 
 ```bash
-export IGDATA='~/immc/scripts/ncbi-igblast-1.19.0/bin'
-export DATA='~/Desktop/seq_data'
 
-for file in $DATA/fastq_qc/*.fasta; do
+export IGDATA=~/immc/igblast
+bin/igblastn \
+    -germline_db_V ~/immc/igblast/database/imgt_human_ig_v\
+    -germline_db_D ~/immc/igblast/database/imgt_human_ig_d \
+    -germline_db_J ~/immc/igblast/database/imgt_human_ig_v \
+    -auxiliary_data ~/immc/igblast/optional_file/human_gl.aux \
+    -domain_system imgt -ig_seqtype Ig -organism human \
+    -outfmt '7 std qseq sseq btop' \
+    -query ~/Desktop/seq_data/fastq_qc/D0043-rep1.fasta \
+    -out D0043-rep1.fmt7
 
-AssignGenes.py ~/bin/igblast \
+AssignGenes.py igblast \
 	-s ~/Desktop/seq_data/fastq_qc/D0043-rep1.fasta \
-	-b ~/immc/igblast \
+	-b ~/bin/igblast \
 	-o ~/Desktop/seq_data/igblast \
-	-r $IGDATA
 	--organism human \
 	--loci ig \
-	--format airr \
-	--nproc 4; done
+	--format blast
 ```
 
 convert fastq to fasta
