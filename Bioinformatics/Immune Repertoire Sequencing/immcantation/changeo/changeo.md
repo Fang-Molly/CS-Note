@@ -43,7 +43,7 @@ AssignGenes.py igblast \
 
 ## Configuring IgBLAST
 
-* Copy all the tools in the `/scripts` folder from https://bitbucket.org/kleinstein/immcantation/src/master/scripts/
+* Get tools from https://bitbucket.org/kleinstein/immcantation/src/master/scripts/
 
 	* `fetch_igblastdb.sh`
 
@@ -52,6 +52,8 @@ AssignGenes.py igblast \
 	* `clean_imgtdb.py`
 
 	* `imgt2igblast.sh`
+
+* Download and configure the IgBLAST and IMGT reference databases
 
 ```bash
 #!/usr/bash
@@ -71,6 +73,85 @@ cp -r ncbi-igblast-${VERSION}/optional_file ~/immc/igblast
 bash fetch_imgtdb.sh -o ~/immc/germlines/imgt
 bash imgt2igblast.sh -i ~/immc/germlines/imgt -o ~/immc/igblast
 ```
+
+* Build databases for each segment
+
+```bash
+#!/usr/bash
+
+# V segment database
+~/bin/edit_imgt_file.pl ~/immc/germlines/imgt/human/vdj/imgt_human_IGHV.fasta > ~/immc/igblast/fasta/imgt_human_ig_v.fasta
+
+~/bin/makeblastdb -parse_seqids -dbtype nucl \
+    -in ~/immc/igblast/fasta/imgt_human_ig_v.fasta \
+    -out ~/immc/igblast/database/imgt_human_ig_v
+
+# D segment database
+~/bin/edit_imgt_file.pl ~/immc/germlines/imgt/human/vdj/imgt_human_IGHD.fasta > ~/immc/igblast/fasta/imgt_human_ig_d.fasta
+
+~/bin/makeblastdb -parse_seqids -dbtype nucl \
+    -in ~/immc/igblast/fasta/imgt_human_ig_d.fasta \
+    -out ~/immc/igblast/database/imgt_human_ig_d
+
+# J segment database
+~/bin/edit_imgt_file.pl ~/immc/germlines/imgt/human/vdj/imgt_human_IGHJ.fasta > ~/immc/igblast/fasta/imgt_human_ig_j.fasta
+
+~/bin/makeblastdb -parse_seqids -dbtype nucl \
+    -in ~/immc/igblast/fasta/imgt_human_ig_j.fasta \
+    -out ~/immc/igblast/database/imgt_human_ig_j
+```
+
+## Running IgBLAST
+
+
+```bash
+
+bash run_igblast.sh \
+	-s ~/Desktop/seq_data/fastq_qc/D0043-rep1.fasta \
+	-o ~/Desktop/seq_data/igblast \
+    -g human \
+	-t ig \
+	-b ~/immc/igblast \
+	-i nt \
+	-n 4
+	
+```
+
+```bash
+export IGDATA='~/immc/scripts/ncbi-igblast-1.19.0/bin'
+export DATA='~/Desktop/seq_data'
+
+for file in $DATA/fastq_qc/*.fasta; do
+
+AssignGenes.py ~/bin/igblast \
+	-s ~/Desktop/seq_data/fastq_qc/D0043-rep1.fasta \
+	-b ~/immc/igblast \
+	-o ~/Desktop/seq_data/igblast \
+	-r $IGDATA
+	--organism human \
+	--loci ig \
+	--format airr \
+	--nproc 4; done
+```
+
+convert fastq to fasta
+
+```
+for filename in *.fastq; do
+seqtk seq -a "$filename" > "$filename".fasta; done
+```
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
