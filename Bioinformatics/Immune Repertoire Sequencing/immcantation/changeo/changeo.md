@@ -103,22 +103,17 @@ bash imgt2igblast.sh -i ~/immc/germlines/imgt -o ~/immc/igblast
 
 ## Running IgBLAST
 
+* Convert fastq to fasta
 
-```bash
-
-bash run_igblast.sh \
-	-s ~/Desktop/seq_data/fastq_qc/D0043-rep1.fasta \
-	-o ~/Desktop/seq_data/igblast \
-    -g human \
-	-t ig \
-	-b ~/immc/igblast \
-	-i nt \
-	-n 4
-	
+```
+for filename in *.fastq; do
+seqtk seq -a "$filename" > "$filename".fasta; done
 ```
 
-```bash
+* Run IgBlast
 
+```bash
+for file in *.fasta; do
 export IGDATA=~/immc/igblast
 bin/igblastn \
     -germline_db_V ~/immc/igblast/database/imgt_human_ig_v\
@@ -127,26 +122,25 @@ bin/igblastn \
     -auxiliary_data ~/immc/igblast/optional_file/human_gl.aux \
     -domain_system imgt -ig_seqtype Ig -organism human \
     -outfmt '7 std qseq sseq btop' \
-    -query ~/Desktop/seq_data/fastq_qc/D0043-rep1.fasta \
-    -out D0043-rep1.fmt7
+    -query ~/Desktop/seq_data/fastq_qc/"$file" \
+    -out "$file".fmt7
 
-AssignGenes.py igblast \
-	-s ~/Desktop/seq_data/fastq_qc/D0043-rep1.fasta \
-	-b ~/bin/igblast \
-	-o ~/Desktop/seq_data/igblast \
-	--organism human \
-	--loci ig \
-	--format blast
-```
+MakeDb.py igblast -i D0043-rep1.fasta.fmt7 -s D0043-rep1.fasta \
+    -r ~/immc/germlines/imgt/human/vdj \
+    --format airr
 
-convert fastq to fasta
-
-```
-for filename in *.fastq; do
-seqtk seq -a "$filename" > "$filename".fasta; done
+MakeDb.py igblast -i D0043-rep2.fasta.fmt7 -s D0043-rep2.fasta \
+    -r ~/immc/germlines/imgt/human/vdj --outname data\
+    --format airr
 ```
 
 
+```bash
+export IGDATA=~/immc/igblast
+AssignGenes.py igblast -s ~/Desktop/seq_data/fastq_qc/D0043-rep1.fasta \
+	-b ~/immc/igblast --organism human --loci ig \
+	--format blast --outdir ~/Desktop/seq_data/igblast --nproc 4
+```
 
 
 
