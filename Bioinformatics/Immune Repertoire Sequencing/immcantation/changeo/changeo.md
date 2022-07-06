@@ -109,8 +109,19 @@ bash imgt2igblast.sh -i ~/immc/germlines/imgt -o ~/immc/igblast
 for filename in *.fastq; do
 seqtk seq -a "$filename" > "$filename".fasta; done
 ```
+ 
+* Option 1 : Run IgBlast using AssignGenes.py
 
-* Run IgBlast
+```
+export PATH=$PATH:~/immc/scripts/ncbi-igblast-1.19.0/bin
+
+for file in *.fasta; do
+AssignGenes.py igblast -s ~/Desktop/seq_data/fastq_qc/"$file" \
+-b ~/immc/igblast --organism human --loci ig \
+--format airr --outdir ~/Desktop/seq_data/igblast --nproc 4; done
+```
+
+* Option 2 : Run IgBlast using igblastn
 
 ```bash
 cd ~/Desktop/seq_data/fastq_qc
@@ -137,6 +148,30 @@ MakeDb.py igblast -i "$file1" -s "$file2" \
 
 
 
+
+# Genotyping and discovery of novel V gene alleles with TIgGER
+
+
+
+```python
+# assign clonal groups
+! DefineClones.py -d ~/Desktop/seq_data/tigger/data_ph_genotyped.tsv --vf v_call_genotyped \
+--model ham --norm len --dist 0.08 --format airr --nproc 4 \
+--outname data_ph_genotyped --outdir ~/Desktop/seq_data/changeo/
+```
+
+```python
+CreateGermlines.py -d ~/Desktop/seq_data/changeo/data_ph_genotyped_clone-pass.tsv \
+-r ~/immc/germlines/imgt/human/vdj/*IGH[DJ].fasta ~/Desktop/seq_data/tigger/v_genotype.fasta \
+-g dmask --cloned --vf v_call_genotyped \
+--format airr --outname data_ph_genotyped --outdir ~/Desktop/seq_data/changeo/
+```
+
+# 6. Alakazam: Analysis of clonal diversity
+
+
+
+# 7. Alakazam: Physicochemical properties of the CDR3
 
 
 
