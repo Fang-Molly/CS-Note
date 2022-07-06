@@ -26,19 +26,6 @@ usage: AssignGenes.py igblast [--version] [-h] [-o OUT_FILES [OUT_FILES ...]]
                               [--exec IGBLAST_EXEC]
 ```
 
-```bash
-export DATA=''
-
-AssignGenes.py igblast \
-	-o $DATA/igblast
-	-s $DATA/fastq_qc/*.fastq
-	-b 
-	--organism human
-	--loci ig
-	--format airr
-```
-	
-
 # Using IgBLAST
 
 ## Configuring IgBLAST
