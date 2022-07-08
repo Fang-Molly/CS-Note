@@ -13,7 +13,7 @@ Change-O is a collection of tools for processing the output of V(D)J alignment t
 
 # Commandline Usage
 
-## AssignGenes.py igblast
+## `AssignGenes.py igblast` Executes igblastn
 
 ```
 usage: AssignGenes.py igblast [--version] [-h] [-o OUT_FILES [OUT_FILES ...]]
@@ -25,6 +25,13 @@ usage: AssignGenes.py igblast [--version] [-h] [-o OUT_FILES [OUT_FILES ...]]
                               [--jdb JDB] [--format {blast,airr}]
                               [--exec IGBLAST_EXEC]
 ```
+
+## `ParseDb.py merge` Merges files
+
+```
+ParseDb.py merge -d 
+
+
 
 # Using IgBLAST
 
@@ -133,6 +140,7 @@ MakeDb.py igblast -i "$file1" -s "$file2" \
     --format airr; done; done
 ```
 
+# 
 
 
 
@@ -154,11 +162,7 @@ CreateGermlines.py -d ~/Desktop/seq_data/changeo/data_ph_genotyped_clone-pass.ts
 --format airr --outname data_ph_genotyped --outdir ~/Desktop/seq_data/changeo/
 ```
 
-# 6. Alakazam: Analysis of clonal diversity
 
-
-
-# 7. Alakazam: Physicochemical properties of the CDR3
 
 
 
