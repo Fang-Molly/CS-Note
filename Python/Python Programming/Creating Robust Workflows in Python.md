@@ -88,22 +88,105 @@ Hello World!
 ```
 
 ```python
+# lead to duplicated output, because the input statement executes Python code files to make imported objects available.
 import say
 say.hello()
 
 Hello World!
 Hello World!
 
+# To avoid this duplicated output, remove the function call in the module
 from say import hello
 hello()
 
-Hello World!
 Hello World!
 ```
 
 * **Module-script hybrid**
 
+```
+# To avoid this duplicated output, add if satement to prevent the function from being called
+def hello():
+	print("Hello World!")
+if __name__ =='__main__':
+	hello()
+
+from say import hello
+hello()
+Hello World!
+```
+
+* **The __name__variable**
+
 ```python
+def name():
+	print(__name__)
+	
+if __name__ == '__main__':
+	name()
+``` 
+
+* **One function to rule them all**
+
+```python
+from pathlib import Path
+
+def do_everything(filename, match):
+	matches = (line for line in Path(filename).open() if match in line)
+	flat = (string for sublist in matches for string in sublist)
+	num_gen = (int(substring) for string in flat for substring in string.split() if substring.isdigit())
+	return zip(num_gen, num_gen)
+```
+
+* **One job per function**
+
+```python
+def generate_matches(filename, match):
+	return (line for line in Path(filename).open() if match in line)
+def flatten(nested_list):
+	return (string for sublist in nested_list for string in sublist)
+def generate_numbers(string_source):
+	return (int(substring) for string in string_source
+		for substring in string.split() if substring.isdigit()
+def pair(generator):
+	return zip(generator, generator)
+```
+
+* **Iterators**
+
+```python
+def pair(items):
+	iterator = iter(items)
+	return zip(iterator, iterator)
+pairs = list(pair([1, 2, 3, 4]))
+
+pairs
+[(1, 2), (3, 4)]
+```
+
+* **Generators are iterators**
+
+```python
+def pair(items):
+	iterator = iter(items)
+	return zip (iterator, iterator)
+pairs = list(pair([1, 2, 3, 4]))
+pairs
+[(1, 2), (3, 4)]
+```
+
+* **Adaptable functions**
+
+```python
+def pair(items):
+	iterator = iter(items)
+	return zip(iterator, iterator)
+pairs = list(pair([1, 2, 3, 4]))
+list(flatten(pairs))
+[1, 2, 3, 4]
+```  
+
+## Abstraction
 
 
 
@@ -114,4 +197,13 @@ Hello World!
 # 3. Shell superpowers
 
 # 4. Projects, pipelines, and parallelism
+
+
+
+
+
+
+
+
+
 
