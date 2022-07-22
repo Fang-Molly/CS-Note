@@ -123,7 +123,100 @@ In [9]: error
 Out[9]: 'no error so far\n'
 ```
 
-* **Automate with SList**
+## 1.3 Automate with SList
+
+* **SList methods**
+
+	* `fields`
+	* `grep`
+	* `sort`
+
+* **Using SList fields**
+
+```
+# List the items in a directory and save the variable
+ls = !ls -l /usr/bin
+
+# Collect whitespace-separated fields
+ls.fields(1, 5)[1:4]
+['1 jan', '1 Jul', '1 Sep']
+```
+
+* **Using SList grep**
+
+```
+# Assign `ls` output to an `SList`
+ls = !ls -l /usr/bin
+
+# Grep a pattern
+ls.grep("Kill")
+
+# Only results matching pattern are displayed
+['lrwxrwxrwx 1 root root         5 May 14  2018 pkill -> pgrep','-rwxr-xr-x 1 root root     26704 May 14  2018 skill']
+```
+
+* **Using SList sort**
+
+```
+# Capture df unix command
+disk_usage = !df -h
+
+# Sort by usage
+disk_usage.sort(5, nums = True)
+
+['/dev/nvme0n1p1  335G  177G  158G  53% /etc/hosts',
+ 'Filesystem      Size  Used Avail Use% Mounted on',
+ 'overlay         335G  177G  158G  53% /',
+ 'shm              64M   24K   64M   1% /dev/shm']
+```
+
+* **SList and regular Python lists**
+
+```
+# An SList can be popped using `.pop()`
+var = ls.pop()
+print(var)
+'pear84.txt'
+
+# slicing operations work on SLists
+ls[-4:]
+['pear5.txt', 'pear52.txt', 'pear56.txt', 'pear6.txt']
+```
+	
+* **Wrapping up SList**
+
+```
+# SList to list workflow
+type(ls)
+'IPython.utils.text.SList'
+newls = list(ls)
+'list'
+
+# SList to set
+sls = set(ls)
+
+# SList to dictionary
+dls = dict(vals=ls)
+```
+
+# 2. Shell commands with subprocess
+
+## 2.1 Execute shell commands in subprocess
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
