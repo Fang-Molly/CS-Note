@@ -5,13 +5,13 @@ Introduction to Data Visualization with Seaborn
 
 ## 1.1 Introduction to Seaborn
 
-* What is Seaborn?
+* **What is Seaborn?**
 
 	* Seaborn is a library for making statistical graphics in Python.
 
 	* It builds on top of matplotlib and integrates closely with pandas data structures.
 
-* Getting started
+* **Getting started**
 
 	* Install: `pip3 install seaborn`
 
@@ -22,7 +22,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 ```
 
-* Example 1: Scatter plot
+* **Example 1: Scatter plot**
 
 ```python
 import seaborn as sns
@@ -33,7 +33,7 @@ sns.scatterplot(x=height, y=weight)
 plt.show()
 ```
 
-* Example 2: Create a count plot 
+* **Example 2: Create a count plot**
 
 ```python
 import seaborn as sns
@@ -45,7 +45,7 @@ plt.show()
 
 ## 1.2 Using pandas with Seaborn
 
-* Using DataFrames with countplot()
+* **Using DataFrames with countplot()**
 
 ```python
 import pandas as pd
@@ -99,7 +99,7 @@ plt.show()
 
 ## 2.1 Introduction to relational plots and subplots
 
-* Questions about quantitative variables
+* **Questions about quantitative variables**
 
 	* Relational plots
 
@@ -107,7 +107,7 @@ plt.show()
 		* Number of school absences vs. final grade
 		* GDP vs. percent literate
 
-* Introducing relplot()
+* **Introducing relplot()**
 
 	* Create "relational plots": scatter plots or line plots
 		* Why use `relplot()` instead of `scatterplot()`?
@@ -147,6 +147,7 @@ import matplotlib.pyplot as plt
 sns.relplot(x="total_bill", y="tip", data=tips, kind="scatter", row="smoker")
 plt.show()
 ```
+
 * **Subplots in rows and columns**
 
 ```python
@@ -177,13 +178,269 @@ sns.relplot(x="total_bill", y="tip", data=tips, kind="scatter", col="day", col_w
 plt.show()
 ```
 
-* **Customizing scatter plots**
+## Customizing scatter plots
 
+* **Scatter plot overview**
 
+	* Show relationship between two quantitative variables
+	* We've seen:
+		* Subplots (`col` and `row`)
+		* Subgroups with color (`hue`)
 
+	* New Customizations:
+		* Subgroups with point size and style
+		* Changing point transparency
 
+	* Use with both `scatterplot()` and `relplot()`
+
+* **Subgroups with point size**
+
+```python
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+sns.relplot(x="total_bill", y="tip", data=tips, kind="scatter", size="size")
+plt.show()
+```
+
+* **Point size and hue**
+
+```python
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+sns.relplot(x="total_bill", y="tip", data=tips, kind="scatter", size="size", hue="size")
+plt.show()
+```
+
+* **Subgroups with point style**
+
+```python
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+sns.relplot(x="total_bill", y="tip", data=tips, kind="scatter", hue="smoker", style="smoker")
+plt.show()
+```
+
+* **Changing point transparency**
+
+```python
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+sns.relplot(x="total_bill", y="tip", data=tips, kind="scatter", alpha=0.4)
+plt.show()
+```
+
+## Introduction to line plots
+
+* **What are line plots**
+
+	* Two types of relational plots: 
+		* Scatter plots: each plot point is an independent observation
+		* Line plots: each plot point represents the same "thing", typically tracked over time
+
+* **Scatter plot**
+
+```python
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+sns.relplot(x="hour", y="NO_2_mean", data=air_df_mean, kind="scatter")
+plt.show()
+```
+
+* **Line plot**
+
+```python
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+sns.relplot(x="hour", y="NO_2_mean", data=air_df_mean, kind="line")
+plt.show()
+```
+
+* **Subgroups by location**
+
+```python
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+sns.relplot(x="hour", y="NO_2_mean", data=air_df_mean, kind="line", style="location", hue="location")
+plt.show()
+```
+
+* **Add markers**
+
+```python
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+sns.relplot(x="hour", y="NO_2_mean", data=air_df_mean, kind="line", style="location", hue="location", markers=True)
+plt.show()
+```
+
+* **Turning off line style**
+
+```python
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+sns.relplot(x="hour", y="NO_2_mean", data=air_df_mean, kind="line", style="location", hue="location", markers=True, dashes=False)
+plt.show()
+```
+
+* **Multiple observations per x-value**
+
+	* Shaded region is the confidence interval
+		* Assumes dataset is a random sample
+		* 95% confident that the mean is within this interval
+		* Indicates uncertainty in our estimate
+
+```python
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# scatter plot
+sns.relplot(x="hour", y="NO_2", data=air_df, kind="scatter")
+plt.show()
+
+# line plot
+sns.relplot(x="hour", y="NO_2", data=air_df, kind="line")
+plt.show()
+```
+
+* **Replacing confidence interval with standard deviation**
+
+```python
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+sns.relplot(x="hour", y="NO_2", data=air_df, kind="line", ci="sd")
+plt.show()
+```
+
+* **Turning off confidence interval**
+
+```python
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+sns.relplot(x="hour", y="NO_2", data=air_df, kind="line", ci=None)
+plt.show()
+```
 
 # 3. Visualizing a Categorical and a Quantitative Variable
+
+## 3.1 Count plots and bar plots
+
+* **Categorical plots**
+
+	* Examples: count plots, bar plots
+	* Involve a categorical variable
+	* Comparisons between groups
+
+* **catplot()**
+
+	* Used to create categorical plots
+	* Same advantages of `repplot()`
+	* Easily create subplots with `col=` and `row=`
+
+* **countplot() vs. catplot()**
+
+```python
+import seaborn as sns
+import matplotlib.pyplot as plt
+sns.countplot(x="how_masculine", data=masculinity_data)
+plt.show()
+```
+
+```python
+import seaborn as sns
+import matplotlib.pyplot as plt
+sns.catplot(x="how_masculine", data=masculinity_data, kind="count")
+plt.show()
+```
+
+* **Changing the order**
+
+```python
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+category_order = ["No answer", "Not at all", "Not very", "Somewhat", "Very"]
+sns.catplot(x="how_masculine", data=masculinity_data, kind="count", order=category_order)
+plt.show()
+```
+
+* **Bar plots**
+
+	* Display mean of quantitative variable per category
+
+	* Confidence intervals
+		* Lines show 95% confidence intervals for the mean
+		* Shows uncertainy about our estimate
+		* Assumes our data is a random sample
+
+```python
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+sns.catplot(x="day", y="total_bill", data=tips, kind="bar")
+plt.show()
+```
+
+* **Turning off confidence intervals**
+
+```python
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+sns.catplot(x="day", y="total_bill", data=tips, kind="bar", ci=None)
+plt.show()
+```
+
+* **Changing the orientation**
+
+```python
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+sns.catplot(x="total_bill", y="day", data=tips, kind="bar" )
+plt.show()
+```
+
+## Creating a box plot
+
+* **What is a box plot?**
+
+	* Shows the distribution of quantitative data
+	* See median, spread, skewness, and outliers
+	* Facilitations comparisons between groups
+
+* **How to create a box plot**
+
+```python
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+sns.catplot(x="time", y="total_bill", data=tips, kind="box")
+plt.show()
+```
+
+* **Change the order of categories**
+
+```python
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+g = sns.catplot(x="time", y="total_bill", data=tips, kind="box", order=["Dinner", "Lunch"])
+plt.show()
+```
+
+* **Omitting the 
+
 
 
 
