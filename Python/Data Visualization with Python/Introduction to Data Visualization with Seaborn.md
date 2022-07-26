@@ -470,13 +470,138 @@ plt.show()
 
 * **What are point plots?**
 
+	* Points show mean of quantitative confidence
+	* Vertical lines show 95% confidence intervals
 
+* **Point plots vs. line plots**
 
+	* Both show:
+		* Mean of quantitative variable
+		* 95% confidence intervals for the mean
 
+	* Differences:
+		* Line plot has quantitative variable (usually time) on x-axis
+		* Point plot has categorical variable on x-axis
 
+* **Point plots vs. bar plots**
 
+	* Both show:
+		* Mean of quantitative variable
+		* 95% confidence intervals for the mean 
+
+* **Creating a point plot**
+
+```python
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+sns.catplot(x="age", y="masculinity_important", data=masculinity_data, hue="feel_masculine", kind="point")
+
+plt.show()
+```
+
+* **Disconnecting the points**
+
+```python
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+sns.catplot(x="age", y="masculinity_important", data=masculinity_data, hue="feel_masculine", kind="point", join=False)
+
+plt.show()
+```
+
+* **Displaying the median**
+
+```python
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+sns.catplot(x="smoker", y="total_bill", data=tips, kind="point")
+plt.show()
+```
+
+```python
+import seaborn as sns
+import matplotlib.pyplot as plt
+from numpy import median
+
+sns.catplot(x="smoker", y="total_bill", data=tips, kind="point", estimator=median)
+plt.show()
+```
+
+* **Customizing the confidence intervals**
+
+```python
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+sns.catplot(x="smoker", y="total_bill", data=tips, kind="point", capsize=0.2)
+plt.show()
+```
+
+* **Turning off confidence intervals**
+
+```python
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+sns.catplot(x="smoker", y="total_bill", data=tips, kind="point", ci=None)
+plt.show()
+```
 
 # 4. Customizing Seaborn Plots
+
+## 4.1 Changing plot style and color
+
+* **Why customize?**
+
+	* Personal preference
+	* Improve readability
+	* Guide interpretation
+
+* **Changing the figure style**
+
+	* Figure "style" includes background and axes
+	* Preset 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
