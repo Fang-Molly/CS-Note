@@ -439,7 +439,36 @@ g = sns.catplot(x="time", y="total_bill", data=tips, kind="box", order=["Dinner"
 plt.show()
 ```
 
-* **Omitting the 
+* **Omitting the outliers using `sym`**
+
+```python
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+g = sns.catplot(x="time", y="total_bill", data=tips, kind="box", sym="")
+plt.show()
+```
+
+* **Changing the whiskers using `whis`**
+
+	* By default, the whiskers extend to 1.5 * the interquartile range
+	* Make them extend to 2.0 * IQR: `whis=2.0`
+	* Show the 5th and 95th percentiles: `whis=[5, 95]`
+	* Show min and max values: `whis=[0, 100]`
+
+* **Changing the whiskers using `whis`**
+
+```python
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+g = sns.catplot(x="time", y="total_bill", data=tips, kind="box", whis=[0, 100])
+plt.show()
+```
+
+## Point plots
+
+* **What are point plots?**
 
 
 
