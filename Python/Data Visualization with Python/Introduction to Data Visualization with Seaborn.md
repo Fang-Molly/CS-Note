@@ -489,6 +489,15 @@ plt.show()
 # 3. Visualizing a Categorical and a Quantitative Variable
 
 ## 3.1 Count plots and bar plots
+* **Categorical Data**
+	* Data which takes on a limited and fixed number of values
+	* Normally combined with numeric data
+	* Examples include:
+		* Geography(country, state, region)
+		* Gender
+		* Ethnicity
+		* Blood type
+		* Eye color
 
 * **Categorical plots**: show the distribution of a quantitative variable within categories defined by a categorical variable
 
@@ -564,6 +573,54 @@ import matplotlib.pyplot as plt
 
 sns.catplot(x="total_bill", y="day", data=tips, kind="bar" )
 plt.show()
+```
+
+* **Plots of each observation - stripplot**
+
+```python
+sns.stripplot(data=df, y="DRG Definition", x="Average Covered Charges", jitter=True)
+```
+
+* **Plots of each observation - swarmplot**
+
+```python
+sns.swarmplot(data=df, y="DRG Definition", x="Average Covered Charges")
+```
+
+* **Abstract representations - boxplot**
+
+```python
+sns.boxplot(data=df, y="DRG Definition", x="Average Covered Charges")
+```
+
+* **Abstract representations - violinplot**
+
+```python
+sns.violinplot(data=df, y="DRG Definition", x="Average Covered Charges")
+```
+
+* **Abstract representations - boxenplot**
+
+```python
+sns.boxenplot(data=df, y="DRG Definition", x="Average Covered Charges")
+```
+
+* **Statistical estimates - barplot**
+
+```python
+sns.barplot(data=df, y="DRG Definition", x="Average Covered Charges", hue="Region")
+```
+
+* **Statistical estimates - pointplot**
+
+```python
+sns.poinplot(data=df, y="DRG Definition", x="Average Covered Charges", hue="Region")
+```
+
+* **Statistical estimates - countplot**
+
+```python
+sns.countplot(data=df, y="DRG Definition", x="Average Covered Charges", hue="Region")
 ```
 
 ## Creating a box plot
@@ -1036,13 +1093,15 @@ ax1.axvline(x=20000, label='My Budget', linestyle='--')
 ax1.legend()
 ```
 
+# 5. Additional Plot Types
+
+## 5.1 Categorical Plot Types
+
+–––
 
 
 
-
-
-
-
+# 6. Creating Plots on Data Aware Grids
 
 
 
