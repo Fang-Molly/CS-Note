@@ -563,26 +563,180 @@ plt.show()
 * **Changing the figure style**
 
 	* Figure "style" includes background and axes
-	* Preset 
+	* Preset options: "white", "dark", "whitegrid", "darkgrid", "ticks"
+	* `sns.set_style()`
 
+* **Default figure style ("white")
 
+```python
+import matplotlib.pyplot as plt
+import seaborn as sns
 
+sns.catplot(x="age", y="masculinity_important", data=masculinity_data, hue="feel_masculine", kind="point")
 
+plt.show()
+```
 
+* **Figure style: "whitegrid"**
 
+```python
+import matplotlib.pyplot as plt
+import seaborn as sns
 
+sns.set_style("whitegrid")
 
+sns.catplot(x="age", y="masculinity_important", data=masculinity_data, hue="feel_masculine", kind="point")
 
+plt.show()
+```
 
+* **Other styles**
 
+```python
+import matplotlib.pyplot as plt
+import seaborn as sns
 
+sns.set_style("ticks")
 
+sns.catplot(x="age", y="masculinity_important", data=masculinity_data, hue="feel_masculine", kind="point")
 
+plt.show()
+```
 
+```python
+import matplotlib.pyplot as plt
+import seaborn as sns
 
+sns.set_style("dark")
 
+sns.catplot(x="age", y="masculinity_important", data=masculinity_data, hue="feel_masculine", kind="point")
 
+plt.show()
+```
 
+```python
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+sns.set_style("darkgrid")
+
+sns.catplot(x="age", y="masculinity_important", data=masculinity_data, hue="feel_masculine", kind="point")
+
+plt.show()
+```
+
+* **Changing the palette**
+
+	* Figure "palette" changes the color of the main elements of the plot
+	* `sns.set_palette()`
+	* Use present palettes or create a custom palette
+
+* **Diverging palettes**
+
+	* "RdBu"
+	* "PRGn"
+	* "RdBu_r"
+	* "PRGn_r"
+
+* **Example (default palette)
+
+```python
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+category_order = ["No answer", "Not at all", "Not very", "Somewhat", "Very"]
+
+sns.catplot(x="how_masculine", data=masculinity_data, kind="count", order=category_order)
+
+plt.show()
+```
+
+* **Example (diverging palette)**
+
+```python
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+sns.set_palette("RdBu")
+
+category_order = ["No answer", "Not at all", "Not very", "Somewhat", "Very"]
+
+sns.catplot(x="how_masculine", data=masculinity_data, kind="count", order=category_order)
+
+plt.show()
+```
+
+* **Sequential palettes**
+
+	* "Greys"
+	* "Blues"
+	* "PuRd"
+	* "GnBu"
+
+* **Custom palettes**
+
+```python
+custom_palettle = ["red", "green", "orange", "blue", "yellow", "purple"]
+
+sns.set_palette(custom_palette)
+```
+
+```python
+custom_palettle = ['#FBB4AE', '#B3CDE3', '#CCEBC5', '#DECBE4', '#FED9A6', '#FFFFCC', '#E5D8BD', '#FDDAEC', '#F2F2F2']
+
+sns.set_palette(custom_palette)
+```
+
+* **Changing the scale**
+
+	* Figure "context" changes the scale of the plot elements and labels
+	* `sns.set_context()`
+	* Smallest to largest: "paper", "notebook", "talk", "poster"
+
+* **Default context: "paper"**
+
+```python
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+sns.catplot(x="age", y="masculinity_important", data=masculinity_data, hue="feel_masculine", kind="point")
+
+plt.show()
+```
+
+* **Larger context: "talk"**
+
+```python
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+sns.set_context("talk")
+
+sns.catplot(x="age", y="masculinity_important", data=masculinity_data, hue="feel_masculine", kind="point")
+
+plt.show()
+```
+
+## Adding titles and labels
+
+* **Creating informative visualizations**
+
+* **FacetGrid vs. AxesSubplot objects**
+
+	* `FacetGrid`
+		* `relplot()`, `catplot()`
+		* Can create subplots
+	
+	* `AxesSubplot`
+		* `scatterplot()`, `countplot()`, etc
+		* Only creates a single plot
+
+```python
+g = sns.scatterplot(x="height", y="weight", data=df)
+type(g)
+```
+
+* **Adding a tile to FacetGrid**
 
 
 
