@@ -5,24 +5,58 @@ Introduction to Data Visualization with Seaborn
 
 ## 1.1 Introduction to Seaborn
 
-* **What is Seaborn?**
+* **Pandas**
+
+	* `pandas` is a fundational library for analyzing data
+	* Easily read datasets from csv, txt and other types of files
+	* It supports basic plotting capability
+
+```python
+import pandas as pd
+
+df = pd.read_csv("wines.csv")
+
+df['alcohol'].plot.hist()
+```
+
+* **Matplotlib**
+
+	* `matplotlib` provides the raw building blocks for Seaborn's visualizations
+	* It can also be used on its own to plot data
+
+```python
+import matplotlib.pyplot as plt
+import pandas as pd
+
+df = pd.read_csv("wines.csv")
+
+fig, ax = plt.subplots()
+ax.hist(df['alcohol'])
+```
+
+* **Seaborn**
 
 	* Seaborn is a library for making statistical graphics in Python.
+	* It is built on matplotlib and works best with pandas dataframes
+	
+	* **Getting started**
 
-	* It builds on top of matplotlib and integrates closely with pandas data structures.
+		* Install: `pip3 install seaborn`
 
-* **Getting started**
-
-	* Install: `pip3 install seaborn`
-
-	* Import seaborn: `sns`, Samuel Norman Seaborn
+		* Import seaborn: `sns`, Samuel Norman Seaborn
 
 ```
+# import seaborn
 import seaborn as sns
+
+# import matplotlib
 import matplotlib.pyplot as plt
+
+# show a plot
+plt.show()
 ```
 
-* **Example 1: Scatter plot**
+* **Seaborn Scatter plot**
 
 ```python
 import seaborn as sns
@@ -33,7 +67,7 @@ sns.scatterplot(x=height, y=weight)
 plt.show()
 ```
 
-* **Example 2: Create a count plot**
+* **Seaborn count plot**
 
 ```python
 import seaborn as sns
@@ -43,7 +77,88 @@ sns.countplot(x=gender)
 plt.show()
 ```
 
-## 1.2 Using pandas with Seaborn
+* **Seaborn histplot**
+
+```python
+import pandas as pd
+import seaborn as sns
+
+df = pd.read_csv("wines.csv")
+
+sns.histplot(df['alcohol'])
+```
+
+* **Seaborn displot**
+
+	* The `displot` leverages the `histplot` and other functions for distribution plots
+	* By default, it generates a histogram but can also generate other plot types
+
+```python
+import pandas as pd
+import seaborn as sns
+
+df = pd.read_csv("wines.csv")
+
+sns.displot(df['alcohol'], kind="kde")
+```
+
+* **pandas Histogram vs. Displot**
+
+	* Pandas histogram: `df['alcohol'].plot.hist()`
+		* Actual frequency of observations
+		* No outline of bars
+		* Wide bins
+		* No x-axis label
+	* Seaborn displot: `sns.displot(df['alcohol'])`
+		* Automatic label on x-axis
+		* Muted color palette
+		* Cleaner plot
+
+## 1.2 Using the distribution plot
+
+* **Creating a histogram**
+
+	* The `displot` function has multiple optional arguments
+	* You can overlay a KDE plot on the histogram and specity the number of bins to use
+
+```python
+import pandas as pd
+import seaborn as sns
+
+df = pd.read_csv("wines.csv")
+
+sns.displot(df['alcohol'], kde=True, bins=10)
+```
+
+* **Alternative data distributions**
+
+	* A rug plot is an alternative way to view the distribution of data by including small tickmarks along the x axis
+	* A kde curve and rug plot can be combined
+
+```python
+import pandas as pd
+import seaborn as sns
+
+df = pd.read_csv("wines.csv")
+
+sns.displot(df['alcohol'], kind='kde', rug=True, fill=True)
+```
+
+* **Further plot types**
+
+	* The `displot` function uses several functions including `kdeplot`, `rugplot`, `ecdfplot`
+	* The `ecdfplot` shows the cumulative distribution of the data
+
+```python
+import pandas as pd
+import seaborn as sns
+
+df = pd.read_csv("wines.csv")
+
+sns.displot(df['alcohol'], kind='ecdf')
+```
+
+## 1.3 Using pandas with Seaborn
 
 * **Using DataFrames with countplot()**
 
@@ -56,7 +171,9 @@ sns.countplot(x="how_masculine", data=df)
 plt.show()
 ```
 
-## 1.3 Adding a third variable with hue
+## 1.4 Adding a third variable with hue
+
+* Setting `hue` will create subgroups that are displayed as different colors on a single plot
 
 ```python
 # load library
@@ -95,13 +212,51 @@ sns.scatterplot(x="smoker", data=tips, hue="sex")
 plt.show()
 ```
 
+## 1.5 Regression Plots in Seaborn
+
+* **Introduction to regplot**
+
+	* The `regplot` function generates a scatter plot with a regression line
+	* Usage is similar to the `displot`
+	* The `data` and `x` and `y` variables must be defined
+
+`sns.regplot(data=df, x="alcohol", y="pH")`
+
+* **lmplot() builds on top of the base regplot()**
+
+	* `regplot` - low level
+	
+	```python
+	sns.regplot(data=df, x="alcohol", y="quality")
+	```
+	
+	* `lmplot` - high level
+
+	```python
+	sns.lmplot(data=df, x="alcohol", y="quality")
+	```
+
+* **lmplot faceting**
+
+	* Organize data by colors (`hue`)
+	
+	```python
+	sns.lmplot(data=df, x="quality", y="alcohol", hue="type")
+	```
+	
+	* Organize data by columns (`col`)
+	
+	```python
+	sns.lmplot(data=df, x="quality", y="alcohol", col="type")
+	```
+
 # 2. Visualizing Two Quantitative Variables
 
 ## 2.1 Introduction to relational plots and subplots
 
 * **Questions about quantitative variables**
 
-	* Relational plots
+	* **Relational plots**: show the relationship between two quantitative variables
 
 		* Height vs. weight
 		* Number of school absences vs. final grade
@@ -335,9 +490,9 @@ plt.show()
 
 ## 3.1 Count plots and bar plots
 
-* **Categorical plots**
+* **Categorical plots**: show the distribution of a quantitative variable within categories defined by a categorical variable
 
-	* Examples: count plots, bar plots
+	* Examples: count plots, bar plots, box plots, point plots
 	* Involve a categorical variable
 	* Comparisons between groups
 
@@ -554,11 +709,10 @@ plt.show()
 
 ## 4.1 Changing plot style and color
 
-* **Why customize?**
+* **Setting Styles**
 
-	* Personal preference
-	* Improve readability
-	* Guide interpretation
+	* Seaborn has default configurations that can be applied with `sns.set()`
+	* These styles can override matplotlib and pandas plots as well
 
 * **Changing the figure style**
 
@@ -625,18 +779,72 @@ sns.catplot(x="age", y="masculinity_important", data=masculinity_data, hue="feel
 plt.show()
 ```
 
-* **Changing the palette**
+```python
+for style in ['white', 'dark', 'whitegrid', 'darkgrid', 'ticks']:
+	sns.set_style(style)
+	sns.displot(df['Tuition'])
+	plt.show()
+```
 
+* **Removing axes with despine()**
+
+	* Sometimes plots are improved by removing elements
+	* Seaborn contains a shortcut for removing the spines of a plot
+
+```python
+sns.set_style('white')
+sns.displot(df['Tuition'])
+sns.despine(left=True)
+```
+
+* **Defining a color for a plot**
+
+	* Seaborn supports assigning colors to plots using `matplotlib` color codes
+
+```python
+sns.set(color_codes=True)
+sns.displot(df['Tuition'], color='g')
+```
+
+* **Palettes**
 	* Figure "palette" changes the color of the main elements of the plot
-	* `sns.set_palette()`
+	* Seaborn uses the `sns.set_palette()` function to define a palette
 	* Use present palettes or create a custom palette
 
-* **Diverging palettes**
+```python
+palettes = ['deep', 'muted', 'pastel', 'bright', 'dark', 'color blind']
+for p in palettes:
+	sns.set_palette(p)
+	sns.displot(df['Tuition'])
+```
 
-	* "RdBu"
-	* "PRGn"
-	* "RdBu_r"
-	* "PRGn_r"
+* **Displaying Palettes**
+
+	* `sns.palplot()` function displays a palette
+	* `sns.color_palette()` returns the current palette
+
+```python
+import matplotlib.pyplot as plt
+import seaborn as sns
+palettes = ['deep', 'muted', 'pastel', 'bright', 'dark', 'color blind']
+for p in palettes:
+	sns.set_palette(p)
+	sns.palplot(sns.color_palette())
+	plt.show()
+```
+
+* **Defining Custom Palettes**
+
+	* **Circular colors**: when the data is not ordered
+		* `sns.palplot(sns.color_palette("Paired",
+	
+	* **Diverging colors**: when both the low and high values are interesting
+		* "RdBu", "PRGn", "RdBu_r", "PRGn_r"
+		* `sns.palplot(sns.color_palette("BrBG",
+
+	* **Sequential colors**: When the data has a consistent range from high to low
+		* "Greys", "Blues", "PuRd", "GnBu"
+		* `sns.palplot(sns.color_palette("Blues",
 
 * **Example (default palette)
 
@@ -665,13 +873,6 @@ sns.catplot(x="how_masculine", data=masculinity_data, kind="count", order=catego
 
 plt.show()
 ```
-
-* **Sequential palettes**
-
-	* "Greys"
-	* "Blues"
-	* "PuRd"
-	* "GnBu"
 
 * **Custom palettes**
 
@@ -717,7 +918,7 @@ sns.catplot(x="age", y="masculinity_important", data=masculinity_data, hue="feel
 plt.show()
 ```
 
-## Adding titles and labels
+## 4.2 Adding titles and labels
 
 * **Creating informative visualizations**
 
@@ -736,7 +937,105 @@ g = sns.scatterplot(x="height", y="weight", data=df)
 type(g)
 ```
 
+|Object Type  |Plot Types                          |Characteristics           |
+|:-----------:|:----------------------------------:|:------------------------:|
+|`FacetGrid`  |`relplot()`, `catplot()`            |Can create subplots       |
+|`AxesSubplot`|`scatterplot()`, `countplot()`, etc.|Only creates a single plot|
+
 * **Adding a tile to FacetGrid**
+
+```python
+g = sns.catplot(x="Region", y="Birthrate", data=gdp_data, kind="box")
+g.fig.suptitle("New Title")
+plt.show()
+```
+
+* **Adjusting height of title in FacetGrid**
+
+```python
+g = sns.catplot(x="Region", y="Birthrate", data=gdp_data, kind="box")
+g.fig.suptitle("New Title", y=1.03)
+plt.show()
+```
+
+* **Adding a title to AxesSubplot**
+
+```python
+# FacetGrid
+g = sns.catplot(x="Region", y="Birthrate", data=gdp_data, kind="box")
+g.fig.suptitle("New Title", y=1.03)
+
+# AxesSubplot
+g = sns.boxplot(x="Region", y="Birthrate", data=gdp_data)
+g.set_title("New Title", y=1.03)
+```
+
+* **Titles for subplots**
+
+```python
+g = sns.catplot(x="Region", y="Birthrate", data=gdp_data, kind="box", col="Group")
+
+g.fig.suptitle("New Title", y=1.03)
+
+g.set_title("This is {col_name}")
+```
+
+* **Adding axis labels**
+
+```python
+g = sns.catplot(x="Region", y="Birthrate", data=gdp_data, kind="box")
+
+g.set(xlabel="New X Label", ylabel="New Y Label")
+
+plt.show()
+```
+
+* **Rotating x-axis tick labels**
+
+```python
+g = sns.catplot(x="Region", y="Birthrate", data=gdp_data, kind="box")
+
+plt.xticks(rotation=90)
+
+plt.show()
+```
+
+## 4.3 Customizing with matplotlib
+
+* **Matplotlib Axes**
+
+	* Most customization available through `matplotlib` `Axes` objects
+	* `Axes` can be passed to seaborn functions
+
+```python
+fig, ax = plt.subplots()
+sns.histplot(df['Tuition'], ax=ax)
+ax.set(xlabel='Tuition 2013-14')
+```
+
+* **Further Customizations**
+
+	* The `axes` object supports many common customizations
+
+```python
+fig, ax = plt.subplots()
+sns.histplot(df['Tuition'], ax=ax)
+ax.set(xlabel='Tuition 2013-14', ylabel='Distribution', xlim=(0, 50000), title='2013-14 Tuition and Fees Distribution')
+```
+
+* **Combining Multiple Plots**
+
+```python
+fig, (axo, ax1) = plt.subplots(nrows=1, ncols=2, sharey=Ture, figsize(7, 4))
+
+sns.histplot(df['Tuition'], stat='density', ax=ax0)
+sns.histplot(df.query('State == "MN")['Tuition'], stat='")
+
+ax1.set(xlabel='Tuition(MN)', xlim=(0, 70000))
+ax1.axvline(x=20000, label='My Budget', linestyle='--')
+ax1.legend()
+```
+
 
 
 
