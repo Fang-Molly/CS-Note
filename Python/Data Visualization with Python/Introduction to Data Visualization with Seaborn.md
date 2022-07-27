@@ -212,43 +212,7 @@ sns.scatterplot(x="smoker", data=tips, hue="sex")
 plt.show()
 ```
 
-## 1.5 Regression Plots in Seaborn
 
-* **Introduction to regplot**
-
-	* The `regplot` function generates a scatter plot with a regression line
-	* Usage is similar to the `displot`
-	* The `data` and `x` and `y` variables must be defined
-
-`sns.regplot(data=df, x="alcohol", y="pH")`
-
-* **lmplot() builds on top of the base regplot()**
-
-	* `regplot` - low level
-	
-	```python
-	sns.regplot(data=df, x="alcohol", y="quality")
-	```
-	
-	* `lmplot` - high level
-
-	```python
-	sns.lmplot(data=df, x="alcohol", y="quality")
-	```
-
-* **lmplot faceting**
-
-	* Organize data by colors (`hue`)
-	
-	```python
-	sns.lmplot(data=df, x="quality", y="alcohol", hue="type")
-	```
-	
-	* Organize data by columns (`col`)
-	
-	```python
-	sns.lmplot(data=df, x="quality", y="alcohol", col="type")
-	```
 
 # 2. Visualizing Two Quantitative Variables
 
@@ -489,6 +453,7 @@ plt.show()
 # 3. Visualizing a Categorical and a Quantitative Variable
 
 ## 3.1 Count plots and bar plots
+
 * **Categorical Data**
 	* Data which takes on a limited and fixed number of values
 	* Normally combined with numeric data
@@ -575,53 +540,6 @@ sns.catplot(x="total_bill", y="day", data=tips, kind="bar" )
 plt.show()
 ```
 
-* **Plots of each observation - stripplot**
-
-```python
-sns.stripplot(data=df, y="DRG Definition", x="Average Covered Charges", jitter=True)
-```
-
-* **Plots of each observation - swarmplot**
-
-```python
-sns.swarmplot(data=df, y="DRG Definition", x="Average Covered Charges")
-```
-
-* **Abstract representations - boxplot**
-
-```python
-sns.boxplot(data=df, y="DRG Definition", x="Average Covered Charges")
-```
-
-* **Abstract representations - violinplot**
-
-```python
-sns.violinplot(data=df, y="DRG Definition", x="Average Covered Charges")
-```
-
-* **Abstract representations - boxenplot**
-
-```python
-sns.boxenplot(data=df, y="DRG Definition", x="Average Covered Charges")
-```
-
-* **Statistical estimates - barplot**
-
-```python
-sns.barplot(data=df, y="DRG Definition", x="Average Covered Charges", hue="Region")
-```
-
-* **Statistical estimates - pointplot**
-
-```python
-sns.poinplot(data=df, y="DRG Definition", x="Average Covered Charges", hue="Region")
-```
-
-* **Statistical estimates - countplot**
-
-```python
-sns.countplot(data=df, y="DRG Definition", x="Average Covered Charges", hue="Region")
-```
 
 ## Creating a box plot
 
@@ -1097,11 +1015,332 @@ ax1.legend()
 
 ## 5.1 Categorical Plot Types
 
-–––
+* **Plots of each observation - stripplot**
 
+```python
+sns.stripplot(data=df, y="DRG Definition", x="Average Covered Charges", jitter=True)
+```
 
+* **Plots of each observation - swarmplot**
+
+```python
+sns.swarmplot(data=df, y="DRG Definition", x="Average Covered Charges")
+```
+
+* **Abstract representations - boxplot**
+
+```python
+sns.boxplot(data=df, y="DRG Definition", x="Average Covered Charges")
+```
+
+* **Abstract representations - violinplot**
+
+```python
+sns.violinplot(data=df, y="DRG Definition", x="Average Covered Charges")
+```
+
+* **Abstract representations - boxenplot**
+
+```python
+sns.boxenplot(data=df, y="DRG Definition", x="Average Covered Charges")
+```
+
+* **Statistical estimates - barplot**
+
+```python
+sns.barplot(data=df, y="DRG Definition", x="Average Covered Charges", hue="Region")
+```
+
+* **Statistical estimates - pointplot**
+
+```python
+sns.poinplot(data=df, y="DRG Definition", x="Average Covered Charges", hue="Region")
+```
+
+* **Statistical estimates - countplot**
+
+```python
+sns.countplot(data=df, y="DRG Definition", x="Average Covered Charges", hue="Region")
+```
+
+## 5.2 Regression Plots
+
+* **Introduction to regplot**
+
+	* The `regplot` function generates a scatter plot with a regression line
+	* Usage is similar to the `displot`
+	* The `data` and `x` and `y` variables must be defined
+
+`sns.regplot(data=df, x="alcohol", y="pH")`
+
+* **lmplot() builds on top of the base regplot()**
+
+	* `regplot` - low level
+	
+	```python
+	sns.regplot(data=df, x="alcohol", y="quality")
+	```
+	
+	* `lmplot` - high level
+
+	```python
+	sns.lmplot(data=df, x="alcohol", y="quality")
+	```
+
+* **lmplot faceting**
+
+	* Organize data by colors (`hue`)
+	
+	```python
+	sns.lmplot(data=df, x="quality", y="alcohol", hue="type")
+	```
+	
+	* Organize data by columns (`col`)
+	
+	```python
+	sns.lmplot(data=df, x="quality", y="alcohol", col="type")
+	```
+	
+* **Plotting with regplot()**
+
+```python
+sns.regplot(data=df, x='temp', y='total_rentals', marker='+')
+```
+
+* **Evaluating regression with residplot()**
+
+	* A residual plot is useful for evaluating the fit of a model
+	* Seaborn supports through `residplot` function
+
+```python
+sns.residplot(data=df, x='temp', y='total_rentals')
+```
+
+* **Polynomial regression**
+
+	* Seaborn supports polynomial regression using the `order` parameter
+
+```python
+sns.regplot(data=df, x='temp', y='total_rentals', order=2)
+```
+
+* **residplot with polynomial regression
+
+```python
+sns.residplot(data=df, x='temp', y='total_rentals', order=2)
+```
+
+* **Categorical values**
+
+```python
+sns.regplot(data=df, x='mnth', y='total_rentals', x_jitter=.1, order=2)
+```
+
+* **Estimators**
+
+	* In some cases, an `x_estimator` can be useful for highlighting trends
+
+```python
+sns.regplot(data=df, x='mnth', y='total_rentals', x_estimator=np.mean, order=2)
+```
+
+* **Binning the data
+
+	* `x_bins` can be used to divide the data into discrete bins
+	* The regression line is still fit against all the data
+
+```python
+sns.regplot(data=df, x='temp', y='total_rentals', x_bins=4)
+```
+
+## 5.3 Matrix Plots
+
+* **Getting data in the right format**
+
+	* Seaborn's `heatmap()` function requires data to be in a grid format
+	* pandas `crosstab()` is frequently used to manipulate the data
+
+```python
+pd.crosstab(df["mnth"], df["weekday"], values=df["total_rentals"], aggfunc="mean").round(0)
+```
+
+* **Build a heatmap**
+
+```python
+sns.heatmap(pd.crosstab(df["mnth"], df["weekday"], values=df["total_rentals"], aggfunc="mean"))
+```
+
+* **Customize a heatmap**
+
+```python
+sns.heatmap(df_crosstab, annot=True, fmt="d", cmap="YlGnBu", cbar=False, linewidths=.5)
+```
+
+* **Centering a heatmap**
+
+```python
+sns.heatmap(df_crosstab, annot=True, fmt="d", cmap="YlGnBu", cbar=True, center=df_crosstab.loc[9, 6])
+```
+
+* **Plotting a correlation matrix**
+
+	* Pandas `corr` function calculates correlations between columns in a dataframe
+	* The output can be converted to a heatmap with seaborn
+
+```python
+cols = ['total_rentals', 'temp', 'casual', 'hum', 'windspeed']
+sns.heatmap(df[cols].corr(), cmap='YlGnBu')
+```
 
 # 6. Creating Plots on Data Aware Grids
+
+## 6.1 Using FacetGrid, catplot and lmplot
+
+* **Tidy data**
+
+	* Seaborn's grid plots require data in "tidy format"
+	* One observation per row of data
+
+* **FacetGrid**
+
+	* The `FacetGrid` is foundational for many data aware grids
+	* It allows the user to control how data is distributed across columns, rows and hue
+	* Once a `FacetGrid` is created, the plot type must be mapped to the grid
+
+* **FacetGrid Categorical Example**
+
+```python
+g = sns.FacetGrid(df, col='HIGHDEG')
+g.map(sns.boxplot, 'Tuition', order=['1', '2', '3', '4'])
+```
+
+* **catplot()**
+
+	* The `catplot` is a simpler way to use a `FacetGrid` for categorical data
+	* Combines the facetting and mapping process into 1 function
+
+```python
+sns.catplot(x="Tuition", data=df, col="HIGHDEG", kind="box")
+```
+
+* **FacetGrid for regression**
+
+	* `FacetGrid()` can also be used for scatter or regression plots
+
+```python
+g = sns.FacetGrid(df, col='HIGHDEG')
+g.map(plt.scatter, 'Tuition', 'SAT_AVG_ALL')
+```
+
+* **lmplot**
+
+	* `lmplot` plots scatter and regression plots on a `FacetGrid`
+
+```python
+sns.lmplot(data=df, x="Tuition", y="SAT_AVG_ALL", col="HIGHDEG", fit_reg=False)
+```
+
+* **lmplot with regression**
+
+```python
+sns.lmplot(data=df, x="Tuition", y="SAT_AVG_ALL", col="HIGHDEG", row="REGION")
+```
+
+## 6.2 Using PairGrid and pairplot
+
+* **Pairwise relationships**
+
+	* `PairGrid` shows pairwise relationships between data elements
+
+* **Creating a PairGrid**
+
+	* The `PairGrid` follows similar API to FacetGrid
+
+```python
+g = sns.PairGrid(df, vars=["Fair_Mrkt_Rent","Median_Income"])
+g = g.map(sns.scatterplot)
+```
+
+* **Customizing the PairGrid diagonals**
+
+```python
+g = sns.PairGrid(df, vars=["Fair_Mrkt_Rent", "Median_Income"])
+g = g.map_diag(sns.histplot)
+g = g.map_offdiag(sns.scatterplot)
+```
+
+* **Pairplot**
+
+	* `pairplot` is a shortcut for the `PairGrid`
+
+```python
+sns.pairplot(df, vars=["Fair_Mrkt_Rent","Median_Income"], kind="reg", diag_kind="hist")
+```
+
+* **Customizing a pairplot**
+
+```python
+sns.pairplot(df.query("BEDRMS < 3"), vars=["Fair_Mrkt_Rent", "Median_Income", "UTILITY"], hue="BEDRMS", palette="husl", plot_kws={"alpha": 0.5})
+```
+
+## 6.3 Using JointGrid and jointplot
+
+* **Basic JointGrid**
+
+```python
+g = sns.JointGrid(data=df, x="Tuition", y="ADM_RATE_ALL")
+g.plot(sns.regplot, sns.histplot)
+```
+
+* **Advanced JointGrid**
+
+```python
+g = sns.JointGrid(data=df, x="Tuition", y="ADM_RATE_ALL")
+g = g.plot_joint(sns.kdeplot)
+g = g.plot_marginals(sns.kdeplot, shade=True)
+```
+
+* **jointplot()**
+
+```python
+sns.jointplot(data=df, x="Tuition", y="ADM_RATE_ALL", kind=
+```
+
+* **Customizing a jointplot**
+
+```python
+g = (sns.jointplot(x="Tuition", y="ADM_RATE_ALL", kind="scatter", xlim=(0, 25000), data=df.query('UG < 2500 & Ownership == "Public"')).plot_joint(sns.kdeplot))
+```
+
+## 6.4 Selecting Seaborn Plots
+
+* **Univariate Distribution Analysis**
+
+	* `displot()` is the best place to start for this analysis
+	* `rugplot()`, `kdeplot()` and `ecdfplot()` can be useful alternatives
+
+* **Regression Analysis**
+
+	* `lmplot()` performs regression analysis and supports facetting
+
+* **Categorical Plots**
+
+	* Explore data with the categorical plots and facet with 
+
+* **pairplot() and jointplot()**
+
+	* Perform regression analysis with `lmplot`
+	* Analyze distributions with `displot`
+
+
+
+
+
+
+
+
+
+
 
 
 
