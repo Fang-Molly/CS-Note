@@ -87,7 +87,8 @@ Changes to be committed:
 	* press the space bar to go down a page
 	* press the `q` key to quit
 
-* `git log path/to/file`: display only the changes made to the specific file
+* `git log path/to/file`: display only the changes made to the specific file 
+	* `git log -2 data/western.csv`: list the last two changes to that file
 
 # 2. Repositories
 
@@ -149,24 +150,211 @@ $ git add sources.txt
 $ git commit -m "Starting to track data sources."
 ```
 
+## 2.5 How do I tell Git to ignore certain files?
+
+* `.gitignore`: create a file in the root directory of your repository, tell git to stop paying attention to files you don't care about
+
+```
+build
+*.mpl
+
+# ignore any file or directory called `build`
+# ignore files ends in `.mpl`
+```
+
+## 2.6 How can I remove unwanted files?
+
+* `git clean -n`: show you a list of files that are in the repository, but whose history Git is not currently tracking
+
+* `git clean -f`: delete the files that you don't want
+
+* `git clean`: only works on untracked files
 
 
+## 2.7 Git configuration?
+
+* `git config --list`: see what the settings are
+	* `--system`: (for all users on the computer) settings for every user on this computer
+	* `--global`: (per-user) settings for every one of your projects
+	* `--local`:(per-project) settings for one specific project
+
+* `git config --global setting value`: change a configuration value
+	* user.name
+	* user.email `git config --global user.email rep.loop@datacamp.com`
+
+# 3. Undo
+
+## 3.1 How can I commit changes selectively?
+
+* `git add path/to/file`: stage a single file
+
+* `git reset HEAD`: unstage the additions
+
+## 3.2 How do I re-stage files?
+
+* use `git add` periodically to save the most recent changes to a file to the staging area.
+
+## 3.3 How can I undo changes to unstaged files?
+
+* `git checkout -- filename`: discard the changes that have not yet been staged
+	* once you discard changes in this way, they are gone forever.
+
+## 3.4 How can I undo changes to staged files?
+
+```
+git reset HEAD path/to/file
+git checkout -- path/to/file
+```
+
+## 3.5 How do I restore an old version of a file?
+
+```
+# list the last two changes to that file
+$ git log -2 data/western.csv
+
+# restore the version of that file
+$ git checkout 29a59811 data/western.csv
+
+# display the updated contents
+$ cat data/western.csv
+
+# commit the restored version
+$ git commit -m "Adding fresh data for southern and western regions" data/western.csv
+```
+
+## 3.6 How can I undo all of the changes I have made?
+
+`git checkout -- .`: revert all files in the current directory.
+
+# 4. Working with branches
+
+## 4.1 What is a branch?
+
+Git supports for creating branches, which allows you to have multiple versions of your work, and lets you track each version systematically.
+
+## 4.2 How can I see what branches my repository has?
+
+* `git branch`: list all of the branches in a repository
+
+* The branch you are currently in will be shown with a `*` beside its name
+
+* By default, every Git repository has a branch called `master`
+
+## 4.3 How can I view the differences between branches?
+
+* `git diff branch-1..branch-2`: show the difference between two branches
+
+## 4.4 How can I switch from one branch to another?
+
+* `git checkout branch`: switch to that branch
+
+* `git rm`: remove the file
+
+```
+# go into dental repository
+$ cd dental
+
+# show the branches
+$ git branch
+  alter-report-title
+  * master
+  summary-statistics
+  
+# switch to the other branch
+$ git checkout summary-statistics
+Switched to branch 'summary-statistics'
+
+# delete file
+$ git rm report.txt
+rm 'report.txt'
+
+# commit your change with message
+$ git commit -m "Removing report"
+[summary-statistics 30142e7] Removing report
+ 1 file changed, 7 deletions(-)
+ delete mode 100644 report.txt
+ 
+# list to check changes
+$ ls
+bin  data  results
+
+# switch to master branch
+$ git checkout master
+Switched to branch 'master'
+
+$ ls
+bin  data  report.txt  results
+```
+
+## 4.5 How can I create a branch?
+
+* `git checkout -b branch-name`: create a branch then switch to it in one step
+
+## 4.6 How can I merge two branches?
+
+* `git merge branch-name branch-name -m "message"`
+
+## 4.7 How can I merge two brances with conflicts?
+
+* `git status`: check if there is a conflict during a merge
+
+* `nano file`: edit the file
+
+# 5. collaborating
+
+## 5.1 How can I create a brand new repository?
+
+* `git init project-name`: create a repository for a new project in the current working directory
+
+* nested repositories: create one Git repository inside another
+	* It becomes very complicated very quickly. You should not to do it.
+
+## 5.2 How can I turn an existing project into a Git repository?
+
+* `git init`: convert existing projects into repositories
+* `git init /path/to/project`
+
+## 5.3 How can I create a copy of an existing repository?
+
+* `git clone URL`: clone a repository, where `URL` identifies the repository you want to clone
+
+* `git clone /existing/project newprojectname`
 
 
+## 5.4 How can I find out where a cloned repository originated?
 
+* `git remote`: list the names of its remotes in a repository
 
+* `git remote -v`: shows the remote's URLs
 
+## 5.5 How can I define remotes?
 
+* `git remote add remote-name URL`: add more remotes
 
+* `git remote rm remote-name`: remove existing remotes
 
+## 5.6 How can I pull in changes from a remote repository?
 
+`git pull remote branch`: gets everything in `branch` in the remote repository identified by `remote` and merges it into the current branch of your local repository.
 
+## 5.7 What happens if I try to pull when I have unsaved changes?
 
+```
+$ cd dental
+$ git pull origin dental
+fatal: Couldn't find remote ref dental
+fatal: The remote end hung up unexpectedly
+$ git checkout -- .
+$ git pull
+Updating da2604e..0ae302b
+Fast-forward
+ report.txt | 2 ++
+ 1 file changed, 2 insertions(+)
+```
 
+## 5.8 How can I push my changes to a remote repository?
 
-
-
-
+`git push remote-name branch-name`: pushes the changes you have made locally into a remote repository
 
 
 
