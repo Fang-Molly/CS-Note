@@ -181,7 +181,7 @@ plt.show()
 
 	* Which nodes are important?
 		* Degree centrality
-		*  
+		* Betweenness centrality
 
 	* Which center node might be more important?
 
@@ -221,6 +221,7 @@ NetworkXError: The node 10 is not in the graph.
 
 * **Breadth-first search (BFS)**
 
+	* The breadth-first search algorithm was first developed in the 1950s as a way of finding the shortest path out of a maze. 
 	* Example: Shortest path between two nodes
 
 ## 2.3 Betweenness centrality
@@ -250,22 +251,113 @@ NetworkXError: The node 10 is not in the graph.
 import networkx as nx
 G = nx.barbell_graph(m1=5, m2=1)
 nx.betweenness_centrality(G)
+
+{0: 0.0, 1: 0.0, 2: 0.0, 3: 0.0, 4: 0.5333333333333333, 6: 0.5333333333333333, 7: 0.0, 8: 0.0, 9: 0.0, 10: 0.0, 5: 0.5555555555555556}
 ```
 
+# 3. Structures
 
+## 3.1 Communities & cliques
 
+* **Cliques**
 
+	* Social cliques: tightly-knit groups
+	* Network cliques: completely connected graphs
 
+```python
+from itertools import combinations
+for n1, n2 in combinations(G.nodes(), 2):
+	print(n1, n2)
+```
 
+## 3.2 Maximal cliques
 
+* **Maximal cliques
 
+	* Definition: a clique that, when extended by one node is no longer a clique
 
+	* Applications: community finding
 
+* **Communities**
 
+	* Find cliques
+	* Find unions of cliques
 
+* **NetworkX API**
 
+	* `find_cliques` finds all maximal cliques
 
+```python
+>>> import networkx as nx
+>>> G = nx.barbell_graph(m1=5, m2=1)
+>>> nx.find_cliques(G)
+<generator object find_cliques at 0x10587ccf0>
+>>> list(nx.find_cliques(G))
+[[4, 0, 1, 2, 3], [4, 5], [6, 5], [6, 7, 8, 9, 10]]
+```
 
+## 3.3 Subgraphs
+
+* **Subgraphs**
+
+	* Visualize portions of a large graph
+		* Paths
+		* Communities/cliques
+		* Degrees of separation from a node
+	
+```python
+import networkx as nx
+G = nx.erdos_renyi_graph(n=20, p=0.2)
+G.nodes()
+
+NodeView((0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19))
+
+G.edges()
+
+EdgeView([(0, 2), (0, 6), (0, 14), (0, 15), (0, 19), (1, 5), (1, 10), (2, 16), (3, 6), (3, 8), (3, 10), (3, 14), (4, 8), (4, 11), (4, 15), (4, 16), (5, 17), (5, 18), (5, 19), (6, 10), (7, 17), (7, 18), (8, 9), (8, 13), (8, 14), (8, 15), (11, 12), (11, 15), (11, 16), (11, 19), (12, 13), (12, 15), (12, 19), (13, 14), (13, 18)])
+
+nodes = G.neighbors(8)
+nodes
+
+[3, 4, 9, 13, 14, 15]
+
+nodes.append(8)
+
+G_eight = G.subgraph(nodes)
+G_eight.edges()
+
+nx.draw(G_eight, with_labels=True)
+```
+
+# 4. Case study
+
+```python
+>>> import networkx as nx
+>>> G = nx.erdos_renyi_graph(n=20, p=0.2)
+>>> len(G.edges())
+46
+>>> len(G.nodes())
+20
+>>> nx.degree_centrality(G)
+{0: 0.2631578947368421, 1: 0.10526315789473684, 2: 0.3157894736842105, 3: 0.21052631578947367, 4: 0.21052631578947367, 5: 0.2631578947368421, 6: 0.15789473684210525, 7: 0.15789473684210525, 8: 0.42105263157894735, 9: 0.10526315789473684, 10: 0.2631578947368421, 11: 0.42105263157894735, 12: 0.2631578947368421, 13: 0.2631578947368421, 14: 0.2631578947368421, 15: 0.15789473684210525, 16: 0.2631578947368421, 17: 0.2631578947368421, 18: 0.21052631578947367, 19: 0.2631578947368421}
+>>> nx.betweenness_centrality(G)
+{0: 0.05029239766081871, 1: 0.00619604566972988, 2: 0.09477861319966584, 3: 0.0378724589250905, 4: 0.013157894736842105, 5: 0.05633528265107212, 6: 0.029156223893065998, 7: 0.01111111111111111, 8: 0.1527429685324422, 9: 0.00935672514619883, 10: 0.03329156223893066, 11: 0.14959621275410748, 12: 0.042495126705653016, 13: 0.05800612642717905, 14: 0.08432191590086326, 15: 0.025898078529657476, 16: 0.1021164021164021, 17: 0.04085213032581454, 18: 0.021832358674463936, 19: 0.08000556947925368}
+
+# Import necessary modules
+import matplotlib.pyplot as plt
+
+# Plot the degree distribution of the GitHub collaboration network
+plt.hist(list(nx.degree_centrality(G).values()))
+plt.show()
+```
+
+```python
+import networkx as nx
+import nxviz as nv
+G = nx.erdos_renyi_graph(n=20, p=0.3)
+circ = nv.CircosPlot(G, node_color='key', node_group='key')
+circ.draw()
+```
 
 
 
