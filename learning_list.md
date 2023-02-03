@@ -21,6 +21,9 @@ https://swaruplab.bio.uci.edu/tutorial/tutorial.html
 
 # Tools
 
+* Seurat
+https://satijalab.org/seurat/index.html
+
 * scRepertoire
 https://ncborcherding.github.io/vignettes/vignette.html
 
