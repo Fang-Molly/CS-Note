@@ -1,7 +1,7 @@
 Demultiplexing and Analyzing 5’ Immune Profiling Libraries Pooled with Hashtags
 ===============================================================================
 
-Read more [10X Genomics Analysis Guides](https://www.10xgenomics.com/resources/analysis-guides/demultiplexing-and-analyzing-5%E2%80%99-immune-profiling-libraries-pooled-with-hashtags)
+Learn more on the [10X Genomics Analysis Guides](https://www.10xgenomics.com/resources/analysis-guides/demultiplexing-and-analyzing-5%E2%80%99-immune-profiling-libraries-pooled-with-hashtags) website
 
 # 1. Prepare input files
 
@@ -19,9 +19,19 @@ curl -O https://cf.10xgenomics.com/supp/cell-exp/refdata-gex-GRCh38-2020-A.tar.g
 tar -xvzf refdata-gex-GRCh38-2020-A.tar.gz
 ```
 
+* **V(D)J reference**
+
+```bash
+# Download
+curl -O https://cf.10xgenomics.com/supp/cell-vdj/refdata-cellranger-vdj-GRCh38-alts-ensembl-7.0.0.tar.gz
+
+# Decompress
+tar -xzvf refdata-cellranger-vdj-GRCh38-alts-ensembl-7.0.0.tar.gz
+```
+
 ## 1.3 Custom Cell Multiplexing Oligo (CMO) reference
 
-* 5p_hashing_demux_cmo-set.csv
+[5p_hashing_demux_cmo-set.csv](https://github.com/Fang-Molly/CS-note/blob/master/Bioinformatics/single_cell_sequencing/Demultiplex/5p_hashing_demux_cmo-set.csv)
 
 ```csv
 id,name,read,pattern,sequence,feature_type
