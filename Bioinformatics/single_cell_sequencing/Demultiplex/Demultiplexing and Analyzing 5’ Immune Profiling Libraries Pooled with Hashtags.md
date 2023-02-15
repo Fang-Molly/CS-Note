@@ -1,8 +1,7 @@
 Demultiplexing and Analyzing 5’ Immune Profiling Libraries Pooled with Hashtags
 ===============================================================================
 
-[reference]   
-(https://www.10xgenomics.com/resources/analysis-guides/demultiplexing-and-analyzing-5%E2%80%99-immune-profiling-libraries-pooled-with-hashtags)
+Read more [10X Genomics Analysis Guides](https://www.10xgenomics.com/resources/analysis-guides/demultiplexing-and-analyzing-5%E2%80%99-immune-profiling-libraries-pooled-with-hashtags)
 
 # 1. Prepare input files
 
