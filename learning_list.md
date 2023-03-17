@@ -16,8 +16,8 @@ https://ucdavis-bioinformatics-training.github.io/
 https://swaruplab.bio.uci.edu/tutorial/tutorial.html
 
 
-
-
+Single-cell best practices (python)
+https://www.sc-best-practices.org/preamble.html
 
 # Tools
 
@@ -26,5 +26,12 @@ https://satijalab.org/seurat/index.html
 
 * scRepertoire
 https://ncborcherding.github.io/vignettes/vignette.html
+
+
+
+
+
+
+
 
 
